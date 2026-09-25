@@ -16,6 +16,7 @@ Pemakaian (dari akar repo):
 Membutuhkan paket Python "markdown" (lihat skrip/kebutuhan.txt).
 """
 import html
+import json
 import os
 import re
 import sys
@@ -29,7 +30,7 @@ SITUS = "https://defsayurinda-bot.github.io/Defsa-Yurinda/"
 REPO = "https://github.com/defsayurinda-bot/Defsa-Yurinda"
 DASAR_404 = "/Defsa-Yurinda/"
 
-MENU = [("alat/", "Alat", ("alat", "kalkulator")),
+MENU = [("alat/", "Alat", ("alat", "kalkulator", "praktikum")),
         ("latihan/", "Latihan", ("latihan",)),
         ("catatan/", "Catatan", ("catatan",)),
         ("tentang/", "Tentang", ("tentang", "cara-memakai-ai", "skill"))]
@@ -113,7 +114,7 @@ def tulis_ulang_tautan(isi_html, sumber, folder, peta):
     return re.sub(r'href="([^"]+)"', ganti, isi_html)
 
 
-def kepala(judul, ringkasan, awalan, url):
+def kepala(judul, ringkasan, awalan, url, tambahan=""):
     j, r = html.escape(judul), html.escape(ringkasan)
     return f"""<!doctype html>
 <html lang="id">
@@ -134,7 +135,7 @@ def kepala(judul, ringkasan, awalan, url):
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{awalan}assets/gaya.css">
-  <link rel="icon" href="{awalan}assets/ikon.svg" type="image/svg+xml">
+  <link rel="icon" href="{awalan}assets/ikon.svg" type="image/svg+xml">{tambahan}
 </head>"""
 
 
@@ -188,6 +189,60 @@ def halaman_daftar_catatan(catatan):
             "\n  <!-- FOOTER:SELESAI -->\n</body>\n</html>\n")
 
 
+# ---------------------------------------------------------------- praktikum
+
+KATEX = '\n  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">'
+
+
+def data_praktikum():
+    return json.loads((KONTEN / "praktikum.json").read_text(encoding="utf-8"))
+
+
+def halaman_alat_praktikum(alat, kelompok):
+    folder = f"praktikum/{alat['id']}/"
+    awalan = "../../"
+    skrip = "".join(f'\n  <script src="{awalan}assets/praktikum/{s}" defer></script>'
+                    for s in dict.fromkeys(["grafik.js", "kerangka.js"] + alat["skrip"]))
+    return (kepala(f"{alat['judul']} · Praktikum", alat["deskripsi"], awalan, folder, KATEX) +
+            "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "praktikum") + "\n  <!-- NAV:SELESAI -->\n\n"
+            "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
+            f"      <p class=\"remah\"><a href=\"{awalan}praktikum/\">← Praktikum Mekanika Tanah</a></p>\n"
+            f"      <span class=\"label-atas\">{html.escape(kelompok)} · {html.escape(alat['standar'])}</span>\n"
+            f"      <h1>{html.escape(alat['judul'])}</h1>\n      <p class=\"lead\">{html.escape(alat['deskripsi'])}</p>\n    </header>\n"
+            f"    <div id=\"alat-praktikum\" data-alat=\"{alat['id']}\"></div>\n  </main>\n\n"
+            "  <!-- FOOTER:MULAI -->\n  " + footer(awalan) + "\n  <!-- FOOTER:SELESAI -->\n"
+            f'  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>\n'
+            f'  <script src="{awalan}assets/umum.js" defer></script>{skrip}\n</body>\n</html>\n')
+
+
+def halaman_induk_praktikum(data):
+    folder, awalan = "praktikum/", "../"
+    bagian = []
+    for k in data["kelompok"]:
+        kartu = []
+        for a in k["alat"]:
+            isi = (f'<span class="lencana">{html.escape(a["standar"])}</span>\n          <h3>{html.escape(a["judul"])}</h3>\n'
+                   f'          <p class="redup">{html.escape(a["deskripsi"])}</p>')
+            if a["status"] == "tersedia":
+                kartu.append(f'        <a class="kartu" href="{a["id"]}/">\n          {isi}\n        </a>')
+            else:
+                kartu.append(f'        <div class="kartu kartu-menyusul">\n          {isi}\n          <p class="kecil"><strong>Menyusul</strong></p>\n        </div>')
+        bagian.append(f'    <section>\n      <h2>{html.escape(k["judul"])}</h2>\n      <div class="kisi">\n' + "\n".join(kartu) + "\n      </div>\n    </section>")
+    tersedia = sum(a["status"] == "tersedia" for k in data["kelompok"] for a in k["alat"])
+    return (kepala("Praktikum Mekanika Tanah", "Alat pengolah data praktikum Mekanika Tanah: formulir seperti lembar data laboratorium, langkah hitungan, grafik, dan ekspor ke Excel.", awalan, folder) +
+            "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "praktikum") + "\n  <!-- NAV:SELESAI -->\n\n"
+            "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
+            "      <span class=\"label-atas\">Praktikum</span>\n      <h1>Praktikum Mekanika Tanah</h1>\n"
+            f"      <p class=\"lead\">Pengolah data praktikum dengan formulir seperti lembar data laboratorium. {tersedia} alat sudah tersedia; alat lain menyusul.</p>\n"
+            "    </header>\n    <div class=\"kisi fitur\">\n"
+            "      <div class=\"kartu\"><h3>Isi seperti form lab</h3><p class=\"redup\">Baris dan simbol mengikuti lembar data. Angka boleh diketik dengan koma. Tekan Enter untuk turun ke baris berikutnya.</p></div>\n"
+            "      <div class=\"kartu\"><h3>Langkah dan grafik</h3><p class=\"redup\">Setiap hasil disertai rumus bernomor, substitusi angka, dan grafik yang dibutuhkan laporan.</p></div>\n"
+            "      <div class=\"kartu\"><h3>Tersimpan dan bisa diekspor</h3><p class=\"redup\">Data tersimpan otomatis di browser. Salin ke Excel, unduh CSV, bagikan tautan, atau cetak dengan kop identitas contoh.</p></div>\n"
+            "    </div>\n" + "\n".join(bagian) +
+            "\n    <section>\n      <div class=\"catatan\"><strong>Untuk laporan.</strong> Alat ini membantu mengolah dan memeriksa data. Ikuti modul dan arahan asisten laboratorium untuk format laporan resmi, termasuk bila perhitungan harus ditulis tangan.</div>\n    </section>\n  </main>\n\n"
+            "  <!-- FOOTER:MULAI -->\n  " + footer(awalan) + "\n  <!-- FOOTER:SELESAI -->\n</body>\n</html>\n")
+
+
 # ---------------------------------------------------------------- penanda di halaman tulisan tangan
 
 def ganti_penanda(teks, nama, isi, wajib=True):
@@ -239,6 +294,12 @@ def bangun():
             sesudah = urutan_catatan[i + 1] if i + 1 < len(urutan_catatan) else None
         keluaran[DOCS / folder / "index.html"] = halaman_konten(sumber, folder, peta, sebelum, sesudah)
     keluaran[DOCS / "catatan/index.html"] = halaman_daftar_catatan(catatan)
+    praktikum = data_praktikum()
+    keluaran[DOCS / "praktikum/index.html"] = halaman_induk_praktikum(praktikum)
+    for k in praktikum["kelompok"]:
+        for a in k["alat"]:
+            if a["status"] == "tersedia":
+                keluaran[DOCS / f"praktikum/{a['id']}/index.html"] = halaman_alat_praktikum(a, k["judul"])
 
     dihasilkan = set(keluaran)
     for berkas in sorted(DOCS.rglob("*.html")):
