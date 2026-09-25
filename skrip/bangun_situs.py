@@ -74,7 +74,7 @@ def footer(awalan, sumber=None):
     return ('<footer>\n    <div class="wadah">'
             f'<a href="{awalan or "./"}">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · '
             f'<a href="{REPO}">Kode dan tulisan di GitHub</a>{tautan_sumber} · '
-            f'Isi dilisensikan <a href="{REPO}/blob/main/LICENSE">CC BY 4.0</a></div>\n  </footer>')
+            f'Kode <a href="{REPO}/blob/main/LICENSE">MIT</a>, tulisan <a href="{REPO}/blob/main/LICENSE-TULISAN">CC BY 4.0</a></div>\n  </footer>')
 
 
 def bagian_aktif(folder):

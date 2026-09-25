@@ -24,6 +24,8 @@ Catatan ini merangkum cara situs [defsayurinda.github.io](https://defsayurinda.g
 
 **3. Rumus yang belum bisa diverifikasi tidak dimasukkan.** O'Neill & Reese (1999) dan N<sub>γ</sub> Terzaghi (1943) ditunda karena sumber aslinya tidak bisa diakses dari sesi Claude. Lebih baik alatnya belum lengkap daripada angkanya salah.
 
+*Tambahan September 2026:* audit berikutnya menemukan rumus Meyerhof di kalkulator tiang bor ternyata rumus tiang pancang, jadi hasil Meyerhof disembunyikan sampai rumusnya dicocokkan dengan sumber. Tahanan ujung Reese & Wright juga disamakan dengan sumber yang dikutip.
+
 **4. Kunci jawaban latihan tidak ditulis tangan.** Soal latihan dibangkitkan dengan angka acak, lalu kuncinya dihitung oleh modul kalkulator yang sudah diuji. Bank soal diuji dengan 3.000 soal acak.
 
 **5. Tampilan diperiksa sebelum di-merge.** Claude merender setiap halaman di browser pada lebar desktop dan HP, mode terang dan gelap, lalu memperbaiki yang terpotong atau melebar ke samping.

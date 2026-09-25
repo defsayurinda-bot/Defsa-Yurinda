@@ -25,7 +25,7 @@ Laporan ditulis di Issue tahap dan di jawaban sesi. Setelah laporan, lanjut ke t
 
 ## Tentang repo
 
-Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi). Isinya situs GitHub Pages yang menjadi pintu utama semua isi publik Defsa: kalkulator geoteknik, alat praktikum, latihan soal, catatan belajar, cara memakai AI, skill, dan profil. Lisensi sekarang CC BY 4.0; pemisahan MIT (kode) dan CC BY 4.0 (tulisan) dikerjakan di Tahap 5.
+Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi). Isinya situs GitHub Pages yang menjadi pintu utama semua isi publik Defsa: kalkulator geoteknik, alat praktikum, latihan soal, catatan belajar, cara memakai AI, skill, dan profil. Lisensi: kode MIT (`LICENSE`), tulisan dan gambar CC BY 4.0 (`LICENSE-TULISAN`), sejak Tahap 5.
 
 ## Aturan isi
 

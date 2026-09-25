@@ -54,4 +54,7 @@ Aturan lengkap untuk Claude Code ada di [CLAUDE.md](CLAUDE.md).
 
 ## Lisensi
 
-[CC BY 4.0](LICENSE). Boleh dipakai, disalin, dan diubah, termasuk untuk keperluan komersial, asal mencantumkan nama Defsa Yurinda dan tautan ke repo ini.
+- **Kode** (JavaScript, Python, CSS, kerangka HTML, workflow): [MIT](LICENSE).
+- **Tulisan dan gambar** (isi `konten/`, teks halaman situs, tangkapan layar): [CC BY 4.0](LICENSE-TULISAN).
+
+Keduanya boleh dipakai, disalin, dan diubah, termasuk untuk keperluan komersial, asal mencantumkan nama Defsa Yurinda dan tautan ke repo ini.

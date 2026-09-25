@@ -21,7 +21,7 @@ Topik yang saya ajukan: perbandingan daya dukung aksial fondasi tiang bor (*bore
 
 | Tingkat | Perangkat lunak |
 |---|---|
-| Lancar | Microsoft Word, Excel, PowerPoint, AutoCAD, Revit |
+| Menengah | Microsoft Word, Excel, PowerPoint, AutoCAD, Revit |
 | Dasar | ETABS, SAP2000, PLAXIS |
 | Sedang dipelajari | Git, GitHub, Claude Code |
 
