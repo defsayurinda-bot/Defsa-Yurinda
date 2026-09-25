@@ -10,9 +10,13 @@
  *    - Ujung, tanah kohesif:    qp = 9 cu
  *    - Selimut, nonkohesif:     fs = 0,32 N (t/m²), berlaku N < 53
  *    - Selimut, kohesif:        fs = α cu, α = 0,55
- * 2. Meyerhof (1976), sesuai Kementerian PUPR (2019)
- *    - Ujung: qp = 38 N̄ (Lb/d) ≤ 380 N̄ (kPa), N̄ = rata-rata N dari 8d di atas sampai 4d di bawah ujung
- *    - Selimut: fs = σr N / 50 (perpindahan besar) atau σr N / 100 (perpindahan kecil), σr = 100 kPa
+ *    Asumsi kalkulator [BELUM TERVERIFIKASI terhadap Reese & Wright (1977) asli]: N > 53 dipotong
+ *    menjadi 53 pada rumus selimut, dan jenis N (N lapangan atau N60) tidak dikoreksi.
+ * 2. Meyerhof (1976) [DISEMBUNYIKAN dari halaman dan bank soal, temuan B1–B3 di .claude/rencana.md]
+ *    - Ujung: qp = 38 N̄ (Lb/d) ≤ 380 N̄ (kPa) adalah rumus tiang pancang dan Lb hanya dihitung dari
+ *      baris lapisan tempat ujung. Menunggu halaman PUPR (2019) dari Defsa.
+ *    - Selimut: pembagi 50/100 menurut perpindahan tiang belum bersumber.
+ *    Fungsinya tetap ada supaya uji lama berjalan; hasilnya null bila data tidak mencapai 4d di bawah ujung.
  */
 (function (root) {
   'use strict';
@@ -69,9 +73,9 @@
       if (ly.jenis === 'lempung' && !(ly.cu > 0)) galat.push('Lapisan ' + no + ' (lempung) memerlukan nilai cu.');
       atas = ly.bawah;
     });
-    if (m.lapisan.length && atas < m.L + 4 * m.d - 1e-9) {
-      galat.push('Data tanah harus mencapai minimal 4d di bawah ujung tiang (sampai ' +
-        (m.L + 4 * m.d).toFixed(2).replace('.', ',') + ' m) untuk menghitung N rata-rata Meyerhof.');
+    if (m.lapisan.length && !(atas > m.L + 1e-9)) {
+      galat.push('Data tanah harus mencapai kedalaman di bawah ujung tiang (lebih dari ' +
+        Number(m.L).toFixed(2).replace('.', ',') + ' m) supaya lapisan ujung tiang diketahui.');
     }
     return galat;
   }
@@ -138,6 +142,11 @@
     };
   }
 
+  function cukupUntukMeyerhof(m) {
+    var dasar = m.lapisan[m.lapisan.length - 1].bawah;
+    return dasar >= m.L + 4 * m.d - 1e-9;
+  }
+
   function hitung(m) {
     var galat = periksaMasukan(m);
     if (galat.length) return { galat: galat };
@@ -154,7 +163,7 @@
       geo: geo,
       W: W,
       reeseWright: tutup(reeseWright(m, geo)),
-      meyerhof: tutup(meyerhof(m, geo))
+      meyerhof: cukupUntukMeyerhof(m) ? tutup(meyerhof(m, geo)) : null
     };
   }
 

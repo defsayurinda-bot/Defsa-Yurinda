@@ -31,6 +31,16 @@
     } catch (e) { /* hash rusak diabaikan */ }
     return null;
   }
+  // Isi tautan berbagi dianggap tidak tepercaya: teks yang memuat karakter HTML ditolak seluruhnya.
+  function tanpaHTML(o) {
+    if (typeof o === 'string') return !/[<>"'&`]/.test(o);
+    if (o && typeof o === 'object') return Object.keys(o).every(function (k) { return tanpaHTML(k) && tanpaHTML(o[k]); });
+    return true;
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+  }
+
   function salinTautan(elPesan) {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(location.href).then(
@@ -42,7 +52,7 @@
   window.Umum = {
     $: function (id) { return document.getElementById(id); },
     salin: function (o) { return JSON.parse(JSON.stringify(o)); },
-    f: f, t: t, tex: tex, rumus: rumus,
+    f: f, t: t, tex: tex, rumus: rumus, esc: esc, tanpaHTML: tanpaHTML,
     simpanKeHash: simpanKeHash, bacaHash: bacaHash, salinTautan: salinTautan,
     KN_PER_TON: 9.80665
   };

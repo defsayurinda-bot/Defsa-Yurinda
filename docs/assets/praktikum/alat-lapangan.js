@@ -170,7 +170,7 @@
         }
         if (r.lapisan.length) {
           h += '<h3>Tabel log bor</h3>' + U.tabel([{ teks: 'Dari (m)' }, { teks: 'Sampai (m)' }, { teks: 'Tebal (m)' }, { teks: 'Jenis' }, { teks: 'Deskripsi' }],
-            r.lapisan.map(function (l) { return [f(l.dari, 2), f(l.sampai, 2), f(l.sampai - l.dari, 2), NAMA[l.jenis], U.esc(l.deskripsi || '')]; }), null, { angkaMulai: 99 });
+            r.lapisan.map(function (l) { return [f(l.dari, 2), f(l.sampai, 2), f(l.sampai - l.dari, 2), NAMA[l.jenis], l.deskripsi || '']; }), null, { angkaMulai: 99 });
         }
         if (u.length) {
           var a = u[0];

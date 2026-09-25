@@ -42,14 +42,15 @@
 
   // ---------- Soal ----------
   function soalBaru() {
-    var daftar = L.TEMPLAT.filter(function (x) { return topik === 'semua' || x.topik === topik; });
+    var daftar = L.TEMPLAT_AKTIF.filter(function (x) { return topik === 'semua' || x.topik === topik; });
     var tp = daftar[Math.floor(Math.random() * daftar.length)];
     var seed = Math.floor(Math.random() * 900000) + 100000;
     tampilkan(tp.id, seed);
   }
 
   function tampilkan(id, seed) {
-    soal = L.buatSoal(id, seed, F);
+    var aktif = L.TEMPLAT_AKTIF.some(function (x) { return x.id === id; });
+    soal = aktif ? L.buatSoal(id, seed, F) : null;
     if (!soal) return soalBaru();
     sudahDijawab = false;
     try { history.replaceState(null, '', '#' + id + '/' + seed); } catch (e) { /* abaikan */ }

@@ -88,7 +88,7 @@
       });
       if (r.pengembangan !== undefined) kartu.push(U.kartu('Pengembangan', f(r.pengembangan, 2) + ' <small>%</small>', 'terhadap tinggi ' + f(p.H0, 1) + ' mm'));
       var awal = r.kondisi.filter(function (k) { return k.gammaD !== undefined; })[0];
-      if (awal) kartu.push(U.kartu('γ<sub>d</sub> ' + U.esc(awal.nama).toLowerCase(), f(awal.gammaD, 3) + ' <small>g/cm³</small>', r.D !== undefined ? 'derajat kepadatan ' + f(r.D, 2) + '%' : 'w = ' + f(awal.w, 2) + '%'));
+      if (awal) kartu.push(U.kartu('γ<sub>d</sub> ' + awal.nama.toLowerCase(), f(awal.gammaD, 3) + ' <small>g/cm³</small>', r.D !== undefined ? 'derajat kepadatan ' + f(r.D, 2) + '%' : 'w = ' + f(awal.w, 2) + '%'));
       h += U.ringkasan(kartu);
       h += U.grafik(grafik(r), 'Kurva beban penetrasi. Garis putus-putus menunjukkan koreksi titik nol bila awal kurva cekung ke atas.');
       h += '<h3>Tabel nilai CBR</h3>' + U.tabel([{ teks: 'Permukaan' }, { teks: 'Titik nol (mm)', angka: true }, { teks: 'P<sub>2,54</sub> (kN)', angka: true }, 'σ<sub>2,54</sub> (MPa)', 'CBR<sub>2,54</sub> (%)', 'P<sub>5,08</sub> (kN)', 'σ<sub>5,08</sub> (MPa)', 'CBR<sub>5,08</sub> (%)'],
@@ -99,7 +99,7 @@
       });
       var kk = r.kondisi.filter(function (k) { return k.gamma !== undefined; });
       if (kk.length) {
-        h += '<h3>Tabel berat isi</h3>' + U.tabel(['Uraian', 'Simbol', 'Satuan'].concat(kk.map(function (k) { return U.esc(k.nama); })), [
+        h += '<h3>Tabel berat isi</h3>' + U.tabel(['Uraian', 'Simbol', 'Satuan'].concat(kk.map(function (k) { return k.nama; })), [
           ['Berat tanah basah', 'W<sub>t</sub> − W<sub>m</sub>', 'gram'].concat(kk.map(function (k) { return f(k.basah, 3); })),
           ['Berat isi basah', 'γ', 'g/cm³'].concat(kk.map(function (k) { return f(k.gamma, 3); })),
           ['Kadar air', 'w', '%'].concat(kk.map(function (k) { return k.w !== undefined ? f(k.w, 2) : '–'; })),
@@ -107,7 +107,7 @@
       }
       if (r.swell) {
         h += '<h3>Tabel pengembangan</h3>' + U.tabel([{ teks: 'Tanggal / jam' }, { teks: 'Bacaan (divisi)', angka: true }, { teks: 'Perubahan (mm)', angka: true }, 'Pengembangan (%)'],
-          r.swell.map(function (s) { return [U.esc(s.waktu || ('Bacaan ' + s.no)), f(s.bacaan, 1), f(s.dh, 3), f(s.persen, 2)]; }), null, { angkaMulai: 1 });
+          r.swell.map(function (s) { return [(s.waktu || ('Bacaan ' + s.no)), f(s.bacaan, 1), f(s.dh, 3), f(s.persen, 2)]; }), null, { angkaMulai: 1 });
       }
       var s0 = r.set[0];
       h += '<h3>Langkah hitungan (' + s0.nama.toLowerCase() + ')</h3>';

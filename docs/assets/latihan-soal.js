@@ -224,6 +224,8 @@
     },
     {
       id: 'meyerhof-selimut', topik: 'tiang-bor', judul: 'Tahanan selimut tiang (Meyerhof)',
+      // Tidak ditampilkan: pembagi 50/100 menurut perpindahan tiang belum bersumber (temuan B1–B3).
+      disembunyikan: 'Menunggu rumus Meyerhof dicocokkan dengan PUPR (2019).',
       buat: function (rng, F) {
         var d = acak(rng, 0.4, 1.0, 0.1), L = acak(rng, 8, 20, 1), N = acak(rng, 10, 40, 1);
         var perpindahan = pilih(rng, ['kecil', 'besar']);
@@ -261,7 +263,9 @@
     return Math.abs(jawaban - kunci) <= TOLERANSI * Math.abs(kunci);
   }
 
-  var api = { TEMPLAT: TEMPLAT, TOPIK: TOPIK, TOLERANSI: TOLERANSI, buatSoal: buatSoal, periksaJawaban: periksaJawaban, rngDari: rngDari };
+  var TEMPLAT_AKTIF = TEMPLAT.filter(function (x) { return !x.disembunyikan; });
+
+  var api = { TEMPLAT: TEMPLAT, TEMPLAT_AKTIF: TEMPLAT_AKTIF, TOPIK: TOPIK, TOLERANSI: TOLERANSI, buatSoal: buatSoal, periksaJawaban: periksaJawaban, rngDari: rngDari };
   if (node) module.exports = api;
   else root.Latihan = api;
 })(this);

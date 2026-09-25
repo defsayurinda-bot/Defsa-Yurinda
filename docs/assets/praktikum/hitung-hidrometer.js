@@ -1,5 +1,6 @@
 /*
  * Analisis hidrometer (SNI 3423:2008, mengacu ASTM D422) dengan hidrometer 152H, digabung dengan saringan.
+ * ASTM D422 ditarik pada 2016 (pengganti D7928); rumus di bawah belum dicocokkan dengan D7928 [BELUM TERVERIFIKASI].
  *
  * Bacaan terkoreksi untuk persen lolos:  Rc = R + k − Cd
  *   R = bacaan hidrometer, k = koreksi suhu (seperti form lab), Cd = koreksi nol/dispersan (opsional).

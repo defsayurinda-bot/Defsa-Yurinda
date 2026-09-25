@@ -207,7 +207,7 @@
   }
 
   function mulai() {
-    keadaan = U.bacaHash(function (o) { return typeof o.modeDelta === 'string'; }) || salin(CONTOH);
+    keadaan = U.bacaHash(function (o) { return typeof o.modeDelta === 'string' && U.tanpaHTML(o); }) || salin(CONTOH);
     isiFormulir();
     ANGKA.forEach(function (k) {
       $(k).addEventListener('input', function () { keadaan[k] = parseFloat($(k).value); perbarui(); });

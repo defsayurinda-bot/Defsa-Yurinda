@@ -3,7 +3,7 @@
   'use strict';
 
   var CONTOH = {
-    d: 0.6, L: 12, SF: 2.5, gammaBeton: 24, pakaiBerat: true, perpindahan: 'kecil',
+    d: 0.6, L: 12, SF: 2.5, gammaBeton: 24, pakaiBerat: true,
     lapisan: [
       { bawah: 3, jenis: 'lempung', N: 4, cu: 25 },
       { bawah: 7, jenis: 'lempung', N: 8, cu: 50 },
@@ -13,13 +13,14 @@
     ]
   };
   var U = window.Umum;
-  var $ = U.$, f = U.f, t = U.t, rumus = U.rumus, salin = U.salin, KN_PER_TON = U.KN_PER_TON;
+  var $ = U.$, f = U.f, t = U.t, rumus = U.rumus, salin = U.salin, esc = U.esc, KN_PER_TON = U.KN_PER_TON;
   var keadaan = salin(CONTOH);
+  var CATATAN_MEYERHOF = '<strong>Hasil Meyerhof (1976) disembunyikan sementara.</strong> Rumus tahanan ujung yang dipakai sebelumnya adalah rumus untuk tiang pancang, ' +
+    'dan pembagi tahanan selimut menurut perpindahan tiang belum bersumber. Metode ini ditampilkan lagi setelah rumusnya dicocokkan dengan pedoman PUPR (2019).';
 
   // ---------- Formulir ----------
   function isiFormulir() {
     ['d', 'L', 'SF', 'gammaBeton'].forEach(function (k) { $(k).value = keadaan[k]; });
-    $('perpindahan').value = keadaan.perpindahan;
     $('pakaiBerat').checked = keadaan.pakaiBerat;
     $('gammaBeton').disabled = !keadaan.pakaiBerat;
     gambarTabelLapisan();
@@ -63,11 +64,23 @@
     });
   }
 
+  // Nilai dari tautan berbagi bisa berupa teks apa saja; paksa menjadi angka atau pilihan yang sah.
+  function angka(v) { return v === null || v === undefined || v === '' ? null : Number(v); }
+  function rapikan(k) {
+    ['d', 'L', 'SF', 'gammaBeton'].forEach(function (x) { k[x] = angka(k[x]); });
+    k.pakaiBerat = !!k.pakaiBerat;
+    delete k.perpindahan; // opsi tiang pancang dihapus (temuan B3)
+    k.lapisan = k.lapisan.map(function (ly) {
+      return { bawah: angka(ly.bawah), jenis: ly.jenis === 'lempung' ? 'lempung' : 'pasir', N: angka(ly.N), cu: angka(ly.cu) };
+    });
+    return k;
+  }
+
   function masukanHitung() {
     var atas = 0;
     return {
       d: keadaan.d, L: keadaan.L, SF: keadaan.SF, gammaBeton: keadaan.gammaBeton,
-      pakaiBerat: keadaan.pakaiBerat, perpindahan: keadaan.perpindahan,
+      pakaiBerat: keadaan.pakaiBerat,
       lapisan: keadaan.lapisan.map(function (ly) {
         var o = { atas: atas, bawah: ly.bawah, jenis: ly.jenis, N: ly.N, cu: ly.cu };
         atas = ly.bawah;
@@ -84,8 +97,6 @@
     var y = function (z) { return atasY + (z / dalam) * (bawahY - atasY); };
     var lebarTanah = 150, xN = kiri + lebarTanah + 14, lebarN = W - xN - 8;
     var s = '<svg class="profil-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Profil lapisan tanah dan tiang">';
-    s += '<defs><pattern id="arsir" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
-      '<line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--aksen);stroke-width:1.5;opacity:.55"/></pattern></defs>';
 
     m.lapisan.forEach(function (ly, i) {
       var y1 = y(ly.atas), y2 = y(ly.bawah);
@@ -100,10 +111,6 @@
       if (y2 - y1 > 12) s += '<text x="' + (xN + 4) + '" y="' + ((y1 + y2) / 2 + 4) + '" font-size="11" style="fill:var(--teks)">' + ly.N + '</text>';
     });
 
-    if (r && !r.galat.length) {
-      var z1 = r.meyerhof.zona.atas, z2 = Math.min(r.meyerhof.zona.bawah, dalam);
-      s += '<rect x="' + kiri + '" y="' + y(z1) + '" width="' + lebarTanah + '" height="' + (y(z2) - y(z1)) + '" fill="url(#arsir)"/>';
-    }
     if (m.L > 0 && m.L <= dalam * 1.5) {
       var lebarTiang = 22, xT = kiri + 34;
       s += '<rect x="' + xT + '" y="' + atasY + '" width="' + lebarTiang + '" height="' + (y(Math.min(m.L, dalam)) - atasY) + '" rx="2" style="fill:var(--tiang);stroke:var(--teks);stroke-width:1"/>';
@@ -123,9 +130,9 @@
   }
 
   // ---------- Hasil ----------
-  function tabelSelimut(segmen, jenisMetode) {
+  function tabelSelimut(segmen) {
     var baris = segmen.map(function (s) {
-      var dasar = jenisMetode === 'rw' && s.jenis === 'lempung' ? 'c<sub>u</sub> = ' + f(s.cu, 0) + ' kPa' : 'N = ' + f(s.N, 0);
+      var dasar = s.jenis === 'lempung' ? 'c<sub>u</sub> = ' + f(s.cu, 0) + ' kPa' : 'N = ' + f(s.N, 0);
       return '<tr><td>' + f(s.atas) + ' – ' + f(s.bawah) + '</td><td class="angka">' + f(s.tebal) + '</td><td>' +
         (s.jenis === 'lempung' ? 'Lempung' : 'Pasir') + '</td><td>' + dasar + '</td><td class="angka">' + f(s.fs) +
         '</td><td class="angka">' + f(s.Qs) + '</td></tr>';
@@ -145,25 +152,27 @@
   function gambarHasil(m, r) {
     var el = $('hasil');
     if (r.galat.length) {
-      el.innerHTML = '<h2>Hasil</h2>' + r.galat.map(function (g) { return '<div class="catatan galat">' + g + '</div>'; }).join('');
+      el.innerHTML = '<h2>Hasil</h2>' + r.galat.map(function (g) { return '<div class="catatan galat">' + esc(g) + '</div>'; }).join('');
       return;
     }
-    var rw = r.reeseWright, my = r.meyerhof, g = r.geo;
+    var rw = r.reeseWright, g = r.geo;
     var lyU = m.lapisan[rw.lapisanUjung];
     var h = '';
 
     // Ringkasan
-    var maks = Math.max(rw.Qa, my.Qa, 1);
-    h += '<h2>Ringkasan</h2><div class="ringkasan">';
-    [['Reese & Wright (1977)', rw, ''], ['Meyerhof (1976)', my, ' b2']].forEach(function (x) {
-      h += '<div class="kartu"><div class="redup kecil" style="font-weight:700">' + x[0] + '</div>' +
-        '<div class="nilai-besar">' + f(x[1].Qa, 0) + ' <small>kN</small></div>' +
-        '<div class="redup kecil">Q<sub>a</sub> ≈ ' + f(x[1].Qa / KN_PER_TON, 1) + ' ton · Q<sub>u</sub> = ' + f(x[1].Qu, 0) + ' kN</div>' +
-        '<div class="batang' + x[2] + '" style="width:' + Math.max(2, x[1].Qa / maks * 100) + '%;margin-top:10px"></div></div>';
-    });
-    h += '</div>';
-    var semuaPeringatan = rw.peringatan.concat(my.peringatan);
-    semuaPeringatan.forEach(function (p) { h += '<div class="catatan">' + p + '</div>'; });
+    h += '<h2>Ringkasan</h2><div class="ringkasan">' +
+      '<div class="kartu"><div class="redup kecil" style="font-weight:700">Reese &amp; Wright (1977)</div>' +
+      '<div class="nilai-besar">' + f(rw.Qa, 0) + ' <small>kN</small></div>' +
+      '<div class="redup kecil">Q<sub>a</sub> ≈ ' + f(rw.Qa / KN_PER_TON, 1) + ' ton · Q<sub>u</sub> = ' + f(rw.Qu, 0) + ' kN</div></div></div>';
+    h += '<div class="catatan">' + CATATAN_MEYERHOF + '</div>';
+    rw.peringatan.forEach(function (p) { h += '<div class="catatan">' + esc(p) + '</div>'; });
+
+    // Asumsi (temuan B4)
+    h += '<h3>Asumsi kalkulator</h3><ul>' +
+      '<li>Nilai N dipakai apa adanya, tanpa koreksi energi atau tegangan. Apakah rumus Reese &amp; Wright memakai N lapangan atau N<sub>60</sub> belum diperiksa dari sumber aslinya [BELUM TERVERIFIKASI].</li>' +
+      '<li>Pada rumus selimut pasir, N di atas 53 dipotong menjadi 53. Batas ini belum diperiksa dari sumber aslinya [BELUM TERVERIFIKASI].</li>' +
+      '<li>Tahanan ujung pasir dibatasi 400 t/m²; α = 0,55 untuk lempung.</li>' +
+      '</ul>';
 
     // 1. Diketahui
     h += '<h2>1. Diketahui</h2><div class="tabel-gulir"><table><thead><tr><th>Simbol</th><th>Besaran</th><th class="angka">Nilai</th><th>Satuan</th></tr></thead><tbody>' +
@@ -171,14 +180,11 @@
       '<tr><td><i>L</i></td><td>Panjang tiang tertanam</td><td class="angka">' + f(m.L) + '</td><td>m</td></tr>' +
       '<tr><td><i>SF</i></td><td>Faktor keamanan</td><td class="angka">' + f(m.SF, 1) + '</td><td>–</td></tr>' +
       (m.pakaiBerat ? '<tr><td>γ<sub>c</sub></td><td>Berat volume beton</td><td class="angka">' + f(m.gammaBeton, 1) + '</td><td>kN/m³</td></tr>' : '') +
-      '<tr><td>σ<sub>r</sub></td><td>Tegangan referensi (Meyerhof)</td><td class="angka">100</td><td>kPa</td></tr>' +
       '</tbody></table></div>';
-    h += '<p class="kecil redup" style="margin-top:10px">Tiang ' + (m.perpindahan === 'besar' ? 'dianggap berperpindahan besar (pancang)' : 'dianggap berperpindahan kecil (tiang bor)') +
-      '. Data lapisan tanah sesuai tabel di atas; ujung tiang berada di lapisan ' + (rw.lapisanUjung + 1) + ' (' + (lyU.jenis === 'lempung' ? 'lempung' : 'pasir') + ').</p>';
+    h += '<p class="kecil redup" style="margin-top:10px">Data lapisan tanah sesuai tabel di atas; ujung tiang berada di lapisan ' + (rw.lapisanUjung + 1) + ' (' + (lyU.jenis === 'lempung' ? 'lempung' : 'pasir') + ').</p>';
 
     // 2. Ditanya
-    h += '<h2>2. Ditanya</h2><ol><li>Daya dukung ultimit Q<sub>u</sub> dan izin Q<sub>a</sub> dengan metode Reese &amp; Wright (1977).</li>' +
-      '<li>Daya dukung ultimit Q<sub>u</sub> dan izin Q<sub>a</sub> dengan metode Meyerhof (1976).</li></ol>';
+    h += '<h2>2. Ditanya</h2><p>Daya dukung ultimit Q<sub>u</sub> dan izin Q<sub>a</sub> dengan metode Reese &amp; Wright (1977).</p>';
 
     // 3. Penyelesaian
     h += '<h2>3. Penyelesaian</h2>';
@@ -190,9 +196,6 @@
       (m.pakaiBerat
         ? rumus('W = \\gamma_c \\, A_p \\, L = ' + t(m.gammaBeton, 1) + ' \\times ' + t(g.Ap, 4) + ' \\times ' + t(m.L) + ' = ' + t(r.W) + '\\ \\text{kN}')
         : '<p>Berat sendiri tiang tidak dikurangkan (W = 0), sesuai pilihan pada formulir.</p>') + '</div>';
-
-    // Metode A
-    h += '<h3>Metode A — Reese &amp; Wright (1977)</h3>';
     h += '<div class="langkah"><h4>c. Tahanan ujung</h4>';
     if (rw.ujung.rumus === 'kohesif') {
       h += '<p>Ujung tiang di tanah kohesif, c<sub>u</sub> = ' + f(rw.ujung.cu, 0) + ' kPa.</p>' +
@@ -200,7 +203,7 @@
     } else {
       h += '<p>Ujung tiang di tanah nonkohesif, N = ' + f(rw.ujung.N, 0) + '. Batas atas q<sub>p</sub> = 400 t/m².</p>' +
         rumus('q_p = 7N = 7 \\times ' + t(rw.ujung.N, 0) + ' = ' + t(7 * rw.ujung.N, 0) + '\\ \\text{t/m}^2' +
-          (rw.ujung.dibatasi ? ' > 400 \\;\\Rightarrow\\; q_p = 400\\ \\text{t/m}^2' : ' \\le 400\\ \\text{t/m}^2')) +
+          (rw.ujung.dibatasi ? ' > 400 \;\\Rightarrow\; q_p = 400\\ \\text{t/m}^2' : ' \\le 400\\ \\text{t/m}^2')) +
         rumus('q_p = ' + t(rw.ujung.qpT, 0) + ' \\times 9{,}80665 = ' + t(rw.qp) + '\\ \\text{kPa}');
     }
     h += rumus('Q_p = q_p \\, A_p = ' + t(rw.qp) + ' \\times ' + t(g.Ap, 4) + ' = ' + t(rw.Qp) + '\\ \\text{kN}') + '</div>';
@@ -208,51 +211,27 @@
       rumus('f_s = 0{,}32\\,N\\ \\text{(t/m}^2\\text{)}\\ \\text{(pasir, } N < 53) \\qquad f_s = \\alpha\\,c_u,\\ \\alpha = 0{,}55\\ \\text{(lempung)}') +
       rumus('Q_s = \\sum f_{s,i}\\, p\\, \\Delta z_i') +
       '<p class="ket">f<sub>s</sub> pasir dikonversi ke kPa dengan faktor 9,80665. Δz = tebal lapisan sepanjang tiang.</p>' +
-      tabelSelimut(rw.segmen, 'rw') + '</div>';
+      tabelSelimut(rw.segmen) + '</div>';
     h += '<div class="langkah"><h4>e. Daya dukung ultimit dan izin</h4>' + blokQuQa(m, rw) + '</div>';
 
-    // Metode B
-    var zonaTeks = f(my.zona.atas) + ' – ' + f(my.zona.bawah) + ' m';
-    h += '<h3>Metode B — Meyerhof (1976)</h3>';
-    h += '<div class="langkah"><h4>c. N rata-rata di zona ujung</h4>' +
-      '<p>Zona dari 8d di atas sampai 4d di bawah ujung tiang: ' + zonaTeks + '.</p>' +
-      rumus('\\bar N = \\dfrac{\\sum N_i\\,\\Delta z_i}{\\sum \\Delta z_i} = ' + t(my.Nrata) + '') +
-      '<p class="ket">Kedalaman tertanam di lapisan pendukung: L<sub>b</sub> = ' + f(my.Lb) + ' m (dari batas atas lapisan ' + (my.lapisanUjung + 1) + ' sampai ujung tiang).</p></div>';
-    h += '<div class="langkah"><h4>d. Tahanan ujung</h4>' +
-      rumus('q_p = 38\\,\\bar N\\,\\dfrac{L_b}{d} = 38 \\times ' + t(my.Nrata) + ' \\times \\dfrac{' + t(my.Lb) + '}{' + t(m.d) + '} = ' + t(my.qpTanpaBatas) + '\\ \\text{kPa}') +
-      rumus('q_{p,\\text{maks}} = 380\\,\\bar N = 380 \\times ' + t(my.Nrata) + ' = ' + t(my.qpBatas) + '\\ \\text{kPa}') +
-      '<p>' + (my.dibatasi ? 'Nilai hitungan melebihi batas, jadi dipakai q<sub>p</sub> = ' + f(my.qp) + ' kPa.' : 'Nilai hitungan di bawah batas, jadi dipakai q<sub>p</sub> = ' + f(my.qp) + ' kPa.') + '</p>' +
-      rumus('Q_p = q_p \\, A_p = ' + t(my.qp) + ' \\times ' + t(g.Ap, 4) + ' = ' + t(my.Qp) + '\\ \\text{kN}') + '</div>';
-    h += '<div class="langkah"><h4>e. Tahanan selimut</h4>' +
-      rumus('f_s = \\dfrac{1}{' + my.pembagi + '}\\,\\sigma_r\\,N = \\dfrac{100\\,N}{' + my.pembagi + '}\\ \\text{kPa}') +
-      tabelSelimut(my.segmen, 'my') + '</div>';
-    h += '<div class="langkah"><h4>f. Daya dukung ultimit dan izin</h4>' + blokQuQa(m, my) + '</div>';
-
     // 4. Hasil dan penjelasan
-    var selisih = Math.abs(rw.Qu - my.Qu) / Math.max(rw.Qu, my.Qu) * 100;
-    var dQp = rw.Qp - my.Qp, dQs = rw.Qs - my.Qs;
-    var sumber = Math.abs(dQp) >= Math.abs(dQs) ? 'tahanan ujung' : 'tahanan selimut';
-    h += '<h2>4. Hasil dan penjelasan</h2><div class="tabel-gulir"><table><thead><tr><th>Komponen</th><th class="angka">Reese &amp; Wright</th><th class="angka">Meyerhof</th></tr></thead><tbody>' +
-      '<tr><td>Q<sub>p</sub> (kN)</td><td class="angka">' + f(rw.Qp) + '</td><td class="angka">' + f(my.Qp) + '</td></tr>' +
-      '<tr><td>Q<sub>s</sub> (kN)</td><td class="angka">' + f(rw.Qs) + '</td><td class="angka">' + f(my.Qs) + '</td></tr>' +
-      '<tr><td>W (kN)</td><td class="angka">' + f(rw.W) + '</td><td class="angka">' + f(my.W) + '</td></tr>' +
-      '<tr><td>Q<sub>u</sub> (kN)</td><td class="angka">' + f(rw.Qu) + '</td><td class="angka">' + f(my.Qu) + '</td></tr>' +
-      '<tr><td><strong>Q<sub>a</sub> (kN)</strong></td><td class="angka"><strong>' + f(rw.Qa) + '</strong></td><td class="angka"><strong>' + f(my.Qa) + '</strong></td></tr>' +
-      '<tr><td>Q<sub>a</sub> (ton)</td><td class="angka">' + f(rw.Qa / KN_PER_TON) + '</td><td class="angka">' + f(my.Qa / KN_PER_TON) + '</td></tr>' +
+    h += '<h2>4. Hasil dan penjelasan</h2><div class="tabel-gulir"><table><thead><tr><th>Komponen</th><th class="angka">Reese &amp; Wright</th></tr></thead><tbody>' +
+      '<tr><td>Q<sub>p</sub> (kN)</td><td class="angka">' + f(rw.Qp) + '</td></tr>' +
+      '<tr><td>Q<sub>s</sub> (kN)</td><td class="angka">' + f(rw.Qs) + '</td></tr>' +
+      '<tr><td>W (kN)</td><td class="angka">' + f(rw.W) + '</td></tr>' +
+      '<tr><td>Q<sub>u</sub> (kN)</td><td class="angka">' + f(rw.Qu) + '</td></tr>' +
+      '<tr><td><strong>Q<sub>a</sub> (kN)</strong></td><td class="angka"><strong>' + f(rw.Qa) + '</strong></td></tr>' +
+      '<tr><td>Q<sub>a</sub> (ton)</td><td class="angka">' + f(rw.Qa / KN_PER_TON) + '</td></tr>' +
       '</tbody></table></div>';
-    h += '<p style="margin-top:14px">Selisih Q<sub>u</sub> kedua metode ' + f(selisih, 1) + '%' +
-      (selisih > 20
-        ? ', lebih dari 20%. Perbedaan terbesar ada pada ' + sumber + ' (' + f(Math.abs(sumber === 'tahanan ujung' ? dQp : dQs)) + ' kN).' +
-          (sumber === 'tahanan ujung' && my.Lb / m.d < 10 ? ' Pada Meyerhof, q<sub>p</sub> sebanding dengan L<sub>b</sub>/d; tiang hanya tertanam ' + f(my.Lb) + ' m di lapisan pendukung, sehingga tahanan ujungnya kecil.' : '') +
-          (sumber === 'tahanan selimut' ? ' Rumus selimut kedua metode berbeda koefisien dan cara memperlakukan lapisan lempung.' : '')
-        : '. Kedua metode memberi hasil yang berdekatan.') + '</p>';
+    h += '<p style="margin-top:14px">Tahanan ujung menyumbang ' + f(rw.Qp / (rw.Qp + rw.Qs) * 100, 1) + '% dan tahanan selimut ' +
+      f(rw.Qs / (rw.Qp + rw.Qs) * 100, 1) + '% dari Q<sub>p</sub> + Q<sub>s</sub>.</p>';
 
     // 5. Catatan
     h += '<h2>5. Catatan</h2><ul>' +
-      '<li>Kepala tiang dianggap di muka tanah; nilai N dianggap sudah N₆₀.</li>' +
+      '<li>Kepala tiang dianggap di muka tanah.</li>' +
       '<li>Tidak memperhitungkan efek kelompok tiang, gesek negatif, maupun penurunan.</li>' +
-      '<li>Reese &amp; Wright memakai N di lapisan ujung; Meyerhof memakai N rata-rata zona ujung. Karena itu kedua metode bisa sangat berbeda bila ujung tiang dekat batas lapisan.</li>' +
-      semuaPeringatan.map(function (p) { return '<li>' + p + '</li>'; }).join('') +
+      '<li>Reese &amp; Wright memakai N di lapisan tempat ujung tiang, sehingga hasil bisa berubah tajam bila ujung tiang dekat batas lapisan.</li>' +
+      rw.peringatan.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') +
       '</ul>';
 
     el.innerHTML = h;
@@ -272,7 +251,6 @@
     ['d', 'L', 'SF', 'gammaBeton'].forEach(function (k) {
       $(k).addEventListener('input', function () { keadaan[k] = parseFloat($(k).value); perbarui(); });
     });
-    $('perpindahan').addEventListener('change', function () { keadaan.perpindahan = $('perpindahan').value; perbarui(); });
     $('pakaiBerat').addEventListener('change', function () {
       keadaan.pakaiBerat = $('pakaiBerat').checked;
       $('gammaBeton').disabled = !keadaan.pakaiBerat;
@@ -289,7 +267,8 @@
   }
 
   function mulai() {
-    keadaan = U.bacaHash(function (o) { return Array.isArray(o.lapisan); }) || salin(CONTOH);
+    var dariTautan = U.bacaHash(function (o) { return Array.isArray(o.lapisan) && U.tanpaHTML(o); });
+    keadaan = dariTautan ? rapikan(dariTautan) : salin(CONTOH);
     isiFormulir();
     pasangPendengar();
     perbarui();

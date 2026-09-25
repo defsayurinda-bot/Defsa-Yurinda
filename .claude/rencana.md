@@ -2,7 +2,7 @@
 
 - [x] Tahap 0: Fondasi (identitas git, PR draft perubahan praktikum, rencana, CLAUDE.md, settings, Issue)
 - [x] Tahap 1: Akun dan riwayat
-- [ ] Tahap 2: Kebenaran hitungan dan keamanan
+- [ ] Tahap 2: Kebenaran hitungan dan keamanan (sebagian: butir tanpa sumber selesai di PR `tahap-2/hitungan`; B1–B5 dan B7 menunggu bahan dari Defsa)
 - [ ] Tahap 3: Mudah ditambah
 - [ ] Tahap 4: Tampilan
 - [ ] Tahap 5: Isi dan portofolio
@@ -13,6 +13,8 @@ Catatan Tahap 0 (25 September 2026): perubahan praktikum yang disebut "belum di-
 
 Catatan Tahap 1 (25 September 2026): langkah manual Defsa selesai (email privat, username `defsayurinda`, repo `defsayurinda.github.io` dan `defsayurinda`). Branch `simpan/praktikum-belum-verifikasi` tidak pernah dibuat, jadi langkah rebase di tugas 3 tidak berlaku. Mailmap disetujui: `187654321+defsa-yurinda@…`, Gmail di commit merge, dan `310235006+defsayurinda-bot@…` menjadi `310235006+defsayurinda@users.noreply.github.com`; commit `github-actions[bot]` tetap.
 Rujukan nama lama diganti lewat PR #33 dan PR profil #5. Riwayat `main` ketiga repo (situs, profil, `catatan-pribadi`) ditulis ulang dengan `git filter-repo --mailmap` dan di-force push sekali per repo dengan izin Defsa; isi berkas tidak berubah, judul merge `from defsayurinda-bot/…` dibiarkan (keputusan Defsa). Commit lama masih terlihat di halaman PR lama karena ref PR di GitHub tidak ikut berubah.
+
+Catatan Tahap 2 (25 September 2026), tanpa bahan sumber: B1 dan B3 selesai sebagian (Meyerhof dan opsi tiang pancang disembunyikan dari kalkulator dan bank soal; kodenya tetap ada dan diuji). B4 selesai (asumsi N ditampilkan, ditandai [BELUM TERVERIFIKASI]). B6 selesai (escape di kerangka praktikum, pemeriksa tautan di kalkulator, `tests/verifikasi_keamanan.py`). B5 berupa kerangka yang dilewati. B2 ditunda karena hanya berlaku untuk Meyerhof yang disembunyikan. B7 menunggu teks standar. Butir 7: tidak ada sumber dari situs terlarang; ASTM D422 (ditarik 2016) di alat hidrometer ditandai [BELUM TERVERIFIKASI].
 
 ---
 
