@@ -19,6 +19,15 @@ Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi) 
 - Setiap menambah catatan atau file, perbarui tabel di `README.md`.
 - Nama file huruf kecil, dipisah tanda hubung.
 
+## Situs dan kalkulator
+
+- Situs ada di `docs/` (HTML, CSS, dan JavaScript biasa, tanpa build) dan diterbitkan lewat GitHub Pages dari branch `main`, folder `/docs`.
+- Hitungan dipisah dari tampilan: `docs/assets/*-hitung.js` hanya berisi rumus, `*-tampilan.js` berisi formulir dan langkah hitungan.
+- Setiap rumus harus punya sumber yang bisa ditelusuri dan ditulis di halaman. Rumus yang belum bisa diverifikasi tidak dimasukkan. O'Neill & Reese (1999) ditunda karena koefisiennya belum terverifikasi.
+- Setiap perubahan hitungan wajib lolos `python3 tests/verifikasi_tiang_bor.py`, yang membandingkan JavaScript dengan perhitungan Python terpisah. Kasus uji baru ditambahkan untuk setiap rumus baru.
+- Tampilan dicek di lebar HP (390 px) dan mode gelap sebelum di-merge. Tidak boleh ada gulir horizontal.
+- Format hitungan mengikuti urutan Defsa: diketahui, ditanya, penyelesaian (rumus, sumber, substitusi), hasil dan penjelasan, catatan. Desimal koma, ribuan titik.
+
 ## Alur kerja
 
 Kerjakan di branch terpisah, buat Pull Request, lalu Claude yang melakukan merge (keputusan Defsa). Perubahan besar diusulkan dulu dan ditunggu persetujuannya.

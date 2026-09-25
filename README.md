@@ -4,6 +4,16 @@ Mahasiswa Teknik Sipil, Universitas Jambi. Minat utama: geoteknik.
 
 Repo ini berisi catatan saya selama belajar dan memakai Claude dan Claude Code untuk kuliah: bagaimana saya mengatur Claude, perintah yang saya pakai, aturan yang saya pegang supaya hasilnya bisa dipertanggungjawabkan, dan skill yang saya susun sendiri.
 
+## Situs
+
+**[defsayurinda-bot.github.io/Defsa-Yurinda](https://defsayurinda-bot.github.io/Defsa-Yurinda/)**
+
+| Alat | Keterangan |
+|---|---|
+| [Kalkulator tiang bor N-SPT](https://defsayurinda-bot.github.io/Defsa-Yurinda/kalkulator/tiang-bor.html) | Daya dukung aksial dengan metode Reese & Wright (1977) dan Meyerhof (1976), lengkap dengan langkah hitungan, profil tanah, dan tautan berbagi |
+
+Kode hitungan diuji otomatis terhadap perhitungan Python yang ditulis terpisah ([`tests/`](tests/)), setiap kali ada perubahan.
+
 ## Mulai dari mana
 
 | Kalau kamu ingin... | Baca |
@@ -19,6 +29,8 @@ Repo ini berisi catatan saya selama belajar dan memakai Claude dan Claude Code u
 
 ```
 .
+├── docs/                         situs (GitHub Pages): beranda dan kalkulator
+├── tests/                        verifikasi hitungan kalkulator
 ├── tentang-saya.md               profil, pendidikan, pengalaman
 ├── catatan/                      jurnal belajar, bernomor urut
 ├── cara-saya-memakai-claude/     preferensi, contoh prompt, batasan
