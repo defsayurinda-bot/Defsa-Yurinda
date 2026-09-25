@@ -41,6 +41,26 @@ Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi).
 - Tampilan dicek di lebar HP (390 px) dan mode gelap sebelum di-merge. Tidak boleh ada gulir horizontal. Tautan diperiksa oleh `tests/verifikasi_tautan.py`.
 - Format hitungan mengikuti urutan Defsa: diketahui, ditanya, penyelesaian (rumus, sumber, substitusi), hasil dan penjelasan, catatan. Desimal koma, ribuan titik.
 
+## Praktikum Mekanika Tanah
+
+Pengolah data praktikum di `docs/praktikum/`, disusun mengikuti form laboratorium Mekanika Tanah UNJA yang diberikan Defsa (urutan baris, simbol W1, W2, …) dan panduan laporan.
+
+- **Aturan angka dari panduan laporan:** desimal koma, ribuan titik; besaran berat dan volume 3 desimal; persentase dan waktu 2 desimal; Gs dan berat isi 3 desimal.
+- **Kerangka bersama** (`docs/assets/praktikum/kerangka.js`) sudah menangani formulir tabel, angka berkoma, identitas contoh untuk kop cetak, penyimpanan otomatis di browser, tautan berbagi, salin ke Excel (TSV), unduh CSV (pemisah `;`, desimal koma), dan cetak. `grafik.js` membuat grafik SVG (sumbu linier/log).
+- Peringatan kuning adalah pemeriksaan kewajaran, bukan ketentuan standar; ambangnya harus masuk akal dan disebut sebagai pemeriksaan.
+- Rumus yang berbeda dari form lab harus mengikuti yang benar menurut standar, dan perbedaannya disampaikan ke Defsa. Contoh: panduan laporan menulis penyebut Gs dengan tanda "+" padahal yang benar "−"; ρw pada 27,5 °C di Excel lab 0,99640515, sedangkan Tanaka (2001) memberi 0,996376.
+- Jangan memuat nama mahasiswa, asisten, atau dosen dari berkas panduan/form ke repo publik.
+
+### Menambah alat praktikum
+
+1. `docs/assets/praktikum/hitung-<nama>.js`: fungsi rumus murni dengan pola UMD (bisa `require` di Node), mengembalikan `{ galat: [], peringatan: [], … }`.
+2. `docs/assets/praktikum/alat-<nama>.js`: `Praktikum.pasang({ id, parameter, tabel, contoh, hitung, tampil, ekspor, sumber })`. Contoh paling sederhana: bagian kadar air di `alat-sifat-fisik.js`.
+3. `konten/praktikum.json`: tambah atau ubah entri (`status: "tersedia"`, daftar `skrip`), lalu jalankan `python3 skrip/bangun_situs.py`. Halaman alat dan halaman induk dibuat otomatis.
+4. `tests/verifikasi_praktikum.py`: tambah hitungan Python terpisah dan nilai acuan bila ada.
+5. Periksa tampilan di 1280 px dan 390 px, terang dan gelap.
+
+Alat yang masih `menyusul` (hidrometer, klasifikasi, CBR, geser langsung, UCS, konsolidasi laboratorium, sondir, SPT) dicatat di Issue repo pribadi Defsa.
+
 ## Alur kerja
 
 Kerjakan di branch terpisah, buat Pull Request, lalu Claude yang melakukan merge (keputusan Defsa). Perubahan besar diusulkan dulu dan ditunggu persetujuannya.
