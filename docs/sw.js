@@ -12,10 +12,10 @@ const INTI = [
   "/manifest.webmanifest",
   "/assets/katex/katex.min.css",
   "/assets/katex/katex.min.js",
-  "/assets/font/plus-jakarta-sans-latin-400-normal.woff2",
-  "/assets/font/plus-jakarta-sans-latin-600-normal.woff2",
-  "/assets/font/plus-jakarta-sans-latin-700-normal.woff2",
-  "/assets/font/plus-jakarta-sans-latin-800-normal.woff2"
+  "/assets/font/archivo-black-latin-400-normal.woff2",
+  "/assets/font/source-sans-3-latin-400-normal.woff2",
+  "/assets/font/source-sans-3-latin-600-normal.woff2",
+  "/assets/font/source-sans-3-latin-700-normal.woff2"
 ];
 
 self.addEventListener("install", (e) => {

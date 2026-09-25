@@ -68,7 +68,7 @@
       '<div id="umpanBalik" role="status"></div>' +
       '<div class="baris-tombol tidak-cetak">' +
         '<button type="button" class="tombol kecil" id="lihatBahas">Lihat pembahasan</button>' +
-        '<button type="button" class="tombol kecil" id="soalLain">Soal berikutnya →</button>' +
+        '<button type="button" class="tombol kecil" id="soalLain">Soal berikutnya</button>' +
         '<button type="button" class="tombol kecil" id="bagikanSoal">Salin tautan soal</button>' +
       '</div><p id="pesanBagikan" class="kecil redup" role="status"></p>' +
       '<div id="pembahasan"></div>';

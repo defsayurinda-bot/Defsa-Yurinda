@@ -206,7 +206,7 @@
       return '<div class="impor tidak-cetak"><span class="kecil redup">Ambil hasil alat lain yang tersimpan di browser ini:</span><div class="baris-tombol" style="margin:8px 0 0">' +
         def.impor.map(function (im, i) {
           var h = bacaHasil(im.alat);
-          if (!h) return '<a class="tombol kecil" href="../' + im.alat + '/" title="Belum ada hasil tersimpan. Buka alatnya dulu.">' + im.nama + ' (belum ada) →</a>';
+          if (!h) return '<a class="tombol kecil" href="../' + im.alat + '/" title="Belum ada hasil tersimpan. Buka alatnya dulu.">' + im.nama + ' (belum ada)</a>';
           return '<button type="button" class="tombol kecil" data-impor="' + i + '">Ambil dari ' + im.nama +
             ' <span class="redup kecil">' + (h.contoh ? 'data contoh' : waktuSingkat(h.waktu)) + '</span></button>';
         }).join('') + '</div></div>';

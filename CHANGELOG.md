@@ -14,6 +14,7 @@ Semua perubahan penting dicatat di sini. Format mengikuti [Keep a Changelog](htt
 - `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1, terjemahan resmi), templat Issue dan PR, `CITATION.cff`, Dependabot untuk GitHub Actions.
 
 ### Diubah
+- Tampilan baru (konsep A): latar putih, pita oranye, judul distabilo kuning, Archivo Black untuk judul dan Source Sans 3 untuk isi, tanpa kartu bundar berbayang, logo bertitik, dan panah di teks tautan. Gambar pratinjau sosial 1280 × 640 baru.
 - Alamat situs menjadi https://defsayurinda.github.io/ dan akun menjadi `defsayurinda`.
 - Tahanan ujung Reese & Wright disamakan dengan Lastiasih dkk. (2013), hlm. 136: (2/3)N/0,3048² t/m² untuk N ≤ 60 dan 40/0,3048² untuk N > 60.
 - Lisensi dipisah: kode MIT, tulisan CC BY 4.0.

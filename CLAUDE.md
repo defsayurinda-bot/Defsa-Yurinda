@@ -49,6 +49,7 @@ Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi).
 | `.claude/` | Rencana kerja dan pengaturan Claude Code |
 
 - Setiap alat terdaftar di `konten/alat.json` dengan halaman, skrip, sumber, status (asli / sekunder / belum), tanggal cek, dan uji; `tests/verifikasi_registri.py` memeriksanya. Alat baru dibuat dengan `/tambah-alat`.
+- Tampilan konsep A (Tahap 4): token warna di awal `docs/assets/gaya.css`; judul Archivo Black, isi Source Sans 3; `bangun_situs.py` membungkus isi setiap `<h1>` dengan `span.stabilo`. Pita oranye `--pita` hanya hiasan, teks oranye memakai `--aksen`.
 - KaTeX (`docs/assets/katex/`) dan huruf (`docs/assets/font/`) disimpan lokal; jangan memuat aset dari CDN. `bangun_situs.py` juga membangun `docs/sw.js` (versi cache = `version` di `CITATION.cff`), indeks pencarian `docs/cari.json`, halaman `cari/`, dan lencana status sumber (penanda `STATUS`) dari registri. `tests/verifikasi_situs.py` memeriksanya.
 - Workflow `bangun-situs.yml` membangun ulang `docs/` saat `konten/` berubah di `main` dan meng-commit sebagai `github-actions[bot]`.
 - Profil Defsa hanya ditulis di `konten/tentang.md`. Beranda dan README profil GitHub hanya menautkan.

@@ -66,7 +66,7 @@ def menu(awalan, aktif):
     tanda = ' aria-current="page"'
     butir = "".join(f'<li><a href="{awalan}{url}"{tanda if aktif in kunci else ""}>{nama}</a></li>'
                     for url, nama, kunci in MENU)
-    return (f'<nav class="nav">\n    <div class="wadah">\n      <a class="merek" href="{awalan or "./"}">Defsa<span>.</span></a>\n'
+    return (f'<nav class="nav">\n    <div class="wadah">\n      <a class="merek" href="{awalan or "./"}">Defsa Yurinda</a>\n'
             f'      <ul>{butir}</ul>\n    </div>\n  </nav>')
 
 
@@ -137,7 +137,7 @@ def kepala(judul, ringkasan, awalan, url, tambahan=""):
   <meta property="og:image" content="{SITUS}assets/pratinjau.png">
   <meta property="og:locale" content="id_ID">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#c8421a">
+  <meta name="theme-color" content="#f05a28">
   <link rel="stylesheet" href="{awalan}assets/gaya.css">
   <link rel="icon" href="{awalan}assets/ikon.svg" type="image/svg+xml">
   <link rel="manifest" href="{awalan}manifest.webmanifest">{tambahan}
@@ -157,11 +157,11 @@ def halaman_konten(sumber, folder, peta, sebelum=None, sesudah=None):
         atas = ("tentang/", "Tentang") if aktif != "tentang" else ("", "Beranda")
     else:
         atas = (f"{aktif}/", {"cara-memakai-ai": "Cara saya memakai AI", "skill": "Skill Claude"}[aktif])
-    remah = f'<p class="remah"><a href="{awalan}{atas[0]}">← {atas[1]}</a></p>'
+    remah = f'<p class="remah"><a href="{awalan}{atas[0]}">{atas[1]}</a></p>'
     navigasi = ""
     if sebelum or sesudah:
-        kiri = f'<a class="tombol" href="{relatif(folder, sebelum[1])}">← {html.escape(sebelum[0])}</a>' if sebelum else "<span></span>"
-        kanan = f'<a class="tombol" href="{relatif(folder, sesudah[1])}">{html.escape(sesudah[0])} →</a>' if sesudah else "<span></span>"
+        kiri = f'<a class="tombol" href="{relatif(folder, sebelum[1])}">Sebelumnya: {html.escape(sebelum[0])}</a>' if sebelum else "<span></span>"
+        kanan = f'<a class="tombol" href="{relatif(folder, sesudah[1])}">Berikutnya: {html.escape(sesudah[0])}</a>' if sesudah else "<span></span>"
         navigasi = f'\n      <div class="berikut">{kiri}{kanan}</div>'
     return (kepala(judul, ringkasan, awalan, folder) + "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, aktif) +
             "\n  <!-- NAV:SELESAI -->\n\n  <main class=\"wadah\">\n    <article class=\"prosa\">\n      " + remah + "\n" +
@@ -212,7 +212,7 @@ def halaman_alat_praktikum(alat, kelompok, status=""):
     return (kepala(f"{alat['judul']} · Praktikum", alat["deskripsi"], awalan, folder, katex_css(awalan)) +
             "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "praktikum") + "\n  <!-- NAV:SELESAI -->\n\n"
             "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
-            f"      <p class=\"remah\"><a href=\"{awalan}praktikum/\">← Praktikum Mekanika Tanah</a></p>\n"
+            f"      <p class=\"remah\"><a href=\"{awalan}praktikum/\">Praktikum Mekanika Tanah</a></p>\n"
             f"      <span class=\"label-atas\">{html.escape(kelompok)} · {html.escape(alat['standar'])}</span>\n"
             f"      <h1>{html.escape(alat['judul'])}</h1>\n      <p class=\"lead\">{html.escape(alat['deskripsi'])}</p>\n      {status}\n    </header>\n"
             f"    <div id=\"alat-praktikum\" data-alat=\"{alat['id']}\"></div>\n  </main>\n\n"
@@ -327,6 +327,11 @@ def sisip_catatan_beranda(teks, catatan):
     return ganti_penanda(teks, "CATATAN", f'<ul class="daftar-bersih">\n{butir}\n        </ul>')
 
 
+def stabilo(teks):
+    """Bungkus isi setiap <h1> dengan span.stabilo (konsep tampilan A). Aman dijalankan berulang."""
+    return re.sub(r"<h1([^>]*)>(?!<span class=\"stabilo\">)(.*?)</h1>", r'<h1\1><span class="stabilo">\2</span></h1>', teks, flags=re.S)
+
+
 def sitemap(berkas_html):
     url = sorted(SITUS + (p.relative_to(DOCS).as_posix().removesuffix("index.html"))
                  for p in berkas_html if p.name != "404.html")
@@ -375,9 +380,9 @@ def halaman_cari():
 # ---------------------------------------------------------------- mode offline
 
 INTI = ["assets/gaya.css", "assets/umum.js", "assets/daftar-sw.js", "assets/ikon.svg", "manifest.webmanifest",
-        "assets/katex/katex.min.css", "assets/katex/katex.min.js",
-        "assets/font/plus-jakarta-sans-latin-400-normal.woff2", "assets/font/plus-jakarta-sans-latin-600-normal.woff2",
-        "assets/font/plus-jakarta-sans-latin-700-normal.woff2", "assets/font/plus-jakarta-sans-latin-800-normal.woff2"]
+        "assets/katex/katex.min.css", "assets/katex/katex.min.js", "assets/font/archivo-black-latin-400-normal.woff2",
+        "assets/font/source-sans-3-latin-400-normal.woff2", "assets/font/source-sans-3-latin-600-normal.woff2",
+        "assets/font/source-sans-3-latin-700-normal.woff2"]
 
 
 def versi_rilis():
@@ -465,6 +470,9 @@ def bangun():
     keluaran[DOCS / "alat/index.html"] = ganti_penanda(keluaran[DOCS / "alat/index.html"], "DAFTAR-ALAT", daftar_halaman_alat(alat))
     readme = AKAR / "README.md"
     keluaran[readme] = ganti_penanda(readme.read_text(encoding="utf-8"), "ALAT", tabel_readme(alat), baris_baru=True)
+    for k in keluaran:
+        if k.suffix == ".html":
+            keluaran[k] = stabilo(keluaran[k])
     semua_html = set(k for k in keluaran if k.suffix == ".html") | set(DOCS.rglob("*.html"))
     keluaran[DOCS / "sitemap.xml"] = sitemap(semua_html)
     keluaran[DOCS / "sw.js"] = service_worker()

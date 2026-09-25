@@ -18,7 +18,7 @@
   'use strict';
 
   // Grafik di layar memakai variabel CSS (ikut mode gelap). Untuk berkas, warna dikunci ke palet terang.
-  var PALET = { '--aksen': '#c8421a', '--teks': '#1f1b16', '--teks-2': '#5c554c', '--garis': '#d9d1c5', '--permukaan': '#ffffff',
+  var PALET = { '--aksen': '#f05a28', '--teks': '#1f1b16', '--teks-2': '#5c554c', '--garis': '#d9d1c5', '--permukaan': '#ffffff',
     '--permukaan-2': '#f3efe9', '--latar': '#ffffff', '--sukses': '#1f7a4d', '--pasir': '#ecd9a4', '--lempung': '#b99478' };
 
   function svgMandiri(svg) {

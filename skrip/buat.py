@@ -104,7 +104,7 @@ HALAMAN = """<!doctype html>
   <meta property="og:image" content="https://defsayurinda.github.io/assets/pratinjau.png">
   <meta property="og:locale" content="id_ID">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#c8421a">
+  <meta name="theme-color" content="#f05a28">
   <link rel="stylesheet" href="../assets/katex/katex.min.css">
   <link rel="stylesheet" href="../assets/gaya.css">
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">

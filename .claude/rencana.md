@@ -4,9 +4,9 @@
 - [x] Tahap 1: Akun dan riwayat
 - [ ] Tahap 2: Kebenaran hitungan dan keamanan (sebagian: butir tanpa sumber selesai di PR `tahap-2/hitungan`; B1–B5 dan B7 menunggu bahan dari Defsa)
 - [x] Tahap 3: Mudah ditambah (registri `konten/alat.json`, `skrip/buat.py`, `tests/verifikasi_registri.py`, workflow `bangun-situs.yml`, lima skill, `PANDUAN.md`; README profil membaca registri lewat URL raw)
-- [ ] Tahap 4: Tampilan
+- [x] Tahap 4: Tampilan (konsep A dipilih Defsa: pita oranye, stabilo, Archivo Black dan Source Sans 3; `prototipe/` hanya di branch `tahap-4/prototipe`, penghapusannya menunggu izin)
 - [ ] Tahap 5: Isi dan portofolio
-- [ ] Tahap 6: Standar repo populer (sebagian: README, CITATION.cff, CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, templat Issue dan PR, CHANGELOG, Dependabot, permissions selesai; gambar pratinjau sosial dan README profil menunggu tampilan Tahap 4)
+- [ ] Tahap 6: Standar repo populer (sebagian: README, CITATION.cff, CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, templat Issue dan PR, CHANGELOG, Dependabot, permissions selesai; gambar pratinjau sosial dan README profil menyusul setelah Tahap 4, lalu selesai)
 - [ ] Tahap 7: Kualitas situs, lalu rilis v1.0.0 (butir 1–5 selesai: KaTeX dan huruf lokal, offline, pencarian, tombol laporan, lencana status; butir 6 rilis menunggu persetujuan Defsa)
 
 Catatan Tahap 0 (25 September 2026): perubahan praktikum yang disebut "belum di-commit" ternyata sudah masuk `main` lewat PR #7–#10 sebelum Tahap 0 dimulai. Lihat laporan Tahap 0 di PR `tahap-0/fondasi`.
