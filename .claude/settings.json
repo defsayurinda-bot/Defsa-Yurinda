@@ -1,0 +1,37 @@
+{
+  "env": {
+    "GIT_AUTHOR_NAME": "Defsa Yurinda",
+    "GIT_AUTHOR_EMAIL": "310235006+defsayurinda-bot@users.noreply.github.com",
+    "GIT_COMMITTER_NAME": "Defsa Yurinda",
+    "GIT_COMMITTER_EMAIL": "310235006+defsayurinda-bot@users.noreply.github.com"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git config --global user.name 'Defsa Yurinda' && git config --global user.email '310235006+defsayurinda-bot@users.noreply.github.com'",
+            "statusMessage": "Memasang identitas git"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "ask": [
+      "Bash(git push --force)",
+      "Bash(git push --force *)",
+      "Bash(git push -f)",
+      "Bash(git push -f *)",
+      "Bash(git push origin main)",
+      "Bash(git push origin main *)",
+      "Bash(rm -r *)"
+    ],
+    "deny": [
+      "Bash(gh pr merge)",
+      "Bash(gh pr merge *)",
+      "mcp__github__merge_pull_request"
+    ]
+  }
+}
