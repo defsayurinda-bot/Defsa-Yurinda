@@ -430,5 +430,34 @@ cocok("konsolidasi: cv tahap 4 dari t90", 0.848 * t4["Hdr"] ** 2 / (t4["t90"] * 
 benar("konsolidasi: cv contoh mendekati nilai pembangkit 1,6e-3 cm²/s (±15%)", abs(t4["cv"] - 1.6e-3) / 1.6e-3 < 0.15)
 cocok("konsolidasi: korelasi Cc Terzaghi & Peck", 0.009 * 38, r["CcKorelasi"])
 
+# ---------------------------------------------------------------- sondir (SNI 2827:2008, kolom form lab)
+bs = [(0.0, 6, 8), (0.2, 7, 10), (0.4, 5, 8), (0.6, 40, 45), (0.8, 150, 180)]
+r = js("hitung-lapangan.js", "sondir", {"interval": 20, "faktor": 10, "bacaan": [{"kedalaman": z, "PK": a_, "JP": b2} for z, a_, b2 in bs]})
+jhl = 0
+for (z, pk_, jp_), x in zip(bs, r["titik"]):
+    hl = jp_ - pk_
+    jhl += hl * 20 / 10
+    cocok(f"sondir {z} m: HL", hl, x["HL"])
+    cocok(f"sondir {z} m: JHL", jhl, x["JHL"])
+    cocok(f"sondir {z} m: HS = HL/10", hl / 10, x["HS"])
+    cocok(f"sondir {z} m: FR", hl / 10 / pk_ * 100, x["FR"])
+benar("sondir: JP < PK ditolak", js("hitung-lapangan.js", "sondir", {"bacaan": [{"kedalaman": 0, "PK": 5, "JP": 4}, {"kedalaman": 0.2, "PK": 5, "JP": 6}]})["galat"])
+
+# ---------------------------------------------------------------- SPT (SNI 4153:2008)
+r = js("hitung-lapangan.js", "spt", {"Er": 70, "MAT": 2, "uji": [{"kedalaman": 2, "N1": 1, "N2": 2, "N3": 2}, {"kedalaman": 8, "N1": 5, "N2": 8, "N3": 10},
+                                                          {"kedalaman": 18, "N1": 22, "N2": 30, "N3": 35}, {"kedalaman": 20, "N1": 30, "N2": 50, "N3": 0}],
+                                     "lapisan": [{"no": 1, "dari": 0, "sampai": 7, "jenis": "lempung"}, {"no": 2, "dari": 7, "sampai": 21, "jenis": "pasir"}]})
+cocok("SPT: N = N2 + N3", 4, r["uji"][0]["N"])
+cocok("SPT: N60 = N Er/60", 4 * 70 / 60, r["uji"][0]["N60"])
+benar("SPT: N 4 di lempung = sedang", r["uji"][0]["keadaan"] == "Sedang")
+benar("SPT: N 18 di pasir = sedang", r["uji"][1]["keadaan"] == "Sedang")
+benar("SPT: N 65 tanpa 50 pukulan per interval bukan penolakan", not r["uji"][2]["tolak"])
+benar("SPT: 50 pukulan dalam satu interval = penolakan", r["uji"][3]["tolak"])
+for jenis_, N_, harap in (("pasir", 4, "Sangat lepas"), ("pasir", 10, "Lepas"), ("pasir", 30, "Sedang"), ("pasir", 50, "Padat"), ("pasir", 51, "Sangat padat"),
+                          ("lempung", 1, "Sangat lunak"), ("lempung", 3, "Lunak"), ("lempung", 7, "Sedang"), ("lempung", 12, "Kaku"), ("lempung", 30, "Sangat kaku"), ("lempung", 31, "Keras")):
+    k_ = json.loads(subprocess.check_output(["node", "-e", "const m=require(process.argv[1]);console.log(JSON.stringify(m.keadaan(process.argv[2],+process.argv[3])))",
+                                             str(P / "hitung-lapangan.js"), jenis_, str(N_)], text=True))
+    benar(f"Terzaghi & Peck: {jenis_} N={N_} → {harap} (dapat {k_})", k_ == harap)
+
 print("\nSemua cocok." if not gagal else f"\n{gagal} pemeriksaan gagal.")
 sys.exit(1 if gagal else 0)
