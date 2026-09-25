@@ -31,19 +31,20 @@ Tabel ini dibangun otomatis dari [`konten/alat.json`](konten/alat.json).
 ## Struktur repo
 
 ```
-konten/     tulisan sumber (Markdown) dan daftar alat praktikum (praktikum.json)
+konten/     tulisan sumber (Markdown), registri alat (alat.json), daftar alat praktikum (praktikum.json)
 docs/       situs yang diterbitkan GitHub Pages
   kalkulator/, latihan/, alat/     halaman alat (ditulis tangan)
   assets/*-hitung.js               rumus, dipisah dari tampilan supaya bisa diuji
   assets/praktikum/                kerangka, grafik, rumus, dan definisi alat praktikum
   praktikum/                       halaman praktikum (dibangun dari konten/praktikum.json)
   tentang/, catatan/, ...          halaman hasil bangun dari konten/ (jangan diedit langsung)
-skrip/      bangun_situs.py: ubah konten/ jadi halaman, seragamkan menu dan footer
+skrip/      bangun_situs.py: ubah konten/ jadi halaman; buat.py: kerangka alat atau catatan baru
 tests/      verifikasi hitungan, bank soal, dan tautan
 ```
 
 ## Mengubah isi
 
+- **Panduan singkat:** [PANDUAN.md](PANDUAN.md).
 - **Tulisan:** edit berkas di `konten/`, lalu jalankan `python3 skrip/bangun_situs.py` (butuh `pip install -r skrip/kebutuhan.txt`).
 - **Kalkulator:** rumus ada di `docs/assets/*-hitung.js`. Setiap perubahan rumus harus lolos semua `tests/verifikasi_*.py`, dan rumus baru wajib punya kasus uji.
 - **Alat praktikum baru:** lihat bagian *Menambah alat praktikum* di [CLAUDE.md](CLAUDE.md). Singkatnya: satu berkas rumus, satu definisi alat, satu entri di `konten/praktikum.json`, dan kasus uji.

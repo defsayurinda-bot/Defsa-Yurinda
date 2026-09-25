@@ -39,12 +39,17 @@ Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi).
 
 | Lokasi | Isi |
 |---|---|
-| `konten/` | Sumber tulisan (`tentang.md`, `catatan/`, `cara-memakai-ai/`, `skill/`) dan daftar alat praktikum (`praktikum.json`) |
+| `konten/` | Sumber tulisan (`tentang.md`, `catatan/`, `cara-memakai-ai/`, `skill/`), registri alat (`alat.json`), dan daftar alat praktikum (`praktikum.json`) |
 | `docs/` | Situs. Halaman kalkulator ditulis tangan; halaman tulisan dan praktikum dibangun dari `konten/` |
-| `skrip/bangun_situs.py` | Membangun halaman dari `konten/`, menyeragamkan menu dan footer (penanda `NAV`/`FOOTER`), daftar catatan di beranda (penanda `CATATAN`), sitemap. `--periksa` dipakai CI |
-| `tests/` | Verifikasi hitungan, bank soal, dan tautan |
+| `skrip/bangun_situs.py` | Membangun halaman dari `konten/`, menyeragamkan menu dan footer (penanda `NAV`/`FOOTER`), daftar catatan di beranda (penanda `CATATAN`), kartu dan daftar alat serta tabel README dari registri (penanda `ALAT`/`DAFTAR-ALAT`), sitemap. `--periksa` dipakai CI |
+| `skrip/buat.py` | Kerangka alat baru (`alat <id>`) atau catatan bernomor (`catatan "<judul>"`) |
+| `.claude/skills/` | Perintah `/tambah-alat`, `/tambah-catatan`, `/tambah-soal`, `/audit-rumus`, `/rilis` |
+| `PANDUAN.md` | Cara Defsa menambah isi, dengan atau tanpa Claude |
+| `tests/` | Verifikasi hitungan, bank soal, tautan, keamanan, dan registri |
 | `.claude/` | Rencana kerja dan pengaturan Claude Code |
 
+- Setiap alat terdaftar di `konten/alat.json` dengan halaman, skrip, sumber, status (asli / sekunder / belum), tanggal cek, dan uji; `tests/verifikasi_registri.py` memeriksanya. Alat baru dibuat dengan `/tambah-alat`.
+- Workflow `bangun-situs.yml` membangun ulang `docs/` saat `konten/` berubah di `main` dan meng-commit sebagai `github-actions[bot]`.
 - Profil Defsa hanya ditulis di `konten/tentang.md`. Beranda dan README profil GitHub hanya menautkan.
 - Jangan mengedit halaman hasil bangun atau teks di antara penanda; edit sumbernya lalu jalankan `python3 skrip/bangun_situs.py`.
 - Catatan baru masuk `konten/catatan/` dengan nomor urut berikutnya, baris pertama `# NN — Judul`, urutan isi: konsep, contoh dari pengalaman Defsa, latihan.

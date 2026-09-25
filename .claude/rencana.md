@@ -3,7 +3,7 @@
 - [x] Tahap 0: Fondasi (identitas git, PR draft perubahan praktikum, rencana, CLAUDE.md, settings, Issue)
 - [x] Tahap 1: Akun dan riwayat
 - [ ] Tahap 2: Kebenaran hitungan dan keamanan (sebagian: butir tanpa sumber selesai di PR `tahap-2/hitungan`; B1–B5 dan B7 menunggu bahan dari Defsa)
-- [ ] Tahap 3: Mudah ditambah
+- [x] Tahap 3: Mudah ditambah (registri `konten/alat.json`, `skrip/buat.py`, `tests/verifikasi_registri.py`, workflow `bangun-situs.yml`, lima skill, `PANDUAN.md`; README profil membaca registri lewat URL raw)
 - [ ] Tahap 4: Tampilan
 - [ ] Tahap 5: Isi dan portofolio
 - [ ] Tahap 6: Standar repo populer
