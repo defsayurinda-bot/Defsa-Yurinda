@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Pondasi Dangkal · Defsa Yurinda</title>
+  <meta name="description" content="Hitung kapasitas dukung pondasi dangkal dengan persamaan daya dukung umum: faktor bentuk, kedalaman, dan koreksi muka air tanah, lengkap dengan langkah hitungan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="../assets/gaya.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23c8421a'/><rect x='6' y='16' width='20' height='6' rx='1' fill='white'/><rect x='13' y='6' width='6' height='10' fill='white'/></svg>">
+</head>
+<body>
+  <nav class="nav">
+    <div class="wadah">
+      <a class="merek" href="../">Defsa<span>.</span></a>
+      <ul>
+        <li><a href="../#alat">Alat</a></li>
+        <li><a href="../#catatan">Catatan</a></li>
+        <li><a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="wadah">
+    <header class="pahlawan" style="padding-bottom:16px">
+      <span class="label-atas">Kalkulator · Fondasi dangkal</span>
+      <h1>Kapasitas dukung pondasi dangkal</h1>
+      <p class="lead">Persamaan daya dukung umum dengan faktor bentuk, faktor kedalaman, dan koreksi muka air tanah. Setiap faktor ditampilkan beserta substitusi angkanya.</p>
+    </header>
+
+    <div class="tata-kalk">
+      <section>
+        <form id="formulir" class="kartu" autocomplete="off" onsubmit="return false">
+          <h3 style="margin-top:0">Pondasi</h3>
+          <div class="isian-kisi">
+            <div>
+              <label for="bentuk">Bentuk</label>
+              <select id="bentuk">
+                <option value="lajur">Lajur (menerus)</option>
+                <option value="persegi">Bujur sangkar</option>
+                <option value="persegi-panjang">Persegi panjang</option>
+                <option value="lingkaran">Lingkaran</option>
+              </select>
+            </div>
+            <div><label for="B" id="labelB">Lebar, B (m)</label><input id="B" type="number" step="0.1" min="0.1" inputmode="decimal"></div>
+            <div><label for="L">Panjang, L (m)</label><input id="L" type="number" step="0.1" min="0.1" inputmode="decimal"></div>
+            <div><label for="Df">Kedalaman, D<sub>f</sub> (m)</label><input id="Df" type="number" step="0.1" min="0" inputmode="decimal"></div>
+            <div><label for="FS">Faktor keamanan, FS</label><input id="FS" type="number" step="0.1" min="1" inputmode="decimal"></div>
+          </div>
+
+          <h3>Tanah</h3>
+          <div class="isian-kisi">
+            <div><label for="c">Kohesi, c' (kPa)</label><input id="c" type="number" step="1" min="0" inputmode="decimal"></div>
+            <div><label for="phi">Sudut geser, φ' (°)</label><input id="phi" type="number" step="1" min="0" max="50" inputmode="decimal"></div>
+            <div><label for="gamma">Berat volume, γ (kN/m³)</label><input id="gamma" type="number" step="0.5" inputmode="decimal"></div>
+          </div>
+          <div class="isian-kisi" style="margin-top:14px">
+            <label class="centang"><input id="adaMAT" type="checkbox"> Ada muka air tanah</label>
+            <div><label for="dw">Kedalaman MAT dari muka tanah (m)</label><input id="dw" type="number" step="0.1" min="0" inputmode="decimal"></div>
+            <div><label for="gammaSat">γ<sub>sat</sub> (kN/m³)</label><input id="gammaSat" type="number" step="0.5" inputmode="decimal"></div>
+          </div>
+          <p class="kecil redup" style="margin-top:12px">Tanah dianggap homogen, beban vertikal dan sentris, dan keruntuhan berupa geser umum. Untuk lempung jenuh pada kondisi <em>undrained</em>, isi φ' = 0 dan c' = c<sub>u</sub>.</p>
+          <div class="baris-tombol tidak-cetak">
+            <button type="button" class="tombol kecil" id="muatContoh">Muat data contoh</button>
+            <button type="button" class="tombol kecil" id="bagikan">Salin tautan hasil</button>
+            <button type="button" class="tombol kecil" onclick="window.print()">Cetak / simpan PDF</button>
+          </div>
+          <p id="pesanBagikan" class="kecil redup" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <aside class="kartu" style="position:sticky; top:76px">
+        <h3 style="margin-top:0">Sketsa</h3>
+        <div id="sketsa"></div>
+      </aside>
+    </div>
+
+    <section id="hasil" aria-live="polite"></section>
+
+    <section>
+      <h2>Sumber rumus</h2>
+      <ul class="daftar-bersih">
+        <li>Das, B. M. <em>Principles of foundation engineering</em>. Cengage Learning. Bab kapasitas dukung ultimit pondasi dangkal: bentuk persamaan umum, faktor bentuk dan kedalaman, dan koreksi muka air tanah yang dipakai di halaman ini.</li>
+        <li>Prandtl (1921) untuk N<sub>c</sub>; Reissner (1924) untuk N<sub>q</sub>; Vesic (1973), <em>Analysis of ultimate loads of shallow foundations</em>, untuk N<sub>γ</sub>.</li>
+        <li>De Beer (1970) untuk faktor bentuk; Hansen (1970), <em>A revised and extended formula for bearing capacity</em>, untuk faktor kedalaman.</li>
+      </ul>
+      <p class="kecil redup">Faktor daya dukung hasil kalkulator dicocokkan dengan nilai tabel buku teks untuk φ' = 0°, 20°, 30°, dan 35°, lalu seluruh hitungan diuji terhadap perhitungan Python terpisah (<a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/tree/main/tests"><code>tests/</code></a>). Metode Terzaghi (1943) belum dimasukkan karena nilai N<sub>γ</sub>-nya berupa tabel yang belum diverifikasi.</p>
+      <div class="catatan"><strong>Alat bantu belajar.</strong> Hasil kalkulator ini tidak menggantikan analisis dan pemeriksaan oleh ahli geoteknik untuk keperluan desain. Periksa juga penurunan; kapasitas dukung yang cukup belum tentu berarti penurunan memenuhi syarat.</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wadah">Dibuat oleh <a href="../">Defsa Yurinda</a>, Teknik Sipil Universitas Jambi · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="../assets/umum.js" defer></script>
+  <script src="../assets/pondasi-dangkal-hitung.js" defer></script>
+  <script src="../assets/pondasi-dangkal-tampilan.js" defer></script>
+</body>
+</html>

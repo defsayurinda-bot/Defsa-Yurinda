@@ -12,27 +12,9 @@
       { bawah: 20, jenis: 'pasir', N: 55, cu: null }
     ]
   };
-  var KN_PER_TON = 9.80665;
-
-  var $ = function (id) { return document.getElementById(id); };
+  var U = window.Umum;
+  var $ = U.$, f = U.f, t = U.t, rumus = U.rumus, salin = U.salin, KN_PER_TON = U.KN_PER_TON;
   var keadaan = salin(CONTOH);
-
-  function salin(o) { return JSON.parse(JSON.stringify(o)); }
-
-  // ---------- Format angka (desimal koma, ribuan titik) ----------
-  function f(x, d) {
-    if (d === undefined) d = 2;
-    if (!isFinite(x)) return '–';
-    return x.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d });
-  }
-  function t(x, d) { return f(x, d).replace(/,/g, '{,}'); } // angka untuk TeX
-  function tex(s, blok) {
-    if (window.katex) {
-      try { return katex.renderToString(s, { displayMode: !!blok, throwOnError: false }); } catch (e) { /* lanjut */ }
-    }
-    return '<code>' + s.replace(/</g, '&lt;') + '</code>';
-  }
-  function rumus(s) { return '<div class="rumus">' + tex(s, true) + '</div>'; }
 
   // ---------- Formulir ----------
   function isiFormulir() {
@@ -276,19 +258,7 @@
     el.innerHTML = h;
   }
 
-  // ---------- Tautan bagikan ----------
-  function simpanKeHash() {
-    try { history.replaceState(null, '', '#' + btoa(JSON.stringify(keadaan))); } catch (e) { /* abaikan */ }
-  }
-  function bacaHash() {
-    try {
-      if (location.hash.length > 1) {
-        var o = JSON.parse(atob(location.hash.slice(1)));
-        if (o && Array.isArray(o.lapisan)) return o;
-      }
-    } catch (e) { /* abaikan hash rusak */ }
-    return null;
-  }
+  function simpanKeHash() { U.simpanKeHash(keadaan); }
 
   function perbarui() {
     var m = masukanHitung();
@@ -315,18 +285,11 @@
       perbarui();
     });
     $('muatContoh').addEventListener('click', function () { keadaan = salin(CONTOH); isiFormulir(); perbarui(); });
-    $('bagikan').addEventListener('click', function () {
-      simpanKeHash();
-      var pesan = $('pesanBagikan');
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(location.href).then(function () { pesan.textContent = 'Tautan disalin. Siapa pun yang membukanya akan melihat data yang sama.'; },
-          function () { pesan.textContent = 'Salin tautan dari bilah alamat browser.'; });
-      } else pesan.textContent = 'Salin tautan dari bilah alamat browser.';
-    });
+    $('bagikan').addEventListener('click', function () { simpanKeHash(); U.salinTautan($('pesanBagikan')); });
   }
 
   function mulai() {
-    keadaan = bacaHash() || salin(CONTOH);
+    keadaan = U.bacaHash(function (o) { return Array.isArray(o.lapisan); }) || salin(CONTOH);
     isiFormulir();
     pasangPendengar();
     perbarui();
