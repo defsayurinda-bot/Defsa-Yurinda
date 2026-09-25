@@ -111,7 +111,7 @@
       return b;
     },
     sumber: ['Badan Standardisasi Nasional. SNI 3423:2008 <em>Cara uji analisis ukuran butir tanah</em>.',
-      'ASTM D422-63 (2002). <em>Standard test method for particle-size analysis of soils</em>. Faktor a, kedalaman efektif 152H, dan rumus K.',
+      'ASTM D422-63 (2002). <em>Standard test method for particle-size analysis of soils</em>. Faktor a, kedalaman efektif 152H, dan rumus K. Standar ini ditarik ASTM pada 2016 dan diganti ASTM D7928; rumusnya belum dicocokkan dengan D7928 [BELUM TERVERIFIKASI].',
       'Tanaka, M., Girard, G., Davis, R., Peuto, A., &amp; Bignell, N. (2001). Recommended table for the density of water between 0 °C and 40 °C based on recent experimental reports. <em>Metrologia, 38</em>(4), 301–309.',
       'Viskositas air: persamaan tipe Vogel η = A·10<sup>B/(T−C)</sup> dengan A = 2,414 × 10⁻⁵ Pa·s, B = 247,8 K, C = 140 K; dicek terhadap nilai IAPWS (2008) pada 20 °C dan 25 °C.']
   });
