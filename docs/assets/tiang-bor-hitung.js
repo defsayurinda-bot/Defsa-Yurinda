@@ -5,13 +5,16 @@
  * Satuan internal: m, kN, kPa (= kN/m²).
  *
  * Metode:
- * 1. Reese & Wright (1977)
- *    - Ujung, tanah nonkohesif: qp = 7 N (t/m²) ≤ 400 t/m² (N ≤ 60)
- *    - Ujung, tanah kohesif:    qp = 9 cu
- *    - Selimut, nonkohesif:     fs = 0,32 N (t/m²), berlaku N < 53
- *    - Selimut, kohesif:        fs = α cu, α = 0,55
- *    Asumsi kalkulator [BELUM TERVERIFIKASI terhadap Reese & Wright (1977) asli]: N > 53 dipotong
- *    menjadi 53 pada rumus selimut, dan jenis N (N lapangan atau N60) tidak dikoreksi.
+ * 1. Reese & Wright (1977), dikutip dari Lastiasih, Irsyam, Sidi, & Toha, Media Komunikasi Teknik
+ *    Sipil 19(2), Desember 2013, hlm. 136, pers. (1)–(5):
+ *    - Ujung, tanah kohesif:    qp = 9 cu                                        pers. (1)
+ *    - Ujung, tanah nonkohesif: qp = (2/3) N / 0,3048² t/m² untuk N ≤ 60          pers. (3)
+ *                               qp = 40 / 0,3048² t/m²       untuk N > 60          pers. (2)
+ *    - Selimut, kohesif:        fs = α cu                                        pers. (4)
+ *    - Selimut, nonkohesif:     fs = 0,32 N t/m² untuk N < 53                     pers. (5)
+ *    N ditulis sumber sebagai "nilai NSPT tanah", tanpa koreksi.
+ *    [BELUM TERVERIFIKASI] α = 0,55 (sumber tidak memberi nilai α) dan pemotongan N ≥ 53 menjadi 53
+ *    (pers. (6) di sumber memberi fs = 0 pada N = 53, jadi tampaknya salah cetak).
  * 2. Meyerhof (1976) [DISEMBUNYIKAN dari halaman dan bank soal, temuan B1–B3 di .claude/rencana.md]
  *    - Ujung: qp = 38 N̄ (Lb/d) ≤ 380 N̄ (kPa) adalah rumus tiang pancang dan Lb hanya dihitung dari
  *      baris lapisan tempat ujung. Menunggu halaman PUPR (2019) dari Defsa.
@@ -23,9 +26,11 @@
 
   var T_KE_KPA = 9.80665; // 1 t/m² = 9,80665 kPa
   var SIGMA_R = 100;      // tegangan referensi, kPa
-  var ALPHA_RW = 0.55;    // faktor adhesi Reese & Wright
+  var ALPHA_RW = 0.55;    // faktor adhesi Reese & Wright [BELUM TERVERIFIKASI]
   var BATAS_N_SELIMUT_RW = 53;
-  var BATAS_QP_RW_T = 400; // t/m²
+  var KAKI2 = 0.3048 * 0.3048;       // m² per ft²: konversi ton/ft² ke t/m² di Lastiasih dkk.
+  var BATAS_N_UJUNG_RW = 60;
+  var BATAS_QP_RW_T = 40 / KAKI2;    // t/m², pers. (2): 430,56 t/m²
 
   function luasUjung(d) { return Math.PI * d * d / 4; }
   function keliling(d) { return Math.PI * d; }
@@ -106,8 +111,8 @@
       qp = 9 * lyU.cu;
       ujung = { rumus: 'kohesif', cu: lyU.cu };
     } else {
-      var qpT = 7 * lyU.N, dibatasi = qpT > BATAS_QP_RW_T;
-      if (dibatasi) qpT = BATAS_QP_RW_T;
+      var dibatasi = lyU.N > BATAS_N_UJUNG_RW;
+      var qpT = dibatasi ? BATAS_QP_RW_T : (2 / 3) * lyU.N / KAKI2;
       qp = qpT * T_KE_KPA;
       ujung = { rumus: 'nonkohesif', N: lyU.N, qpT: qpT, dibatasi: dibatasi };
     }
@@ -167,7 +172,7 @@
     };
   }
 
-  var api = { hitung: hitung, rataN: rataN, T_KE_KPA: T_KE_KPA };
+  var api = { hitung: hitung, rataN: rataN, T_KE_KPA: T_KE_KPA, KAKI2: KAKI2, BATAS_QP_RW_T: BATAS_QP_RW_T };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.TiangBor = api;
 })(this);

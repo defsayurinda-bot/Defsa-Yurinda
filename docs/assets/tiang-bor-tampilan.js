@@ -169,9 +169,10 @@
 
     // Asumsi (temuan B4)
     h += '<h3>Asumsi kalkulator</h3><ul>' +
-      '<li>Nilai N dipakai apa adanya, tanpa koreksi energi atau tegangan. Apakah rumus Reese &amp; Wright memakai N lapangan atau N<sub>60</sub> belum diperiksa dari sumber aslinya [BELUM TERVERIFIKASI].</li>' +
-      '<li>Pada rumus selimut pasir, N di atas 53 dipotong menjadi 53. Batas ini belum diperiksa dari sumber aslinya [BELUM TERVERIFIKASI].</li>' +
-      '<li>Tahanan ujung pasir dibatasi 400 t/m²; α = 0,55 untuk lempung.</li>' +
+      '<li>Nilai N dipakai apa adanya, tanpa koreksi energi atau tegangan. Sumber rumus menulisnya sebagai nilai N-SPT tanah tanpa menyebut koreksi.</li>' +
+      '<li>Pada rumus selimut pasir, N ≥ 53 dipotong menjadi 53. Rumus sumber untuk N ≥ 53 memberi f<sub>s</sub> = 0 tepat di N = 53, jadi tampaknya salah cetak dan belum dipakai [BELUM TERVERIFIKASI].</li>' +
+      '<li>α = 0,55 untuk selimut lempung. Sumber rumus tidak memberi nilai α [BELUM TERVERIFIKASI].</li>' +
+      '<li>Satuan ton pada rumus dikonversi ke kN dengan 1 t = 9,80665 kN.</li>' +
       '</ul>';
 
     // 1. Diketahui
@@ -201,14 +202,17 @@
       h += '<p>Ujung tiang di tanah kohesif, c<sub>u</sub> = ' + f(rw.ujung.cu, 0) + ' kPa.</p>' +
         rumus('q_p = 9\\,c_u = 9 \\times ' + t(rw.ujung.cu, 0) + ' = ' + t(rw.qp) + '\\ \\text{kPa}');
     } else {
-      h += '<p>Ujung tiang di tanah nonkohesif, N = ' + f(rw.ujung.N, 0) + '. Batas atas q<sub>p</sub> = 400 t/m².</p>' +
-        rumus('q_p = 7N = 7 \\times ' + t(rw.ujung.N, 0) + ' = ' + t(7 * rw.ujung.N, 0) + '\\ \\text{t/m}^2' +
-          (rw.ujung.dibatasi ? ' > 400 \;\\Rightarrow\; q_p = 400\\ \\text{t/m}^2' : ' \\le 400\\ \\text{t/m}^2')) +
-        rumus('q_p = ' + t(rw.ujung.qpT, 0) + ' \\times 9{,}80665 = ' + t(rw.qp) + '\\ \\text{kPa}');
+      h += '<p>Ujung tiang di tanah nonkohesif, N = ' + f(rw.ujung.N, 0) + '. Untuk N ≤ 60 dipakai persamaan (3), untuk N &gt; 60 persamaan (2).</p>' +
+        (rw.ujung.dibatasi
+          ? rumus('q_p = \\dfrac{40}{0{,}3048^2} = ' + t(rw.ujung.qpT) + '\\ \\text{t/m}^2')
+          : rumus('q_p = \\dfrac{2}{3} \\times \\dfrac{N}{0{,}3048^2} = \\dfrac{2}{3} \\times \\dfrac{' + t(rw.ujung.N, 0) + '}{0{,}3048^2} = ' + t(rw.ujung.qpT) + '\\ \\text{t/m}^2')) +
+        rumus('q_p = ' + t(rw.ujung.qpT) + ' \\times 9{,}80665 = ' + t(rw.qp) + '\\ \\text{kPa}') +
+        '<p class="ket">0,3048² mengubah ton/ft² menjadi ton/m² (Lastiasih dkk., 2013, hlm. 136).</p>';
     }
     h += rumus('Q_p = q_p \\, A_p = ' + t(rw.qp) + ' \\times ' + t(g.Ap, 4) + ' = ' + t(rw.Qp) + '\\ \\text{kN}') + '</div>';
     h += '<div class="langkah"><h4>d. Tahanan selimut</h4>' +
       rumus('f_s = 0{,}32\\,N\\ \\text{(t/m}^2\\text{)}\\ \\text{(pasir, } N < 53) \\qquad f_s = \\alpha\\,c_u,\\ \\alpha = 0{,}55\\ \\text{(lempung)}') +
+      '<p class="ket">Persamaan (4) dan (5) Lastiasih dkk. (2013, hlm. 136).</p>' +
       rumus('Q_s = \\sum f_{s,i}\\, p\\, \\Delta z_i') +
       '<p class="ket">f<sub>s</sub> pasir dikonversi ke kPa dengan faktor 9,80665. Δz = tebal lapisan sepanjang tiang.</p>' +
       tabelSelimut(rw.segmen) + '</div>';

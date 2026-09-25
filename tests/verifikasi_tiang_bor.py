@@ -21,6 +21,11 @@ AKAR = Path(__file__).resolve().parent.parent
 T = 9.80665  # kPa per t/m²
 
 
+def qp_pasir_t(N):
+    """Tahanan ujung pasir Reese & Wright (t/m2), Lastiasih dkk. (2013), MKTS 19(2), hlm. 136, pers. (2)-(3)."""
+    return 40 / 0.3048**2 if N > 60 else 2 / 3 * N / 0.3048**2
+
+
 def rata_n(lapisan, z1, z2):
     jumlah = tebal = 0.0
     for ly in lapisan:
@@ -52,7 +57,7 @@ def hitung_python(m):
             fs = 0.32 * min(ly["N"], 53) * T
         Qs_rw += fs * p * h
     u = lapisan_ujung(m["lapisan"], L)
-    qp_rw = 9 * u["cu"] if u["jenis"] == "lempung" else min(7 * u["N"], 400) * T
+    qp_rw = 9 * u["cu"] if u["jenis"] == "lempung" else qp_pasir_t(u["N"]) * T
     Qu_rw = qp_rw * Ap + Qs_rw - W
 
     # Meyerhof (1976)
@@ -137,6 +142,17 @@ def main():
         print("GAGAL  data pendek: Reese & Wright harus dihitung dan Meyerhof kosong")
         gagal += 1
 
+    # Nilai acuan dari rumus sumber: N = 60 dan N = 61 sama-sama 430,556 t/m2 (tahanan ujung menyambung),
+    # N = 30 memberi 215,278 t/m2. Dihitung tangan dari pers. (2)-(3) Lastiasih dkk. (2013), hlm. 136.
+    for N, acuan in ((30, 215.278), (60, 430.556), (61, 430.556)):
+        uji = {"d": 1.0, "L": 10, "SF": 2, "gammaBeton": 24, "pakaiBerat": False, "lapisan": [ly(0, 20, "pasir", N)]}
+        qpT = subprocess.check_output(["node", "-e", "const t=require(process.argv[1]);"
+            "console.log(t.hitung(JSON.parse(process.argv[2])).reeseWright.ujung.qpT)",
+            str(AKAR / "docs/assets/tiang-bor-hitung.js"), json.dumps(uji)], text=True)
+        if abs(float(qpT) - acuan) > 0.001:
+            print(f"GAGAL  qp pasir N={N}: {float(qpT):.3f} t/m2, acuan {acuan}")
+            gagal += 1
+
     # Uji sifat 1: memecah lapisan menjadi dua baris yang sama tidak mengubah hasil Reese & Wright.
     utuh = {"d": 0.6, "L": 12, "SF": 2.5, "gammaBeton": 24, "pakaiBerat": True,
             "lapisan": [ly(0, 4, "lempung", 6, 40), ly(4, 20, "pasir", 30)]}
@@ -151,7 +167,7 @@ def main():
     batas = {"d": 0.6, "L": 10, "SF": 2.5, "gammaBeton": 24, "pakaiBerat": False,
              "lapisan": [ly(0, 10, "pasir", 15), ly(10, 20, "pasir", 45)]}
     rw = hitung_js(batas)["rw"]
-    harapan = min(7 * 45, 400) * T * math.pi * 0.6**2 / 4
+    harapan = qp_pasir_t(45) * T * math.pi * 0.6**2 / 4
     if not rw["Qp"] > 0 or abs(rw["Qp"] - harapan) > 1e-6 * harapan:
         print(f"GAGAL  sifat ujung di batas lapisan: Qp = {rw['Qp']:.4f}, harapan {harapan:.4f}")
         gagal += 1
