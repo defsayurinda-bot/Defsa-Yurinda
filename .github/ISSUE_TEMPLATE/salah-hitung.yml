@@ -1,0 +1,46 @@
+name: Laporkan salah hitung
+description: Hasil kalkulator atau alat praktikum berbeda dengan buku, standar, atau hitungan tangan.
+title: "Salah hitung: "
+labels: ["bug-hitungan"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Isi Issue ini terlihat publik. Jangan menyertakan data proyek, nama orang, atau data pribadi.
+  - type: dropdown
+    id: alat
+    attributes:
+      label: Alat
+      options:
+        - Tiang bor N-SPT
+        - Pondasi dangkal
+        - Penurunan konsolidasi
+        - Praktikum Mekanika Tanah
+        - Latihan soal
+        - Lainnya
+    validations:
+      required: true
+  - type: textarea
+    id: masukan
+    attributes:
+      label: Tautan berbagi atau data masukan
+      description: Tombol "Salin tautan hasil" di kalkulator, atau tulis datanya.
+    validations:
+      required: true
+  - type: input
+    id: hasil
+    attributes:
+      label: Hasil kalkulator
+    validations:
+      required: true
+  - type: input
+    id: harapan
+    attributes:
+      label: Hasil yang diharapkan
+    validations:
+      required: true
+  - type: textarea
+    id: sumber
+    attributes:
+      label: Sumber hasil yang diharapkan
+      description: Judul buku atau standar, edisi, dan halaman. Laporan tanpa sumber tetap diterima, tapi perbaikan menunggu sumbernya.

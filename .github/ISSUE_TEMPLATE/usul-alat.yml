@@ -1,0 +1,25 @@
+name: Usul alat
+description: Usulkan kalkulator atau alat hitung baru.
+title: "Usul alat: "
+labels: ["alat-baru"]
+body:
+  - type: input
+    id: nama
+    attributes:
+      label: Nama alat
+    validations:
+      required: true
+  - type: textarea
+    id: metode
+    attributes:
+      label: Metode
+      description: Metode atau rumus yang dipakai, dan kapan metode itu berlaku.
+    validations:
+      required: true
+  - type: textarea
+    id: sumber
+    attributes:
+      label: Sumber dengan halaman
+      description: SNI atau pedoman kementerian, buku teks standar dengan bab dan halaman, atau jurnal. Situs pekerjaan rumah dan salinan standar yang diunggah pihak lain tidak dipakai.
+    validations:
+      required: true
