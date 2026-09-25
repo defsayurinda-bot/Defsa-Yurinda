@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://defsayurinda-bot.github.io/Defsa-Yurinda/sitemap.xml
+Sitemap: https://defsayurinda.github.io/sitemap.xml
