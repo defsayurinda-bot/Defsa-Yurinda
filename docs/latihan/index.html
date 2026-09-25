@@ -18,20 +18,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="../assets/gaya.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23c8421a'/><path d='M9 16 l5 5 l9 -11' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+  <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
 </head>
 <body>
+  <!-- NAV:MULAI -->
   <nav class="nav">
     <div class="wadah">
       <a class="merek" href="../">Defsa<span>.</span></a>
-      <ul>
-        <li><a href="../#alat">Alat</a></li>
-        <li><a href="../latihan/" aria-current="page">Latihan</a></li>
-        <li><a href="../#catatan">Catatan</a></li>
-        <li><a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">GitHub</a></li>
-      </ul>
+      <ul><li><a href="../alat/">Alat</a></li><li><a href="../latihan/" aria-current="page">Latihan</a></li><li><a href="../catatan/">Catatan</a></li><li><a href="../tentang/">Tentang</a></li></ul>
     </div>
   </nav>
+  <!-- NAV:SELESAI -->
 
   <main class="wadah">
     <header class="pahlawan" style="padding-bottom:16px">
@@ -59,16 +56,18 @@
       <h2>Cara kerja bank soal ini</h2>
       <ul>
         <li>Setiap soal dibuat dari templat dengan angka acak dalam rentang yang wajar. <strong>Kode soal</strong> di pojok kartu menentukan angkanya, jadi soal yang sama bisa dibagikan lewat tautan.</li>
-        <li>Kunci jawaban dihitung oleh modul yang sama dengan <a href="../#alat">kalkulator</a>, yang sudah diuji terhadap perhitungan Python terpisah dan nilai tabel buku teks. Bank soal ini juga diuji dengan 3.000 soal acak (<a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/tree/main/tests"><code>tests/</code></a>).</li>
+        <li>Kunci jawaban dihitung oleh modul yang sama dengan <a href="../alat/">kalkulator</a>, yang sudah diuji terhadap perhitungan Python terpisah dan nilai tabel buku teks. Bank soal ini juga diuji dengan 3.000 soal acak (<a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/tree/main/tests"><code>tests/</code></a>).</li>
         <li>Jawaban dianggap benar bila selisihnya paling besar 2% dari kunci, karena pembulatan di langkah tengah bisa sedikit menggeser hasil.</li>
         <li>Skor dihitung dari jawaban pertama untuk setiap soal, jadi menebak berulang kali tidak menaikkan skor. Skor hanya tersimpan di browser ini dan tidak dikirim ke mana pun.</li>
       </ul>
     </section>
   </main>
 
+  <!-- FOOTER:MULAI -->
   <footer>
-    <div class="wadah">Dibuat oleh <a href="../">Defsa Yurinda</a>, Teknik Sipil Universitas Jambi · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
+    <div class="wadah"><a href="../">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">Kode dan tulisan di GitHub</a> · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
   </footer>
+  <!-- FOOTER:SELESAI -->
 
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
   <script src="../assets/umum.js" defer></script>

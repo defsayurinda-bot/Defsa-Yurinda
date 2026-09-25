@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01 — Mengenal Claude dan Claude Code · Defsa Yurinda</title>
+  <meta name="description" content="Claude adalah asisten AI buatan Anthropic. Saya memakainya lewat claude.ai, di browser atau aplikasi ponsel. Di sana Claude bisa diajak diskusi, membaca file yang dilampirkan…">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="01 — Mengenal Claude dan Claude Code · Defsa Yurinda">
+  <meta property="og:description" content="Claude adalah asisten AI buatan Anthropic. Saya memakainya lewat claude.ai, di browser atau aplikasi ponsel. Di sana Claude bisa diajak diskusi, membaca file yang dilampirkan…">
+  <meta property="og:url" content="https://defsayurinda-bot.github.io/Defsa-Yurinda/catatan/01-mengenal-claude-dan-claude-code/">
+  <meta property="og:image" content="https://defsayurinda-bot.github.io/Defsa-Yurinda/assets/pratinjau.png">
+  <meta property="og:locale" content="id_ID">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#c8421a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/gaya.css">
+  <link rel="icon" href="../../assets/ikon.svg" type="image/svg+xml">
+</head>
+<body>
+  <!-- NAV:MULAI -->
+  <nav class="nav">
+    <div class="wadah">
+      <a class="merek" href="../../">Defsa<span>.</span></a>
+      <ul><li><a href="../../alat/">Alat</a></li><li><a href="../../latihan/">Latihan</a></li><li><a href="../../catatan/" aria-current="page">Catatan</a></li><li><a href="../../tentang/">Tentang</a></li></ul>
+    </div>
+  </nav>
+  <!-- NAV:SELESAI -->
+
+  <main class="wadah">
+    <article class="prosa">
+      <p class="remah"><a href="../../catatan/">← Semua catatan</a></p>
+<h1>01 — Mengenal Claude dan Claude Code</h1>
+<p><em>Ditulis September 2026.</em></p>
+<h2>Claude</h2>
+<p>Claude adalah asisten AI buatan Anthropic. Saya memakainya lewat <a href="https://claude.ai">claude.ai</a>, di browser atau aplikasi ponsel. Di sana Claude bisa diajak diskusi, membaca file yang dilampirkan (PDF, Word, Excel, gambar), menghitung, dan membuat dokumen.</p>
+<h2>Claude Code</h2>
+<p>Claude Code adalah versi Claude yang bekerja langsung di dalam folder proyek. Kalau di chat Claude hanya memberi jawaban, di Claude Code Claude bisa:</p>
+<ul>
+<li>membaca dan mengubah file di folder atau repo;</li>
+<li>menjalankan perintah, misalnya script Python untuk mengecek hitungan;</li>
+<li>menyimpan perubahan dengan git dan mengirimnya ke GitHub.</li>
+</ul>
+<p>Claude Code bisa dipakai di terminal, di aplikasi desktop, di ekstensi editor kode, dan di web (<a href="https://claude.ai/code">claude.ai/code</a>). Saya memakai versi web. Di versi web, Claude bekerja di server yang menyalin repo GitHub saya, jadi laptop saya tidak perlu menyala.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Claude (chat)</th>
+<th>Claude Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hasil kerja</td>
+<td>Jawaban di chat, file untuk diunduh</td>
+<td>Perubahan langsung di file repo</td>
+</tr>
+<tr>
+<td>Cocok untuk</td>
+<td>Diskusi, belajar, dokumen satu kali</td>
+<td>Pekerjaan yang disimpan dan dikembangkan terus</td>
+</tr>
+<tr>
+<td>Riwayat</td>
+<td>Tersimpan per percakapan</td>
+<td>Tersimpan di git, bisa dilacak per baris</td>
+</tr>
+</tbody>
+</table>
+<h2>Empat hal yang mengatur perilaku Claude</h2>
+<table>
+<thead>
+<tr>
+<th>Nama</th>
+<th>Letak</th>
+<th>Fungsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Preferensi</strong></td>
+<td>Pengaturan profil di claude.ai</td>
+<td>Aturan umum untuk semua percakapan: bahasa, gaya, cara kerja. Punya saya ada di <a href="../../cara-memakai-ai/preferensi/">preferensi.md</a>.</td>
+</tr>
+<tr>
+<td><strong>Project</strong></td>
+<td>Fitur di claude.ai</td>
+<td>Kumpulan percakapan yang berbagi dokumen dan instruksi yang sama. Saya pakai untuk urusan yang panjang, misalnya lomba.</td>
+</tr>
+<tr>
+<td><strong>Skill</strong></td>
+<td>Paket instruksi (file <code>SKILL.md</code>)</td>
+<td>Aturan khusus untuk jenis tugas tertentu. Claude memuatnya saat tugas yang cocok muncul. Punya saya ada di <a href="../../skill/">skill/</a>.</td>
+</tr>
+<tr>
+<td><strong><code>CLAUDE.md</code></strong></td>
+<td>File di dalam repo</td>
+<td>Dibaca otomatis oleh Claude Code di setiap sesi yang membuka repo itu.</td>
+</tr>
+</tbody>
+</table>
+<p>Satu hal yang paling penting saya pahami: <strong>Claude tidak ingat percakapan dari sesi lain.</strong> Yang terbawa hanya yang tertulis di preferensi, project, skill, atau <code>CLAUDE.md</code>. Jadi keputusan penting harus ditulis, bukan hanya diucapkan di chat.</p>
+<h2>Contoh</h2>
+<p>Di chat biasa, kalau saya minta "hitung daya dukung tiang ini", Claude bisa memakai format apa saja. Setelah preferensi dan skill saya pasang, permintaan yang sama selalu dijawab dengan urutan yang saya tetapkan: diketahui, ditanya, penyelesaian lengkap dengan sumber rumus, hasil, lalu catatan asumsi. Hitungannya juga dicek ulang dengan Python sebelum ditampilkan.</p>
+<h2>Latihan</h2>
+<p>Kalau kamu juga memakai Claude, coba tulis tiga aturan yang paling sering kamu ulang di chat (misalnya "jawab dalam Bahasa Indonesia", "tulis sumbernya"). Masukkan ketiganya ke preferensi, lalu bandingkan jawaban Claude sebelum dan sesudahnya.</p>
+      <div class="berikut"><span></span><a class="tombol" href="../../catatan/02-git-dan-pull-request-pertama/">02 · Git dan Pull Request pertama →</a></div>
+    </article>
+  </main>
+
+  <!-- FOOTER:MULAI -->
+  <footer>
+    <div class="wadah"><a href="../../">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">Kode dan tulisan di GitHub</a> · <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/konten/catatan/01-mengenal-claude-dan-claude-code.md">Sumber halaman ini</a> · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
+  </footer>
+  <!-- FOOTER:SELESAI -->
+</body>
+</html>
