@@ -35,7 +35,7 @@ Saya memakai Claude dengan tiga peran, tergantung pekerjaannya:
 | Rekan diskusi | Menyusun judul, argumen, metode | Beberapa alternatif lengkap dengan kelebihan dan kekurangannya; keputusan tetap saya ambil |
 | Eksekutor teknis | Menghitung, memeriksa file, membuat dokumen | Hitungan sungguhan yang dicek ulang, dengan asumsi dan sumber yang ditulis |
 
-Yang tidak saya serahkan ke AI: keputusan akhir, data lapangan, dan pemeriksaan terakhir sebelum sesuatu dikumpulkan. Penjelasannya ada di [Batasan dan etika](cara-saya-memakai-claude/batasan-dan-etika.md).
+Yang tidak saya serahkan ke AI: keputusan akhir, data lapangan, dan pemeriksaan terakhir sebelum sesuatu dikumpulkan. Penjelasannya ada di [Batasan dan etika](cara-memakai-ai/batasan-dan-etika.md).
 
 ## Kontak
 

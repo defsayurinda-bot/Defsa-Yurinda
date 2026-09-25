@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>02 — Git dan Pull Request pertama · Defsa Yurinda</title>
+  <meta name="description" content="Buat PR tanpa Claude, langsung dari web GitHub:">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="02 — Git dan Pull Request pertama · Defsa Yurinda">
+  <meta property="og:description" content="Buat PR tanpa Claude, langsung dari web GitHub:">
+  <meta property="og:url" content="https://defsayurinda-bot.github.io/Defsa-Yurinda/catatan/02-git-dan-pull-request-pertama/">
+  <meta property="og:image" content="https://defsayurinda-bot.github.io/Defsa-Yurinda/assets/pratinjau.png">
+  <meta property="og:locale" content="id_ID">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#c8421a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/gaya.css">
+  <link rel="icon" href="../../assets/ikon.svg" type="image/svg+xml">
+</head>
+<body>
+  <!-- NAV:MULAI -->
+  <nav class="nav">
+    <div class="wadah">
+      <a class="merek" href="../../">Defsa<span>.</span></a>
+      <ul><li><a href="../../alat/">Alat</a></li><li><a href="../../latihan/">Latihan</a></li><li><a href="../../catatan/" aria-current="page">Catatan</a></li><li><a href="../../tentang/">Tentang</a></li></ul>
+    </div>
+  </nav>
+  <!-- NAV:SELESAI -->
+
+  <main class="wadah">
+    <article class="prosa">
+      <p class="remah"><a href="../../catatan/">← Semua catatan</a></p>
+<h1>02 — Git dan Pull Request pertama</h1>
+<p><em>Ditulis September 2026, dari sesi pertama saya merapikan akun GitHub bersama Claude Code.</em></p>
+<h2>Istilah dasar</h2>
+<table>
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Arti</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Repository (repo)</strong></td>
+<td>Folder proyek yang setiap perubahannya dicatat.</td>
+</tr>
+<tr>
+<td><strong>Commit</strong></td>
+<td>Satu catatan perubahan: file apa yang berubah, oleh siapa, kapan, dan pesannya.</td>
+</tr>
+<tr>
+<td><strong>Branch</strong></td>
+<td>Jalur kerja terpisah. <code>main</code> adalah jalur utama; perubahan dicoba di branch lain dulu.</td>
+</tr>
+<tr>
+<td><strong>Push</strong></td>
+<td>Mengirim commit ke GitHub.</td>
+</tr>
+<tr>
+<td><strong>Pull Request (PR)</strong></td>
+<td>Permintaan menggabungkan branch ke <code>main</code>. Di sini perubahan diperiksa sebelum diterima.</td>
+</tr>
+<tr>
+<td><strong>Merge</strong></td>
+<td>Menggabungkan branch ke <code>main</code>.</td>
+</tr>
+<tr>
+<td><strong>Issue</strong></td>
+<td>Catatan tugas atau masalah di GitHub. Bisa diberi label dan ditutup kalau selesai.</td>
+</tr>
+</tbody>
+</table>
+<h2>Alurnya</h2>
+<pre><code>main ──●──────────────────────●──   (merge)
+        \                    /
+branch   ●── commit ── push ── PR
+</code></pre>
+<h2>Yang terjadi di sesi pertama</h2>
+<ol>
+<li>Repo pribadi saya awalnya hanya berisi <code>README.md</code> satu baris.</li>
+<li>Claude membuat branch, menulis <code>CLAUDE.md</code> (profil dan aturan kerja saya), lalu commit dan push.</li>
+<li>Saya membuat Pull Request pertama, membaca perubahannya di tab <strong>Files changed</strong>, lalu klik <strong>Merge</strong>.</li>
+<li>Untuk pekerjaan berikutnya, Claude memulai branch baru dari <code>main</code> terbaru. PR yang sudah di-merge tidak dipakai lagi.</li>
+<li>Setelah paham alurnya, saya memutuskan Claude boleh melakukan merge sendiri. Saya tetap bisa memeriksa belakangan lewat riwayat commit, dan kesalahan bisa dibatalkan dengan <code>git revert</code>.</li>
+<li>Tugas yang belum selesai dicatat di <strong>Issues</strong> dengan label (<code>repo</code>, <code>belajar</code>, <code>kuliah</code>, <code>skripsi</code>). Issues juga berfungsi sebagai ingatan untuk sesi Claude berikutnya.</li>
+</ol>
+<h2>Yang saya pelajari</h2>
+<ul>
+<li><strong>Branch dan PR membuat kesalahan murah.</strong> Kalau hasil kerja Claude salah, PR cukup ditutup tanpa merge. <code>main</code> tidak berubah.</li>
+<li><strong>Claude tidak bisa melakukan semuanya.</strong> Pengaturan akun (username, foto, 2FA) dan membuat repo baru harus saya kerjakan sendiri di web GitHub. Aplikasi Claude di GitHub hanya diberi akses ke repo tertentu.</li>
+<li><strong>Repo publik perlu disaring.</strong> NIM, data proyek, dan draf skripsi tidak masuk ke repo publik. Draf skripsi yang sudah terbit online bisa terdeteksi sebagai kemiripan oleh pemeriksa plagiarisme.</li>
+</ul>
+<h2>Latihan</h2>
+<p>Buat PR tanpa Claude, langsung dari web GitHub:</p>
+<ol>
+<li>Buka sebuah file di repo milikmu, lalu klik ikon pensil.</li>
+<li>Ubah satu kalimat.</li>
+<li>Klik <strong>Commit changes...</strong>, pilih <strong>Create a new branch for this commit and start a pull request</strong>.</li>
+<li>Buat PR-nya, periksa <strong>Files changed</strong>, lalu merge.</li>
+</ol>
+<p>Pertanyaan: kalau di langkah 4 kamu klik <strong>Close pull request</strong> alih-alih merge, apa yang terjadi pada file di <code>main</code>?</p>
+      <div class="berikut"><a class="tombol" href="../../catatan/01-mengenal-claude-dan-claude-code/">← 01 · Mengenal Claude dan Claude Code</a><a class="tombol" href="../../catatan/03-membangun-situs-dan-kalkulator/">03 · Membangun situs dan kalkulator bersama Claude Code →</a></div>
+    </article>
+  </main>
+
+  <!-- FOOTER:MULAI -->
+  <footer>
+    <div class="wadah"><a href="../../">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">Kode dan tulisan di GitHub</a> · <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/konten/catatan/02-git-dan-pull-request-pertama.md">Sumber halaman ini</a> · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
+  </footer>
+  <!-- FOOTER:SELESAI -->
+</body>
+</html>

@@ -184,3 +184,33 @@ footer { border-top: 1px solid var(--garis); margin-top: 64px; padding: 28px 0 4
   .kartu { box-shadow: none; }
   .tata-kalk { grid-template-columns: 1fr; }
 }
+
+/* Beranda */
+.pahlawan-beranda { display: grid; gap: 32px; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; }
+.pahlawan-beranda .ilustrasi { width: 100%; max-width: 340px; justify-self: center; }
+@media (max-width: 720px) { .pahlawan-beranda { grid-template-columns: minmax(0, 1fr); } .pahlawan-beranda .ilustrasi { max-width: 220px; } }
+
+/* Rincian alat */
+.rincian { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 10px 0 0; font-size: 14px; }
+.rincian dt { font-weight: 700; color: var(--teks-2); }
+.rincian dd { margin: 0; }
+
+/* Halaman tulisan (dibangun dari konten/) */
+.prosa { max-width: 760px; margin: 0 auto; padding: 40px 0 8px; }
+.prosa h1 { font-size: clamp(30px, 5vw, 44px); margin-bottom: .6em; }
+.prosa h2 { font-size: clamp(21px, 3vw, 26px); }
+.prosa h3 { font-size: 18px; }
+.prosa p, .prosa li { line-height: 1.75; }
+.prosa ul, .prosa ol { padding-left: 1.3em; }
+.prosa li { margin: .25em 0; }
+.prosa table { margin: 1em 0 1.4em; display: block; overflow-x: auto; border: 1px solid var(--garis); border-radius: 10px; }
+.prosa th, .prosa td { white-space: normal; min-width: 120px; vertical-align: top; }
+.prosa code { background: var(--permukaan-2); border-radius: 5px; padding: 1px 5px; font-size: .92em; }
+.prosa pre { background: var(--permukaan-2); border-radius: 10px; padding: 14px 16px; overflow-x: auto; }
+.prosa pre code { background: none; padding: 0; }
+.prosa blockquote { margin: 1em 0; padding: 4px 0 4px 16px; border-left: 3px solid var(--aksen); color: var(--teks-2); }
+.prosa em:only-child { color: var(--teks-2); }
+.remah { font-size: 14px; margin-bottom: 18px; }
+.remah a { text-decoration: none; }
+.berikut { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--garis); }
+.kisi-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
