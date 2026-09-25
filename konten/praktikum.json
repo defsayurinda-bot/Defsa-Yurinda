@@ -198,15 +198,23 @@
           "id": "sondir",
           "judul": "Sondir",
           "standar": "SNI 2827:2008",
-          "status": "menyusul",
-          "deskripsi": "Perlawanan konus, hambatan lekat, jumlah hambatan lekat, dan grafik terhadap kedalaman."
+          "status": "tersedia",
+          "deskripsi": "PK, JP, hambatan lekat, JHL, hambatan setempat, rasio gesekan, dan grafik terhadap kedalaman seperti form lab.",
+          "skrip": [
+            "hitung-lapangan.js",
+            "alat-lapangan.js"
+          ]
         },
         {
           "id": "spt",
-          "judul": "Standard Penetration Test",
+          "judul": "SPT dan log bor",
           "standar": "SNI 4153:2008",
-          "status": "menyusul",
-          "deskripsi": "Nilai N dari tiga interval pukulan dan grafik N terhadap kedalaman."
+          "status": "tersedia",
+          "deskripsi": "Nilai N dan N60, kepadatan atau konsistensi menurut N, dan log bor berpola lapisan dengan grafik N terhadap kedalaman.",
+          "skrip": [
+            "hitung-lapangan.js",
+            "alat-lapangan.js"
+          ]
         }
       ]
     }

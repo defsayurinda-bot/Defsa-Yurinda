@@ -229,15 +229,18 @@ def halaman_induk_praktikum(data):
                 kartu.append(f'        <div class="kartu kartu-menyusul">\n          {isi}\n          <p class="kecil"><strong>Menyusul</strong></p>\n        </div>')
         bagian.append(f'    <section>\n      <h2>{html.escape(k["judul"])}</h2>\n      <div class="kisi">\n' + "\n".join(kartu) + "\n      </div>\n    </section>")
     tersedia = sum(a["status"] == "tersedia" for k in data["kelompok"] for a in k["alat"])
+    semua = sum(len(k["alat"]) for k in data["kelompok"])
+    status_alat = (f"Semua {semua} alat sudah tersedia, dari sifat fisik sampai uji lapangan." if tersedia == semua
+                   else f"{tersedia} dari {semua} alat sudah tersedia; alat lain menyusul.")
     return (kepala("Praktikum Mekanika Tanah", "Alat pengolah data praktikum Mekanika Tanah: formulir seperti lembar data laboratorium, langkah hitungan, grafik, dan ekspor ke Excel.", awalan, folder) +
             "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "praktikum") + "\n  <!-- NAV:SELESAI -->\n\n"
             "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
             "      <span class=\"label-atas\">Praktikum</span>\n      <h1>Praktikum Mekanika Tanah</h1>\n"
-            f"      <p class=\"lead\">Pengolah data praktikum dengan formulir seperti lembar data laboratorium. {tersedia} alat sudah tersedia; alat lain menyusul.</p>\n"
-            "    </header>\n    <div class=\"kisi fitur\">\n"
+            f"      <p class=\"lead\">Pengolah data praktikum dengan formulir seperti lembar data laboratorium. {status_alat}</p>\n"
+            "    </header>\n    <div class=\"kisi kisi-2 fitur\">\n"
             "      <div class=\"kartu\"><h3>Isi seperti form lab</h3><p class=\"redup\">Baris dan simbol mengikuti lembar data. Angka boleh diketik dengan koma, atau blok data di Excel lalu tempel sekaligus.</p></div>\n"
             "      <div class=\"kartu\"><h3>Langkah dan grafik</h3><p class=\"redup\">Setiap hasil disertai rumus bernomor, substitusi angka, dan grafik yang dibutuhkan laporan.</p></div>\n"
-            "      <div class=\"kartu\"><h3>Saling terhubung</h3><p class=\"redup\">Hasil satu alat bisa diambil alat lain: G<sub>s</sub> ke pemadatan dan hidrometer, saringan dan Atterberg ke klasifikasi, γ<sub>d maks</sub> ke sand cone.</p></div>\n"
+            "      <div class=\"kartu\"><h3>Saling terhubung</h3><p class=\"redup\">Hasil satu alat bisa diambil alat lain: G<sub>s</sub> ke pemadatan, hidrometer, dan konsolidasi; saringan, hidrometer, dan Atterberg ke klasifikasi; γ<sub>d maks</sub> ke sand cone dan CBR.</p></div>\n"
             "      <div class=\"kartu\"><h3>Siap untuk laporan</h3><p class=\"redup\">Unduh Word dengan Times New Roman dan tabel tanpa garis vertikal, grafik PNG, salin ke Excel, atau cetak dengan kop identitas contoh.</p></div>\n"
             "    </div>\n" + "\n".join(bagian) +
             "\n    <section>\n      <div class=\"catatan\"><strong>Untuk laporan.</strong> Alat ini membantu mengolah dan memeriksa data. Ikuti modul dan arahan asisten laboratorium untuk format laporan resmi, termasuk bila perhitungan harus ditulis tangan.</div>\n    </section>\n  </main>\n\n"
