@@ -102,7 +102,12 @@
 </tr>
 </tbody>
 </table>
-<p>Satu hal yang paling penting saya pahami: <strong>Claude tidak ingat percakapan dari sesi lain.</strong> Yang terbawa hanya yang tertulis di preferensi, project, skill, atau <code>CLAUDE.md</code>. Jadi keputusan penting harus ditulis, bukan hanya diucapkan di chat.</p>
+<p>Satu hal penting: <strong>cara Claude mengingat berbeda di claude.ai dan di Claude Code.</strong> (Dicek di dokumentasi resmi, September 2026.)</p>
+<ul>
+<li><strong>claude.ai.</strong> Claude bisa mencari percakapan lama bila diminta (paket berbayar) dan menyimpan memori dari chat. Memori aktif bawaan untuk paket Free, Pro, dan Max, dan setiap project punya memori sendiri. Keduanya diatur di Settings → Memory, termasuk untuk menjeda atau menghapus memori.</li>
+<li><strong>Claude Code.</strong> Setiap sesi mulai dengan konteks kosong. Yang terbawa ke sesi berikutnya adalah <code>CLAUDE.md</code> yang saya tulis dan <em>auto memory</em>, yaitu catatan yang ditulis Claude sendiri di folder <code>~/.claude/projects/</code> pada komputer tempat Claude Code berjalan.</li>
+</ul>
+<p>Memori otomatis membantu, tapi isinya ditentukan Claude. Jadi keputusan penting tetap saya tulis di <code>CLAUDE.md</code> atau preferensi, bukan hanya diucapkan di chat.</p>
 <h2>Contoh</h2>
 <p>Di chat biasa, kalau saya minta "hitung daya dukung tiang ini", Claude bisa memakai format apa saja. Setelah preferensi dan skill saya pasang, permintaan yang sama selalu dijawab dengan urutan yang saya tetapkan: diketahui, ditanya, penyelesaian lengkap dengan sumber rumus, hasil, lalu catatan asumsi. Hitungannya juga dicek ulang dengan Python sebelum ditampilkan.</p>
 <h2>Latihan</h2>
@@ -113,7 +118,7 @@
 
   <!-- FOOTER:MULAI -->
   <footer>
-    <div class="wadah"><a href="../../">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · <a href="https://github.com/defsayurinda/defsayurinda.github.io">Kode dan tulisan di GitHub</a> · <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/konten/catatan/01-mengenal-claude-dan-claude-code.md">Sumber halaman ini</a> · Isi dilisensikan <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/LICENSE">CC BY 4.0</a></div>
+    <div class="wadah"><a href="../../">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · <a href="https://github.com/defsayurinda/defsayurinda.github.io">Kode dan tulisan di GitHub</a> · <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/konten/catatan/01-mengenal-claude-dan-claude-code.md">Sumber halaman ini</a> · Kode <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/LICENSE">MIT</a>, tulisan <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/LICENSE-TULISAN">CC BY 4.0</a></div>
   </footer>
   <!-- FOOTER:SELESAI -->
 </body>

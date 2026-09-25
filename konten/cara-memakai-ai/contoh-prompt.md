@@ -28,7 +28,7 @@ Perintah yang jelas menyebut tiga hal: **apa** yang dikerjakan, **data atau ruju
 
 > Usulkan kerangka [proposal/bab/laporan] dulu: subbab, isi ringkas, data yang dipakai, dan data yang masih kurang. Tunggu persetujuan saya.
 
-> Tulis subbab [2.1] saja sesuai kerangka yang sudah disetujui. Berhenti setelah subbab itu.
+> Ini draf subbab [2.1] yang saya tulis sendiri. Periksa: apakah setiap klaim punya sumber, apakah urutannya sesuai kerangka, dan kalimat mana yang kurang jelas. Jangan tulis ulang; beri catatan per paragraf.
 
 > Periksa paragraf ini dari pola tulisan AI dan aturan penulisan akademik. Tunjukkan kalimat yang bermasalah dan usulan perbaikannya.
 

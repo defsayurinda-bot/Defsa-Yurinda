@@ -31,7 +31,12 @@ Claude Code bisa dipakai di terminal, di aplikasi desktop, di ekstensi editor ko
 | **Skill** | Paket instruksi (file `SKILL.md`) | Aturan khusus untuk jenis tugas tertentu. Claude memuatnya saat tugas yang cocok muncul. Punya saya ada di [skill/](../skill/README.md). |
 | **`CLAUDE.md`** | File di dalam repo | Dibaca otomatis oleh Claude Code di setiap sesi yang membuka repo itu. |
 
-Satu hal yang paling penting saya pahami: **Claude tidak ingat percakapan dari sesi lain.** Yang terbawa hanya yang tertulis di preferensi, project, skill, atau `CLAUDE.md`. Jadi keputusan penting harus ditulis, bukan hanya diucapkan di chat.
+Satu hal penting: **cara Claude mengingat berbeda di claude.ai dan di Claude Code.** (Dicek di dokumentasi resmi, September 2026.)
+
+- **claude.ai.** Claude bisa mencari percakapan lama bila diminta (paket berbayar) dan menyimpan memori dari chat. Memori aktif bawaan untuk paket Free, Pro, dan Max, dan setiap project punya memori sendiri. Keduanya diatur di Settings → Memory, termasuk untuk menjeda atau menghapus memori.
+- **Claude Code.** Setiap sesi mulai dengan konteks kosong. Yang terbawa ke sesi berikutnya adalah `CLAUDE.md` yang saya tulis dan *auto memory*, yaitu catatan yang ditulis Claude sendiri di folder `~/.claude/projects/` pada komputer tempat Claude Code berjalan.
+
+Memori otomatis membantu, tapi isinya ditentukan Claude. Jadi keputusan penting tetap saya tulis di `CLAUDE.md` atau preferensi, bukan hanya diucapkan di chat.
 
 ## Contoh
 
