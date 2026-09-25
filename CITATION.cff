@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Kalau memakai alat atau tulisan di repo ini, mohon kutip sebagai berikut."
+title: "Defsa Yurinda: kalkulator geoteknik, alat praktikum Mekanika Tanah, dan catatan belajar"
+type: software
+authors:
+  - family-names: Yurinda
+    given-names: Defsa
+    affiliation: "Program Studi Teknik Sipil, Universitas Jambi"
+version: 0.9.0
+date-released: 2026-09-26
+url: "https://defsayurinda.github.io/"
+repository-code: "https://github.com/defsayurinda/defsayurinda.github.io"
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - geoteknik
+  - teknik sipil
+  - mekanika tanah
+  - tiang bor
+  - kalkulator

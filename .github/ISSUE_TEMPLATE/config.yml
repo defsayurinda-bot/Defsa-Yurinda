@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Celah keamanan
+    url: https://github.com/defsayurinda/defsayurinda.github.io/security/advisories/new
+    about: Laporkan celah keamanan secara privat, bukan lewat Issue publik.
+  - name: Panduan menambah isi
+    url: https://github.com/defsayurinda/defsayurinda.github.io/blob/main/PANDUAN.md
+    about: Cara menambah catatan, soal, atau alat.
