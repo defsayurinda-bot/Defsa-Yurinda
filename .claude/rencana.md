@@ -28,7 +28,7 @@ Lanjutan Tahap 2 (26 September 2026): rumus Reese & Wright dicocokkan dengan Las
 | Tampilan | Dua konsep beranda dulu; Defsa memilih dari tangkapan layar. (a) Turunan template presentasi Defsa: latar putih, pita oranye `#F05A28`, judul distabilo kuning `#FFFF00`, huruf tebal bergaya Arial Black hanya untuk judul (pakai padanan berlisensi terbuka seperti Archivo Black yang disimpan lokal, karena Arial Black tidak ada di banyak HP), tanpa logo kampus. (b) Lembar gambar kerja: kop seperti etiket gambar AutoCAD, grid tipis, huruf teknik |
 | Akun dan alamat | Defsa mengganti username menjadi `defsayurinda`; repo situs menjadi `defsayurinda.github.io`; repo profil menjadi `defsayurinda` |
 | Riwayat commit | Riwayat kedua repo publik ditulis ulang dengan satu kali force push setelah Defsa mengizinkan |
-| Merge | Hanya Defsa |
+| Merge | Claude boleh me-merge PR-nya sendiri setelah uji lulus dan CI hijau, lalu lanjut ke tahap berikutnya tanpa bertanya (diubah September 2026; sebelumnya hanya Defsa) |
 | Bahasa | Indonesia; beranda, tentang, CV, dan README juga dalam bahasa Inggris sederhana |
 | Teknologi | Tetap HTML, CSS, JavaScript biasa, dan skrip Python |
 | Urusan pribadi | Di repo privat `Defsa`, tidak pernah di repo publik |

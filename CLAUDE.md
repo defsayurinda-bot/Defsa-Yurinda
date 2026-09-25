@@ -5,10 +5,10 @@ Panduan untuk Claude saat bekerja di repo ini. Rencana kerja per tahap, keputusa
 ## Aturan wajib
 
 1. **Identitas git** wajib `Defsa Yurinda <310235006+defsayurinda@users.noreply.github.com>` (akun berganti nama dari `-bot` di Tahap 1, September 2026). Cek `git config user.email` sebelum setiap commit. Email `187654321+defsa-yurinda@users.noreply.github.com` SALAH: ID itu milik akun GitHub orang lain. Lingkungan cloud pernah menyetel `GIT_AUTHOR_EMAIL` dan `GIT_COMMITTER_EMAIL` ke email salah itu, dan variabel lingkungan mengalahkan `git config`; periksa juga `env | grep ^GIT_`. Blok `env` di `.claude/settings.json` menimpanya.
-2. **Jangan pernah me-merge PR dan jangan push langsung ke `main`.** Defsa yang me-merge di GitHub setelah memeriksa. Satu-satunya pengecualian: force push penulisan ulang riwayat di Tahap 1 setelah Defsa mengizinkan.
-3. **Kerjakan hanya tahap yang diminta.** Jangan menambah fitur, halaman, alat, atau refactor di luar daftar tugas tahap itu. Fitur baru baru dikerjakan setelah semua temuan Fatal beres (diperbaiki sesuai sumber, atau bagian yang terdampak disembunyikan).
+2. **Merge.** Claude boleh me-merge PR yang ia buat sendiri (metode merge commit) setelah semua `tests/verifikasi_*.py` dan `python3 skrip/bangun_situs.py --periksa` lulus di sesi dan pemeriksaan CI di PR hijau. Jangan push langsung ke `main`, jangan merge PR buatan orang lain, dan jangan force push tanpa izin Defsa (keputusan Defsa, September 2026).
+3. **Kerjakan tahap sesuai rencana, berurutan.** Setelah satu tahap selesai dan di-merge, lanjut ke tahap berikutnya tanpa bertanya. Jangan menambah fitur, halaman, alat, atau refactor di luar daftar tugas tahap itu. Fitur baru baru dikerjakan setelah semua temuan Fatal beres (diperbaiki sesuai sumber, atau bagian yang terdampak disembunyikan).
 4. **Sumber.** Jangan menulis rumus, koefisien, nilai tabel, nomor standar, atau pustaka tanpa sumber yang memenuhi Aturan Sumber di rencana. Kalau sumber yang memenuhi tidak ada di sesi, berhenti dan minta Defsa mengirim halamannya. Jangan mencari pengganti dari situs yang dilarang.
-5. **Berhenti dan tanya Defsa** sebelum: force push; menghapus berkas atau branch; mengganti nama repo atau berkas secara massal; mengubah pengaturan repo atau akun; memilih di antara dua cara yang sama-sama valid dan memengaruhi arsitektur; mengerjakan apa pun di luar tahap; atau setelah dua kali gagal memperbaiki galat yang sama.
+5. **Berhenti dan tanya Defsa** hanya sebelum: force push; menghapus berkas atau branch milik Defsa; mengganti nama repo atau berkas secara massal; mengubah pengaturan repo atau akun; menulis rumus yang sumbernya belum ada (Aturan wajib 4); memilih konsep tampilan (Tahap 4); memuat bahan pribadi yang belum dikirim Defsa (Tahap 5); membuat rilis atau tag; atau setelah dua kali gagal memperbaiki galat yang sama. Bagian tahap yang tertahan dicatat di Issue tahapnya, lalu kerjakan bagian lain yang tidak tertahan.
 6. **Privasi.** Jangan memuat NIM, nomor HP, alamat, email pribadi, data atau nama asli proyek, nama dosen, draf skripsi, atau detail lomba ke repo publik. Repo privat `catatan-pribadi` tidak disentuh kecuali disebut di tugas.
 7. **Satu branch per tahap** dengan nama jelas, misalnya `tahap-2/hitungan`. Pakai subagent hanya untuk penelusuran besar yang benar-benar terpisah.
 8. **Bukti.** Setiap klaim "selesai" dibuktikan dengan keluaran perintah (uji, `python3 skrip/bangun_situs.py --periksa`) dan, untuk tampilan, tangkapan layar.
@@ -21,7 +21,7 @@ Bahasa Indonesia, singkat, tanpa basa-basi:
 3. Daftar hal yang menunggu Defsa.
 4. Tautan PR dan Issue.
 
-Setelah laporan, berhenti dan tunggu Defsa.
+Laporan ditulis di Issue tahap dan di jawaban sesi. Setelah laporan, lanjut ke tahap berikutnya; berhenti hanya pada titik di Aturan wajib 5.
 
 ## Tentang repo
 
@@ -79,7 +79,7 @@ Menambah alat praktikum: berkas `hitung-<nama>.js`, definisi `alat-<nama>.js` (`
 
 ## Alur kerja git
 
-- Mulai dari `main` terbaru, satu branch per tahap, buka Pull Request, lalu berhenti. Defsa yang me-merge.
+- Mulai dari `main` terbaru, satu branch per tahap, buka Pull Request, tunggu CI hijau, lalu merge sesuai Aturan wajib 2. Hapus branch tidak bisa dari sesi; catat di laporan.
 - Pesan commit dalam bahasa Indonesia, kalimat perintah singkat.
 - Kesalahan yang sudah masuk `main` dibatalkan dengan `git revert` lewat PR, bukan dengan menghapus riwayat (kecuali Tahap 1 dengan izin).
 - Operasi GitHub (Issue, label, milestone) lewat REST API; GraphQL dibatasi di sesi cloud.
