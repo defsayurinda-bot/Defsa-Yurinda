@@ -14,8 +14,8 @@ from urllib.parse import unquote
 
 AKAR = Path(__file__).resolve().parent.parent
 DOCS = AKAR / "docs"
-BLOB = "https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/"
-TREE = "https://github.com/defsayurinda-bot/Defsa-Yurinda/tree/main/"
+BLOB = "https://github.com/defsayurinda/defsayurinda.github.io/blob/main/"
+TREE = "https://github.com/defsayurinda/defsayurinda.github.io/tree/main/"
 JALUR_LAMA = ("tentang-saya.md", "cara-saya-memakai-claude/", "/blob/main/catatan/", "/blob/main/skill/")
 
 
@@ -40,8 +40,8 @@ def main():
             if re.match(r"^https?://", url):
                 continue
             jalur = url.split("#")[0].split("?")[0]
-            if berkas.name == "404.html" and jalur.startswith("/Defsa-Yurinda/"):
-                target = DOCS / jalur.removeprefix("/Defsa-Yurinda/")
+            if berkas.name == "404.html" and jalur.startswith("/"):
+                target = DOCS / jalur.removeprefix("/")
             else:
                 target = (berkas.parent / jalur).resolve()
             if target.is_dir():

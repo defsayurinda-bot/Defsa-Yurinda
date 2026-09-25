@@ -1,8 +1,8 @@
 # Defsa Yurinda · Situs dan alat geoteknik
 
-[![Verifikasi](https://github.com/defsayurinda-bot/Defsa-Yurinda/actions/workflows/verifikasi.yml/badge.svg)](https://github.com/defsayurinda-bot/Defsa-Yurinda/actions/workflows/verifikasi.yml)
+[![Verifikasi](https://github.com/defsayurinda/defsayurinda.github.io/actions/workflows/verifikasi.yml/badge.svg)](https://github.com/defsayurinda/defsayurinda.github.io/actions/workflows/verifikasi.yml)
 
-Kode dan tulisan untuk situs **[defsayurinda-bot.github.io/Defsa-Yurinda](https://defsayurinda-bot.github.io/Defsa-Yurinda/)**: kalkulator geoteknik dengan langkah hitungan lengkap, latihan soal, dan catatan belajar memakai Claude Code.
+Kode dan tulisan untuk situs **[defsayurinda.github.io](https://defsayurinda.github.io/)**: kalkulator geoteknik dengan langkah hitungan lengkap, latihan soal, dan catatan belajar memakai Claude Code.
 
 Untuk **memakai** alatnya, buka situsnya. README ini untuk yang ingin melihat atau mengubah isinya.
 
@@ -10,9 +10,9 @@ Untuk **memakai** alatnya, buka situsnya. README ini untuk yang ingin melihat at
 
 | Bagian | Tautan |
 |---|---|
-| Alat | [Semua kalkulator](https://defsayurinda-bot.github.io/Defsa-Yurinda/alat/) · [Praktikum Mekanika Tanah](https://defsayurinda-bot.github.io/Defsa-Yurinda/praktikum/) · [Latihan soal](https://defsayurinda-bot.github.io/Defsa-Yurinda/latihan/) |
-| Tulisan | [Catatan belajar](https://defsayurinda-bot.github.io/Defsa-Yurinda/catatan/) · [Cara saya memakai AI](https://defsayurinda-bot.github.io/Defsa-Yurinda/cara-memakai-ai/) · [Skill Claude](https://defsayurinda-bot.github.io/Defsa-Yurinda/skill/) |
-| Profil | [Tentang saya](https://defsayurinda-bot.github.io/Defsa-Yurinda/tentang/) |
+| Alat | [Semua kalkulator](https://defsayurinda.github.io/alat/) · [Praktikum Mekanika Tanah](https://defsayurinda.github.io/praktikum/) · [Latihan soal](https://defsayurinda.github.io/latihan/) |
+| Tulisan | [Catatan belajar](https://defsayurinda.github.io/catatan/) · [Cara saya memakai AI](https://defsayurinda.github.io/cara-memakai-ai/) · [Skill Claude](https://defsayurinda.github.io/skill/) |
+| Profil | [Tentang saya](https://defsayurinda.github.io/tentang/) |
 
 ## Struktur repo
 

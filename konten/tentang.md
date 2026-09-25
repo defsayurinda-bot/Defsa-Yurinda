@@ -39,4 +39,4 @@ Yang tidak saya serahkan ke AI: keputusan akhir, data lapangan, dan pemeriksaan 
 
 ## Kontak
 
-Lewat GitHub: [@defsayurinda-bot](https://github.com/defsayurinda-bot).
+Lewat GitHub: [@defsayurinda](https://github.com/defsayurinda).

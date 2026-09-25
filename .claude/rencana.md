@@ -1,7 +1,7 @@
 ## Status tahap
 
-- [ ] Tahap 0: Fondasi (identitas git, PR draft perubahan praktikum, rencana, CLAUDE.md, settings, Issue)
-- [ ] Tahap 1: Akun dan riwayat
+- [x] Tahap 0: Fondasi (identitas git, PR draft perubahan praktikum, rencana, CLAUDE.md, settings, Issue)
+- [ ] Tahap 1: Akun dan riwayat (sedang berjalan: rujukan nama lama lewat PR `tahap-1/akun`; penulisan ulang riwayat menunggu merge dan izin force push)
 - [ ] Tahap 2: Kebenaran hitungan dan keamanan
 - [ ] Tahap 3: Mudah ditambah
 - [ ] Tahap 4: Tampilan
@@ -10,6 +10,8 @@
 - [ ] Tahap 7: Kualitas situs, lalu rilis v1.0.0
 
 Catatan Tahap 0 (25 September 2026): perubahan praktikum yang disebut "belum di-commit" ternyata sudah masuk `main` lewat PR #7–#10 sebelum Tahap 0 dimulai. Lihat laporan Tahap 0 di PR `tahap-0/fondasi`.
+
+Catatan Tahap 1 (25 September 2026): langkah manual Defsa selesai (email privat, username `defsayurinda`, repo `defsayurinda.github.io` dan `defsayurinda`). Branch `simpan/praktikum-belum-verifikasi` tidak pernah dibuat, jadi langkah rebase di tugas 3 tidak berlaku. Mailmap disetujui: `187654321+defsa-yurinda@…`, Gmail di commit merge, dan `310235006+defsayurinda-bot@…` menjadi `310235006+defsayurinda@users.noreply.github.com`; commit `github-actions[bot]` tetap.
 
 ---
 
