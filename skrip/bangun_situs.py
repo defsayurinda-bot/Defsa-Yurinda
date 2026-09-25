@@ -26,9 +26,9 @@ import markdown
 
 AKAR = Path(__file__).resolve().parent.parent
 KONTEN, DOCS = AKAR / "konten", AKAR / "docs"
-SITUS = "https://defsayurinda-bot.github.io/Defsa-Yurinda/"
-REPO = "https://github.com/defsayurinda-bot/Defsa-Yurinda"
-DASAR_404 = "/Defsa-Yurinda/"
+SITUS = "https://defsayurinda.github.io/"
+REPO = "https://github.com/defsayurinda/defsayurinda.github.io"
+DASAR_404 = "/"
 
 MENU = [("alat/", "Alat", ("alat", "kalkulator", "praktikum")),
         ("latihan/", "Latihan", ("latihan",)),

@@ -2,7 +2,7 @@
 
 *Ditulis September 2026.*
 
-Catatan ini merangkum cara situs [defsayurinda-bot.github.io/Defsa-Yurinda](https://defsayurinda-bot.github.io/Defsa-Yurinda/) dibuat: tiga kalkulator geoteknik dan satu bank soal, dikerjakan Claude Code dalam empat tahap, masing-masing lewat Pull Request yang saya periksa hasilnya.
+Catatan ini merangkum cara situs [defsayurinda.github.io](https://defsayurinda.github.io/) dibuat: tiga kalkulator geoteknik dan satu bank soal, dikerjakan Claude Code dalam empat tahap, masing-masing lewat Pull Request yang saya periksa hasilnya.
 
 ## Konsep
 
@@ -44,5 +44,5 @@ Pelajarannya: pengujian yang gagal tidak selalu berarti programnya salah. Yang p
 
 ## Latihan
 
-1. Buka [kalkulator pondasi dangkal](https://defsayurinda-bot.github.io/Defsa-Yurinda/kalkulator/pondasi-dangkal.html), isi dengan data dari satu contoh soal di buku Mekanika Tanah atau Teknik Pondasi, lalu bandingkan hasilnya dengan jawaban buku. Kalau berbeda, cari penyebabnya: metode faktor yang berbeda, pembulatan, atau salah input?
+1. Buka [kalkulator pondasi dangkal](https://defsayurinda.github.io/kalkulator/pondasi-dangkal.html), isi dengan data dari satu contoh soal di buku Mekanika Tanah atau Teknik Pondasi, lalu bandingkan hasilnya dengan jawaban buku. Kalau berbeda, cari penyebabnya: metode faktor yang berbeda, pembulatan, atau salah input?
 2. Buka tab **Actions** di repo ini dan cari satu *run* "Verifikasi". Apa saja yang dijalankan di dalamnya?
