@@ -25,6 +25,8 @@ Repo ini berisi catatan saya selama belajar dan memakai Claude dan Claude Code u
 └── skill/                        skill Claude yang saya pakai
 ```
 
+`CLAUDE.md` berisi aturan untuk Claude saat mengubah repo ini.
+
 ## Catatan belajar
 
 | No | Topik |
