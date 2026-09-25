@@ -162,6 +162,7 @@ tfoot td { font-weight: 700; background: var(--permukaan-2); }
 .langkah { border-left: 3px solid var(--aksen); padding: 4px 0 4px 16px; margin: 18px 0; }
 .langkah h4 { margin: 0 0 6px; font-size: 16px; }
 .rumus { overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
+@media (max-width: 520px) { .rumus .katex-display { font-size: .82em; } .rumus .katex-display > .katex { text-align: left; } }
 .ket { font-size: 14px; color: var(--teks-2); }
 
 .catatan {

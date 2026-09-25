@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latihan Soal Geoteknik · Defsa Yurinda</title>
+  <meta name="description" content="Latihan soal geoteknik dengan angka acak dan pembahasan langkah demi langkah: pondasi dangkal, konsolidasi, dan tiang bor.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="../assets/gaya.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23c8421a'/><path d='M9 16 l5 5 l9 -11' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+</head>
+<body>
+  <nav class="nav">
+    <div class="wadah">
+      <a class="merek" href="../">Defsa<span>.</span></a>
+      <ul>
+        <li><a href="../#alat">Alat</a></li>
+        <li><a href="../latihan/" aria-current="page">Latihan</a></li>
+        <li><a href="../#catatan">Catatan</a></li>
+        <li><a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="wadah">
+    <header class="pahlawan" style="padding-bottom:16px">
+      <span class="label-atas">Latihan · Geoteknik</span>
+      <h1>Latihan soal</h1>
+      <p class="lead">Angka di setiap soal dibangkitkan acak, jadi soalnya tidak pernah habis. Kerjakan di kertas, masukkan jawabanmu, lalu buka pembahasan langkah demi langkah.</p>
+    </header>
+
+    <div class="baris-tombol" id="pilihTopik" role="group" aria-label="Pilih topik"></div>
+
+    <div class="tata-kalk">
+      <section>
+        <article class="kartu" id="kartuSoal" aria-live="polite"></article>
+      </section>
+      <aside class="kartu" style="position:sticky; top:76px">
+        <h3 style="margin-top:0">Skor sesi ini</h3>
+        <div class="nilai-besar" id="skor">0 <small>/ 0</small></div>
+        <p class="kecil redup" id="skorKet">Belum ada soal yang dijawab.</p>
+        <div id="riwayat" class="kecil"></div>
+        <button type="button" class="tombol kecil tidak-cetak" id="aturUlang" style="margin-top:10px">Atur ulang skor</button>
+      </aside>
+    </div>
+
+    <section>
+      <h2>Cara kerja bank soal ini</h2>
+      <ul>
+        <li>Setiap soal dibuat dari templat dengan angka acak dalam rentang yang wajar. <strong>Kode soal</strong> di pojok kartu menentukan angkanya, jadi soal yang sama bisa dibagikan lewat tautan.</li>
+        <li>Kunci jawaban dihitung oleh modul yang sama dengan <a href="../#alat">kalkulator</a>, yang sudah diuji terhadap perhitungan Python terpisah dan nilai tabel buku teks. Bank soal ini juga diuji dengan 3.000 soal acak (<a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/tree/main/tests"><code>tests/</code></a>).</li>
+        <li>Jawaban dianggap benar bila selisihnya paling besar 2% dari kunci, karena pembulatan di langkah tengah bisa sedikit menggeser hasil.</li>
+        <li>Skor dihitung dari jawaban pertama untuk setiap soal, jadi menebak berulang kali tidak menaikkan skor. Skor hanya tersimpan di browser ini dan tidak dikirim ke mana pun.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wadah">Dibuat oleh <a href="../">Defsa Yurinda</a>, Teknik Sipil Universitas Jambi · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="../assets/umum.js" defer></script>
+  <script src="../assets/pondasi-dangkal-hitung.js" defer></script>
+  <script src="../assets/konsolidasi-hitung.js" defer></script>
+  <script src="../assets/tiang-bor-hitung.js" defer></script>
+  <script src="../assets/latihan-soal.js" defer></script>
+  <script src="../assets/latihan-tampilan.js" defer></script>
+</body>
+</html>
