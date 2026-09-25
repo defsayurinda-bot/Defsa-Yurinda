@@ -1,75 +1,85 @@
 # CLAUDE.md
 
-Panduan untuk Claude saat bekerja di repo ini.
+Panduan untuk Claude saat bekerja di repo ini. Rencana kerja per tahap, keputusan Defsa, Aturan Sumber, dan temuan audit ada di [`.claude/rencana.md`](.claude/rencana.md). Baca berkas itu sebelum mulai.
+
+## Aturan wajib
+
+1. **Identitas git** wajib `Defsa Yurinda <310235006+defsayurinda-bot@users.noreply.github.com>`. Setelah akun berganti nama di Tahap 1 menjadi `310235006+defsayurinda@users.noreply.github.com`. Cek `git config user.email` sebelum setiap commit. Email `187654321+defsa-yurinda@users.noreply.github.com` SALAH: ID itu milik akun GitHub orang lain.
+2. **Jangan pernah me-merge PR dan jangan push langsung ke `main`.** Defsa yang me-merge di GitHub setelah memeriksa. Satu-satunya pengecualian: force push penulisan ulang riwayat di Tahap 1 setelah Defsa mengizinkan.
+3. **Kerjakan hanya tahap yang diminta.** Jangan menambah fitur, halaman, alat, atau refactor di luar daftar tugas tahap itu. Fitur baru baru dikerjakan setelah semua temuan Fatal beres (diperbaiki sesuai sumber, atau bagian yang terdampak disembunyikan).
+4. **Sumber.** Jangan menulis rumus, koefisien, nilai tabel, nomor standar, atau pustaka tanpa sumber yang memenuhi Aturan Sumber di rencana. Kalau sumber yang memenuhi tidak ada di sesi, berhenti dan minta Defsa mengirim halamannya. Jangan mencari pengganti dari situs yang dilarang.
+5. **Berhenti dan tanya Defsa** sebelum: force push; menghapus berkas atau branch; mengganti nama repo atau berkas secara massal; mengubah pengaturan repo atau akun; memilih di antara dua cara yang sama-sama valid dan memengaruhi arsitektur; mengerjakan apa pun di luar tahap; atau setelah dua kali gagal memperbaiki galat yang sama.
+6. **Privasi.** Jangan memuat NIM, nomor HP, alamat, email pribadi, data atau nama asli proyek, nama dosen, draf skripsi, atau detail lomba ke repo publik. Repo privat `Defsa` tidak disentuh kecuali disebut di tugas.
+7. **Satu branch per tahap** dengan nama jelas, misalnya `tahap-2/hitungan`. Pakai subagent hanya untuk penelusuran besar yang benar-benar terpisah.
+8. **Bukti.** Setiap klaim "selesai" dibuktikan dengan keluaran perintah (uji, `python3 skrip/bangun_situs.py --periksa`) dan, untuk tampilan, tangkapan layar.
+
+## Format laporan tahap
+
+Bahasa Indonesia, singkat, tanpa basa-basi:
+1. Tabel "Yang dikerjakan | Bukti (perintah dan hasil) | Berkas".
+2. Tabel khusus bila tahap memintanya.
+3. Daftar hal yang menunggu Defsa.
+4. Tautan PR dan Issue.
+
+Setelah laporan, berhenti dan tunggu Defsa.
 
 ## Tentang repo
 
-Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi). Isinya situs GitHub Pages yang menjadi **pintu utama** semua isi publik Defsa: kalkulator geoteknik, latihan soal, catatan belajar, cara memakai AI, skill, dan profil. Lisensi CC BY 4.0.
+Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi). Isinya situs GitHub Pages yang menjadi pintu utama semua isi publik Defsa: kalkulator geoteknik, alat praktikum, latihan soal, catatan belajar, cara memakai AI, skill, dan profil. Lisensi sekarang CC BY 4.0; pemisahan MIT (kode) dan CC BY 4.0 (tulisan) dikerjakan di Tahap 5.
 
 ## Aturan isi
 
-- Semua orang bisa membaca repo ini. Jangan pernah memasukkan: NIM, nomor HP, alamat, email, path folder laptop, data atau nama asli proyek skripsi, nama dosen, draf skripsi, dan detail lomba yang penilaiannya masih *blind*.
+- Semua orang bisa membaca repo ini. Lihat Aturan wajib 6.
 - Jangan mengarang pengalaman, pencapaian, atau data tentang Defsa. Kalau informasinya belum ada, tanyakan.
-- Fakta tentang fitur Claude hanya ditulis kalau yakin benar. Tulis bulan penulisan di setiap catatan karena fitur bisa berubah.
-- Bahasa Indonesia yang santai tapi rapi. Hindari pola tulisan AI.
+- Fakta tentang fitur Claude hanya ditulis setelah dicek di dokumentasi resmi. Tulis bulan penulisan di setiap catatan.
+- Teks situs mengikuti "Aturan tulisan dan tampilan" di rencana: santai tapi rapi, tanpa pola tulisan dan ciri template AI.
+- Jangan memuat nama mahasiswa, asisten, atau dosen dari berkas panduan atau form lab.
 
 ## Struktur
 
 | Lokasi | Isi |
 |---|---|
-| `konten/` | Satu-satunya sumber tulisan: `tentang.md`, `catatan/`, `cara-memakai-ai/`, `skill/` |
-| `docs/` | Situs. Halaman alat ditulis tangan; halaman tulisan dibangun dari `konten/` |
-| `skrip/bangun_situs.py` | Membangun halaman dari `konten/`, menyeragamkan menu dan footer (penanda `NAV`/`FOOTER`), daftar catatan di beranda (penanda `CATATAN`), sitemap |
+| `konten/` | Sumber tulisan (`tentang.md`, `catatan/`, `cara-memakai-ai/`, `skill/`) dan daftar alat praktikum (`praktikum.json`) |
+| `docs/` | Situs. Halaman kalkulator ditulis tangan; halaman tulisan dan praktikum dibangun dari `konten/` |
+| `skrip/bangun_situs.py` | Membangun halaman dari `konten/`, menyeragamkan menu dan footer (penanda `NAV`/`FOOTER`), daftar catatan di beranda (penanda `CATATAN`), sitemap. `--periksa` dipakai CI |
 | `tests/` | Verifikasi hitungan, bank soal, dan tautan |
+| `.claude/` | Rencana kerja dan pengaturan Claude Code |
 
-- **Profil Defsa hanya ditulis di `konten/tentang.md`.** Beranda, README ini, dan README profil GitHub hanya menautkan, tidak menyalin isinya.
-- Jangan mengedit halaman hasil bangun (`docs/tentang/`, `docs/catatan/`, `docs/cara-memakai-ai/`, `docs/skill/`) atau teks di antara penanda; edit sumbernya lalu jalankan `python3 skrip/bangun_situs.py`.
-- Catatan baru masuk `konten/catatan/` dengan nomor urut berikutnya (`04-...md`), baris pertama `# NN — Judul`, urutan isi: konsep, contoh dari pengalaman Defsa, latihan. Daftar catatan di situs dan profil GitHub terbarui otomatis.
+- Profil Defsa hanya ditulis di `konten/tentang.md`. Beranda dan README profil GitHub hanya menautkan.
+- Jangan mengedit halaman hasil bangun atau teks di antara penanda; edit sumbernya lalu jalankan `python3 skrip/bangun_situs.py`.
+- Catatan baru masuk `konten/catatan/` dengan nomor urut berikutnya, baris pertama `# NN — Judul`, urutan isi: konsep, contoh dari pengalaman Defsa, latihan.
 - Tautan antartulisan memakai jalur relatif ke berkas `.md`; skrip mengubahnya menjadi tautan situs.
-- Alat baru: tambahkan kartunya di `docs/alat/index.html` (dan di beranda bila perlu).
 - Nama file huruf kecil, dipisah tanda hubung.
 
-## Situs dan kalkulator
+## Situs dan hitungan
 
-- Situs ada di `docs/` (HTML, CSS, dan JavaScript biasa) dan diterbitkan lewat GitHub Pages dari branch `main`, folder `/docs`. Satu-satunya langkah bangun adalah `skrip/bangun_situs.py` untuk halaman tulisan; CI gagal bila `docs/` belum dibangun ulang.
-- Hitungan dipisah dari tampilan: `docs/assets/*-hitung.js` hanya berisi rumus, `*-tampilan.js` berisi formulir dan langkah hitungan.
-- Setiap rumus harus punya sumber yang bisa ditelusuri dan ditulis di halaman. Rumus yang belum bisa diverifikasi tidak dimasukkan. O'Neill & Reese (1999) ditunda karena koefisiennya belum terverifikasi.
-- Fungsi bersama (format angka, KaTeX, tautan berbagi) ada di `docs/assets/umum.js`.
-- Setiap perubahan hitungan wajib lolos semua `tests/verifikasi_*.py`, yang membandingkan JavaScript dengan perhitungan Python terpisah dan, bila ada, dengan nilai tabel buku teks. Kasus uji baru ditambahkan untuk setiap rumus baru.
-- Bank soal (`docs/latihan/`, `docs/assets/latihan-soal.js`): soal dibangkitkan dari templat dengan angka acak berbasis kode soal; kunci jawaban selalu dihitung oleh modul `*-hitung.js`, tidak ditulis tangan. Templat baru wajib ditambahkan ke `tests/verifikasi_latihan.py` beserta hitungan Python-nya.
-- Terzaghi (1943) untuk pondasi dangkal ditunda karena N<sub>γ</sub>-nya berupa tabel yang belum diverifikasi.
-- Tampilan dicek di lebar HP (390 px) dan mode gelap sebelum di-merge. Tidak boleh ada gulir horizontal. Tautan diperiksa oleh `tests/verifikasi_tautan.py`.
-- Format hitungan mengikuti urutan Defsa: diketahui, ditanya, penyelesaian (rumus, sumber, substitusi), hasil dan penjelasan, catatan. Desimal koma, ribuan titik.
+- Situs di `docs/` (HTML, CSS, JavaScript biasa), terbit lewat GitHub Pages dari `main`, folder `/docs`. CI gagal bila `docs/` belum dibangun ulang dari `konten/`.
+- Hitungan dipisah dari tampilan: `docs/assets/*-hitung.js` dan `docs/assets/praktikum/hitung-*.js` hanya berisi rumus (pola UMD, bisa di-`require` di Node); berkas tampilan berisi formulir dan langkah hitungan.
+- Setiap rumus harus punya sumber sesuai Aturan Sumber dan ditulis di halaman. Nilai yang belum terverifikasi ditandai `[BELUM TERVERIFIKASI]`.
+- Setiap perubahan hitungan wajib lolos semua `tests/verifikasi_*.py`. Uji yang hanya menyalin rumus JS ke Python belum cukup; tambahkan contoh soal buku (judul dan halaman di komentar) dan uji sifat.
+- Teks dari pengguna atau URL (tautan berbagi) harus lewat `esc()` atau `textContent` sebelum masuk `innerHTML`.
+- Bank soal: soal dibangkitkan dari templat; kunci selalu dihitung modul `*-hitung.js`. Templat baru wajib masuk `tests/verifikasi_latihan.py`.
+- Tampilan dicek di 390 px dan 1280 px, terang dan gelap, tanpa gulir horizontal dan tanpa rumus KaTeX gagal (`.katex-error`). Tautan diperiksa `tests/verifikasi_tautan.py`.
+- Format hitungan: diketahui, ditanya, penyelesaian (rumus, sumber, substitusi), hasil dan penjelasan, catatan. Desimal koma, ribuan titik.
+- Yang ditunda karena sumber belum terverifikasi: O'Neill & Reese (1999), Terzaghi (1943) untuk pondasi dangkal. Status Meyerhof dan Reese & Wright di kalkulator tiang bor: lihat temuan B1–B5 di rencana.
 
 ## Praktikum Mekanika Tanah
 
-Pengolah data praktikum di `docs/praktikum/`, disusun mengikuti form laboratorium Mekanika Tanah UNJA yang diberikan Defsa (urutan baris, simbol W1, W2, …) dan panduan laporan.
+Pengolah data praktikum di `docs/praktikum/` (16 alat), disusun mengikuti form laboratorium Mekanika Tanah UNJA dan panduan laporan yang diberikan Defsa.
 
-- **Aturan angka dari panduan laporan:** desimal koma, ribuan titik; besaran berat dan volume 3 desimal; persentase dan waktu 2 desimal; Gs dan berat isi 3 desimal.
-- **Kerangka bersama** (`docs/assets/praktikum/kerangka.js`) sudah menangani formulir, angka berkoma, identitas contoh untuk kop cetak, penyimpanan otomatis di browser, tautan berbagi, tempel blok sel dari Excel, salin ke Excel (TSV), unduh CSV (pemisah `;`, desimal koma), dan cetak. Tiga jenis tabel: `kolom` (kolom = cawan/benda uji), `baris` (satu nilai per baris pilihan, mis. saringan), dan `daftar` (baris bebas berkolom banyak, mis. bacaan waktu atau kedalaman; `kolomDari` membuat kolom mengikuti tabel lain).
-- **Hasil antaralat:** `hasil(m, r)` menyimpan hasil alat di browser (`praktikum-hasil-<id>`, dengan tanda data contoh). Alat lain mengambilnya lewat `dariAlat` pada parameter atau `impor` (tombol "Ambil dari …"). Nilai tidak pernah terisi diam-diam; pengguna yang menekan tombol.
-- **Ekspor** (`ekspor.js`): grafik ke PNG berlatar putih dan laporan ke Word `.docx` yang ditulis langsung tanpa pustaka (A4, margin 4-3-3-3, Times New Roman 11, tabel tanpa garis vertikal, nomor tabel di atas dan nomor gambar di bawah). Setelah mengubah `ekspor.js`, buka berkas hasilnya (LibreOffice atau Word) untuk memastikan masih terbaca.
-- `grafik.js` membuat grafik SVG (sumbu linier/log; sumbu log lebar hanya diberi label di 1, 10, 100…).
-- Peringatan kuning adalah pemeriksaan kewajaran, bukan ketentuan standar; ambangnya harus masuk akal dan disebut sebagai pemeriksaan.
-- Rumus yang berbeda dari form lab harus mengikuti yang benar menurut standar, dan perbedaannya disampaikan ke Defsa. Contoh: panduan laporan menulis penyebut Gs dengan tanda "+" padahal yang benar "−"; ρw pada 27,5 °C di Excel lab 0,99640515, sedangkan Tanaka (2001) memberi 0,996376.
-- Jangan memuat nama mahasiswa, asisten, atau dosen dari berkas panduan/form ke repo publik.
+- Aturan angka panduan laporan: desimal koma, ribuan titik; berat dan volume 3 desimal; persen dan waktu 2 desimal; Gs dan berat isi 3 desimal.
+- `kerangka.js`: formulir (tabel `kolom`, `baris`, `daftar`), penyimpanan di browser, tautan berbagi, tempel dari Excel, ekspor TSV/CSV, cetak, dan hasil antaralat (`hasil`, `dariAlat`, `impor`; nilai hanya terisi lewat tombol).
+- `ekspor.js`: grafik ke PNG dan laporan ke Word `.docx` tanpa pustaka. Setelah mengubahnya, buka berkas hasilnya untuk memastikan masih terbaca.
+- `grafik.js`: grafik SVG (sumbu linier/log, sumbu terbalik).
+- Peringatan kuning adalah pemeriksaan kewajaran, bukan ketentuan standar.
+- Rumus yang sengaja berbeda dari form atau Excel lab harus mengikuti standar dan perbedaannya dijelaskan di halaman alat (temuan B7). Temuan audit form lab dicatat di Issue #16 repo privat Defsa.
+- Alat yang ditambahkan lewat PR #7–#9 memakai sebagian sumber yang melanggar Aturan Sumber; diperiksa ulang di Tahap 2 butir 7.
 
-### Menambah alat praktikum
+Menambah alat praktikum: berkas `hitung-<nama>.js`, definisi `alat-<nama>.js` (`Praktikum.pasang({...})`), entri di `konten/praktikum.json`, uji di `tests/verifikasi_praktikum.py`, lalu `python3 skrip/bangun_situs.py`. Alat baru hanya dikerjakan sesuai Aturan wajib 3.
 
-1. `docs/assets/praktikum/hitung-<nama>.js`: fungsi rumus murni dengan pola UMD (bisa `require` di Node), mengembalikan `{ galat: [], peringatan: [], … }`.
-2. `docs/assets/praktikum/alat-<nama>.js`: `Praktikum.pasang({ id, parameter, tabel, contoh, hitung, tampil, ekspor, hasil, sumber })`. Contoh paling sederhana: bagian kadar air di `alat-sifat-fisik.js`; contoh tabel `daftar` dan `impor`: `alat-hidrometer.js` dan `alat-klasifikasi.js`.
-3. `konten/praktikum.json`: tambah atau ubah entri (`status: "tersedia"`, daftar `skrip`), lalu jalankan `python3 skrip/bangun_situs.py`. Halaman alat dan halaman induk dibuat otomatis.
-4. `tests/verifikasi_praktikum.py`: tambah hitungan Python terpisah dan nilai acuan bila ada.
-5. Periksa tampilan di 1280 px dan 390 px, terang dan gelap, dan pastikan tidak ada rumus KaTeX yang gagal (elemen `.katex-error`; hindari karakter seperti `·` di dalam `\text{}`).
+## Alur kerja git
 
-Semua 16 alat di `konten/praktikum.json` sudah `tersedia`. Usulan alat baru dicatat dulu di Issue repo pribadi Defsa.
-
-Catatan metode yang sudah diputuskan:
-- CBR memakai tegangan standar ASTM D1883 (6,9 dan 10,3 MPa, piston 1935 mm²) karena SNI 1744:2012 mengacu AASHTO T 193 dan ASTM D1883; keduanya bisa diubah di formulir.
-- Konsolidasi: c<sub>v</sub> memakai H<sub>dr</sub> = setengah tebal rata-rata (drainase dua arah), bukan tebal penuh seperti Excel lab. Metode Taylor otomatis diuji terhadap kurva Terzaghi eksak (selisih t<sub>90</sub> sekitar 1%).
-- UCS: regangan = ΔL / L0 dengan ΔL dari selisih bacaan arloji, bukan bacaan dikali tinggi.
-- Sondir mengikuti kolom form lab (HL = JP − PK, HL × 20/10, JHL, HS = HL/10). SPT: N = N2 + N3; penolakan bila 50 pukulan dalam satu interval 15 cm; kepadatan/konsistensi dari rentang Terzaghi & Peck.
-
-## Alur kerja
-
-Kerjakan di branch terpisah, buat Pull Request, lalu Claude yang melakukan merge (keputusan Defsa). Perubahan besar diusulkan dulu dan ditunggu persetujuannya.
+- Mulai dari `main` terbaru, satu branch per tahap, buka Pull Request, lalu berhenti. Defsa yang me-merge.
+- Pesan commit dalam bahasa Indonesia, kalimat perintah singkat.
+- Kesalahan yang sudah masuk `main` dibatalkan dengan `git revert` lewat PR, bukan dengan menghapus riwayat (kecuali Tahap 1 dengan izin).
+- Operasi GitHub (Issue, label, milestone) lewat REST API; GraphQL dibatasi di sesi cloud.
