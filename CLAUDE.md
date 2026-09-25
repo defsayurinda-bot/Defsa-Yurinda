@@ -46,7 +46,10 @@ Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi).
 Pengolah data praktikum di `docs/praktikum/`, disusun mengikuti form laboratorium Mekanika Tanah UNJA yang diberikan Defsa (urutan baris, simbol W1, W2, …) dan panduan laporan.
 
 - **Aturan angka dari panduan laporan:** desimal koma, ribuan titik; besaran berat dan volume 3 desimal; persentase dan waktu 2 desimal; Gs dan berat isi 3 desimal.
-- **Kerangka bersama** (`docs/assets/praktikum/kerangka.js`) sudah menangani formulir tabel, angka berkoma, identitas contoh untuk kop cetak, penyimpanan otomatis di browser, tautan berbagi, salin ke Excel (TSV), unduh CSV (pemisah `;`, desimal koma), dan cetak. `grafik.js` membuat grafik SVG (sumbu linier/log).
+- **Kerangka bersama** (`docs/assets/praktikum/kerangka.js`) sudah menangani formulir, angka berkoma, identitas contoh untuk kop cetak, penyimpanan otomatis di browser, tautan berbagi, tempel blok sel dari Excel, salin ke Excel (TSV), unduh CSV (pemisah `;`, desimal koma), dan cetak. Tiga jenis tabel: `kolom` (kolom = cawan/benda uji), `baris` (satu nilai per baris pilihan, mis. saringan), dan `daftar` (baris bebas berkolom banyak, mis. bacaan waktu atau kedalaman; `kolomDari` membuat kolom mengikuti tabel lain).
+- **Hasil antaralat:** `hasil(m, r)` menyimpan hasil alat di browser (`praktikum-hasil-<id>`, dengan tanda data contoh). Alat lain mengambilnya lewat `dariAlat` pada parameter atau `impor` (tombol "Ambil dari …"). Nilai tidak pernah terisi diam-diam; pengguna yang menekan tombol.
+- **Ekspor** (`ekspor.js`): grafik ke PNG berlatar putih dan laporan ke Word `.docx` yang ditulis langsung tanpa pustaka (A4, margin 4-3-3-3, Times New Roman 11, tabel tanpa garis vertikal, nomor tabel di atas dan nomor gambar di bawah). Setelah mengubah `ekspor.js`, buka berkas hasilnya (LibreOffice atau Word) untuk memastikan masih terbaca.
+- `grafik.js` membuat grafik SVG (sumbu linier/log; sumbu log lebar hanya diberi label di 1, 10, 100…).
 - Peringatan kuning adalah pemeriksaan kewajaran, bukan ketentuan standar; ambangnya harus masuk akal dan disebut sebagai pemeriksaan.
 - Rumus yang berbeda dari form lab harus mengikuti yang benar menurut standar, dan perbedaannya disampaikan ke Defsa. Contoh: panduan laporan menulis penyebut Gs dengan tanda "+" padahal yang benar "−"; ρw pada 27,5 °C di Excel lab 0,99640515, sedangkan Tanaka (2001) memberi 0,996376.
 - Jangan memuat nama mahasiswa, asisten, atau dosen dari berkas panduan/form ke repo publik.
@@ -54,12 +57,12 @@ Pengolah data praktikum di `docs/praktikum/`, disusun mengikuti form laboratoriu
 ### Menambah alat praktikum
 
 1. `docs/assets/praktikum/hitung-<nama>.js`: fungsi rumus murni dengan pola UMD (bisa `require` di Node), mengembalikan `{ galat: [], peringatan: [], … }`.
-2. `docs/assets/praktikum/alat-<nama>.js`: `Praktikum.pasang({ id, parameter, tabel, contoh, hitung, tampil, ekspor, sumber })`. Contoh paling sederhana: bagian kadar air di `alat-sifat-fisik.js`.
+2. `docs/assets/praktikum/alat-<nama>.js`: `Praktikum.pasang({ id, parameter, tabel, contoh, hitung, tampil, ekspor, hasil, sumber })`. Contoh paling sederhana: bagian kadar air di `alat-sifat-fisik.js`; contoh tabel `daftar` dan `impor`: `alat-hidrometer.js` dan `alat-klasifikasi.js`.
 3. `konten/praktikum.json`: tambah atau ubah entri (`status: "tersedia"`, daftar `skrip`), lalu jalankan `python3 skrip/bangun_situs.py`. Halaman alat dan halaman induk dibuat otomatis.
 4. `tests/verifikasi_praktikum.py`: tambah hitungan Python terpisah dan nilai acuan bila ada.
-5. Periksa tampilan di 1280 px dan 390 px, terang dan gelap.
+5. Periksa tampilan di 1280 px dan 390 px, terang dan gelap, dan pastikan tidak ada rumus KaTeX yang gagal (elemen `.katex-error`; hindari karakter seperti `·` di dalam `\text{}`).
 
-Alat yang masih `menyusul` (hidrometer, klasifikasi, CBR, geser langsung, UCS, konsolidasi laboratorium, sondir, SPT) dicatat di Issue repo pribadi Defsa.
+Alat yang masih `menyusul` (CBR, geser langsung, UCS, konsolidasi laboratorium, sondir, SPT) dicatat di Issue repo pribadi Defsa.
 
 ## Alur kerja
 

@@ -3,20 +3,18 @@
   'use strict';
 
   var H = window.HitungKepadatan, f = Umum.f, jenis = document.getElementById('alat-praktikum').dataset.alat;
-  var KUNCI_HASIL_PEMADATAN = 'praktikum-hasil-pemadatan';
 
   function kolom(daftar, uraian, simbol, satuan, ambil, d) {
     return [uraian, simbol, satuan].concat(daftar.map(function (x) { return f(ambil(x), d); }));
   }
-  function simpan(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* abaikan */ } }
-  function baca(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
 
   if (jenis === 'pemadatan') {
     Praktikum.pasang({
       id: 'pemadatan', judulEkspor: 'Pengujian pemadatan',
       parameter: [
         { id: 'jenis', label: 'Jenis pemadatan', pilihan: [['ringan', 'Ringan (SNI 1742:2008)'], ['berat', 'Berat (SNI 1743:2008)']] },
-        { id: 'Gs', label: 'Berat spesifik, G<sub>s</sub>', bantuan: 'Dari pemeriksaan berat spesifik; dipakai untuk garis ZAV.' },
+        { id: 'Gs', label: 'Berat spesifik, G<sub>s</sub>', bantuan: 'Dari pemeriksaan berat spesifik; dipakai untuk garis ZAV.',
+          dariAlat: { alat: 'berat-spesifik', nama: 'berat spesifik', ambil: function (h) { return h.G; }, d: 3 } },
         { id: 'V', label: 'Isi cetakan', satuan: 'cm³' },
         { id: 'Mcetakan', label: 'Massa cetakan', satuan: 'gram' },
         { id: 'orde', label: 'Kurva pemadatan', pilihan: [['3', 'Polinomial orde 3'], ['2', 'Polinomial orde 2']],
@@ -33,10 +31,9 @@
         { nama: '5', Mtotal: 6025, W1: 64.0, W2: 56.1, W3: 12.4 }] } },
       kosong: { param: { jenis: 'ringan', Gs: '', V: '', Mcetakan: '', orde: '3' } },
       hitung: function (m) {
-        var r = H.pemadatan({ Gs: m.param.Gs, V: m.param.V, Mcetakan: m.param.Mcetakan, gammaW: 1, orde: +m.param.orde, titik: m.tabel.titik });
-        if (!r.galat.length) simpan(KUNCI_HASIL_PEMADATAN, { gdmaks: r.gdmaks, wopt: r.wopt });
-        return r;
+        return H.pemadatan({ Gs: m.param.Gs, V: m.param.V, Mcetakan: m.param.Mcetakan, gammaW: 1, orde: +m.param.orde, titik: m.tabel.titik });
       },
+      hasil: function (m, r) { return { gdmaks: r.gdmaks, wopt: r.wopt, jenis: m.param.jenis }; },
       tampil: function (m, r, U) {
         var t = r.titik, h = '';
         h += U.ringkasan([U.kartu('Kadar air optimum', f(r.wopt, 2) + ' <small>%</small>', 'w<sub>opt</sub>'),
@@ -70,7 +67,7 @@
           U.langkah('Kurva dan titik optimum', U.rumus('\\gamma_d(w) = ' + r.kurva.koef.map(function (c, k) { return (k === 0 ? U.t(c, 5) : (c < 0 ? ' - ' : ' + ') + U.t(Math.abs(c), 6) + (k === 1 ? 'w' : 'w^' + k)); }).join('')) +
             '<p>Puncak kurva di dalam rentang data: w<sub>opt</sub> = ' + f(r.wopt, 2) + '% dan γ<sub>d maks</sub> = ' + f(r.gdmaks, 3) + ' g/cm³. ' +
             'Sebagai pembanding, titik data tertinggi adalah titik ' + r.titikTertinggi.nama + ' (w = ' + f(r.titikTertinggi.w, 2) + '%, γ<sub>d</sub> = ' + f(r.titikTertinggi.gammaD, 3) + ' g/cm³).</p>');
-        return h + '<p class="kecil redup">Hasil γ<sub>d maks</sub> tersimpan di browser dan otomatis tersedia di alat sand cone.</p>';
+        return h + '<p class="kecil redup">Hasil γ<sub>d maks</sub> dan w<sub>opt</sub> tersimpan di browser dan bisa diambil di alat sand cone dan CBR.</p>';
       },
       ekspor: function (m, r) {
         var t = r.titik, b = [['Jenis pemadatan', '', m.param.jenis], ['Gs', '-', +m.param.Gs], ['Isi cetakan', 'cm3', +m.param.V], ['Massa cetakan', 'gram', +m.param.Mcetakan], [],
@@ -88,7 +85,6 @@
   }
 
   if (jenis === 'sand-cone') {
-    var lab = baca(KUNCI_HASIL_PEMADATAN);
     var BARIS = [
       ['W6', 'Berat tabung + kerucut + pasir sebelum (menentukan pasir dalam kerucut)', 'W<sub>6</sub>'],
       ['W7', 'Berat tabung + kerucut + pasir sesudah (menentukan pasir dalam kerucut)', 'W<sub>7</sub>'],
@@ -103,15 +99,16 @@
         { id: 'K2', label: 'Kalibrasi: tabung + pasir, W<sub>2</sub>', satuan: 'gram' },
         { id: 'K3', label: 'Kalibrasi: tabung + air, W<sub>3</sub>', satuan: 'gram' },
         { id: 'gammaLab', label: 'γ<sub>d maks</sub> laboratorium', satuan: 'g/cm³',
-          bantuan: lab ? 'Hasil terakhir alat pemadatan di browser ini: ' + f(lab.gdmaks, 3) + ' g/cm³.' : 'Dari uji pemadatan standar.' },
+          bantuan: 'Dari uji pemadatan standar.',
+          dariAlat: { alat: 'pemadatan', nama: 'pemadatan', ambil: function (h) { return h.gdmaks; }, d: 3 } },
         { id: 'syarat', label: 'Derajat kepadatan minimum', satuan: '%', bantuan: 'Opsional, sesuai spesifikasi proyek.' }],
       tabel: [{ id: 'titik', judul: 'Data tiap titik uji', kolom: 'Titik', awal: 3, min: 1, maks: 6,
         baris: BARIS.map(function (b) { return { id: b[0], label: b[1], simbol: b[2], satuan: 'gram' }; }) }],
-      contoh: { param: { K1: 1240, K2: 4012, K3: 3222, gammaLab: lab ? Math.round(lab.gdmaks * 1000) / 1000 : 1.62, syarat: 95 }, tabel: { titik: [
+      contoh: { param: { K1: 1240, K2: 4012, K3: 3222, gammaLab: 1.62, syarat: 95 }, tabel: { titik: [
         { nama: '1', W6: 6000, W7: 4380, W8: 6000, W9: 2310, W10: 350, W11: 3050, W12: 15, W13: 115, W14: 100.2 },
         { nama: '2', W6: 6000, W7: 4382, W8: 6000, W9: 2255, W10: 352, W11: 3120, W12: 14.8, W13: 118.4, W14: 103.1 },
         { nama: '3', W6: 6000, W7: 4379, W8: 6000, W9: 2402, W10: 349, W11: 2990, W12: 15.1, W13: 112.6, W14: 98.4 }] } },
-      kosong: { param: { K1: '', K2: '', K3: '', gammaLab: lab ? Math.round(lab.gdmaks * 1000) / 1000 : '', syarat: '' } },
+      kosong: { param: { K1: '', K2: '', K3: '', gammaLab: '', syarat: '' } },
       hitung: function (m) {
         return H.sandCone({ kalibrasi: { W1: m.param.K1, W2: m.param.K2, W3: m.param.K3 }, titik: m.tabel.titik, gammaLab: m.param.gammaLab, syarat: m.param.syarat });
       },

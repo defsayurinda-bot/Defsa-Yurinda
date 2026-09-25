@@ -1,8 +1,8 @@
-/* Definisi alat: batas Atterberg (batas cair, batas plastis, indeks plastisitas). */
+/* Definisi alat: batas Atterberg (batas cair, batas plastis, indeks plastisitas) dan batas susut. Halaman memilih lewat data-alat. */
 (function () {
   'use strict';
 
-  var H = window.HitungAtterberg, f = Umum.f;
+  var H = window.HitungAtterberg, f = Umum.f, jenis = document.getElementById('alat-praktikum').dataset.alat;
 
   function kolom(daftar, uraian, simbol, satuan, ambil, d) {
     return [uraian, simbol, satuan].concat(daftar.map(function (x) { return f(ambil(x), d); }));
@@ -34,13 +34,14 @@
       tanda: teks.concat(r.NP ? [] : [{ x: r.LL, y: r.IP, teks: (r.klas ? r.klas.simbol : '') + ' (' + f(r.LL, 1) + '; ' + f(r.IP, 1) + ')', posisi: r.LL > LLm * 0.7 ? 'kiri' : 'kanan' }]) });
   }
 
-  Praktikum.pasang({
+  if (jenis === 'atterberg') Praktikum.pasang({
     id: 'atterberg', judulEkspor: 'Pengujian konsistensi Atterberg (SNI 1967:2008 & SNI 1966:2008)',
     parameter: [
       { id: 'metodeLL', label: 'Cara menentukan batas cair', pilihan: [['banyak', 'Banyak titik (kurva aliran)'], ['satu', 'Satu titik']],
         bantuan: 'Banyak titik: garis lurus kadar air terhadap log N. Satu titik: tiap titik dikoreksi ke 25 ketukan.' },
       { id: 'eksponen', label: 'Eksponen metode satu titik, β', bantuan: '0,121 (ASTM D4318). Hanya dipakai pada metode satu titik.' },
-      { id: 'wn', label: 'Kadar air asli, w<sub>n</sub>', satuan: '%', bantuan: 'Opsional, untuk indeks cair dan indeks konsistensi.' }],
+      { id: 'wn', label: 'Kadar air asli, w<sub>n</sub>', satuan: '%', bantuan: 'Opsional, untuk indeks cair dan indeks konsistensi.',
+        dariAlat: { alat: 'kadar-air', nama: 'kadar air', ambil: function (h) { return h.w; }, d: 2 } }],
     tabel: [
       { id: 'll', judul: 'Batas cair (LL)', kolom: 'Titik', awal: 4, min: 1, maks: 6, baris: [
         { id: 'N', label: 'Banyaknya pukulan', simbol: 'N', satuan: '–' },
@@ -59,6 +60,7 @@
     hitung: function (m) {
       return H.hitung({ ll: m.tabel.ll, pl: m.tabel.pl, metodeLL: m.param.metodeLL, eksponen: m.param.eksponen, wn: m.param.wn });
     },
+    hasil: function (m, r) { return { LL: r.LL, PL: r.PL, IP: r.IP, NP: r.NP }; },
     tampil: function (m, r, U) {
       var L = r.titikLL, P = r.titikPL, h = '';
       h += U.ringkasan([
@@ -120,4 +122,76 @@
       'Badan Standardisasi Nasional. SNI 6371:2015 <em>Tata cara pengklasifikasian tanah untuk keperluan teknik dengan sistem klasifikasi unifikasi tanah</em>. Garis A dan garis U bagan plastisitas.',
       'ASTM D4318. <em>Standard test methods for liquid limit, plastic limit, and plasticity index of soils</em>. Metode satu titik (β = 0,121).']
   });
+  if (jenis === 'batas-susut') {
+    var RAKSA = function (p) { return p.caraVolume === 'raksa'; };
+    Praktikum.pasang({
+      id: 'batas-susut', judulEkspor: 'Pengujian batas susut (SNI 3422:2008)',
+      parameter: [
+        { id: 'caraVolume', label: 'Cara mengukur volume', pilihan: [['langsung', 'Volume langsung (cm³)'], ['raksa', 'Massa air raksa (gram)']],
+          bantuan: 'Volume langsung cocok untuk cara lilin atau alat ukur lain. Air raksa beracun; ikuti prosedur keselamatan laboratorium.' },
+        { id: 'rhoHg', label: 'Massa jenis air raksa', satuan: 'g/cm³', bantuan: '13,546 g/cm³ pada 20 °C.', tampilJika: RAKSA },
+        { id: 'Gs', label: 'Berat spesifik, G<sub>s</sub>', bantuan: 'Opsional, untuk pembanding SL dari rasio susut.',
+          dariAlat: { alat: 'berat-spesifik', nama: 'berat spesifik', ambil: function (h) { return h.G; }, d: 3 } },
+        { id: 'LL', label: 'Batas cair, LL', satuan: '%', bantuan: 'Opsional, untuk pemeriksaan kewajaran.',
+          dariAlat: { alat: 'atterberg', nama: 'Atterberg', ambil: function (h) { return h.LL; }, d: 2 } }],
+      tabel: [{ id: 'cawan', judul: 'Data cawan susut', kolom: 'Cawan', awal: 2, min: 1, maks: 4, baris: [
+        { id: 'W1', label: 'Berat cawan + tanah basah', simbol: 'W<sub>1</sub>', satuan: 'gram' },
+        { id: 'W2', label: 'Berat cawan + tanah kering', simbol: 'W<sub>2</sub>', satuan: 'gram' },
+        { id: 'W3', label: 'Berat cawan susut', simbol: 'W<sub>3</sub>', satuan: 'gram' },
+        { id: 'V', label: function (p) { return RAKSA(p) ? 'Massa air raksa pengisi cawan (= volume tanah basah)' : 'Volume tanah basah (isi cawan)'; }, simbol: 'V', satuan: function (p) { return RAKSA(p) ? 'gram' : 'cm³'; } },
+        { id: 'V0', label: function (p) { return RAKSA(p) ? 'Massa air raksa yang dipindahkan tanah kering' : 'Volume tanah kering'; }, simbol: 'V<sub>0</sub>', satuan: function (p) { return RAKSA(p) ? 'gram' : 'cm³'; } }],
+        keterangan: 'Tanah dibuat mendekati batas cair, diisikan ke cawan susut, lalu dikeringkan perlahan sebelum dioven.' }],
+      contoh: { param: { caraVolume: 'langsung', rhoHg: 13.546, Gs: 2.68, LL: 42.8 }, tabel: { cawan: [
+        { nama: '1', W1: 48.62, W2: 40.15, W3: 21.34, V: 15.5, V0: 10.4 }, { nama: '2', W1: 49.10, W2: 40.52, W3: 21.60, V: 15.6, V0: 10.5 }] } },
+      kosong: { param: { caraVolume: 'langsung', rhoHg: 13.546, Gs: '', LL: '' } },
+      hitung: function (m) {
+        var raksa = RAKSA(m.param), rho = m.param.rhoHg > 0 ? m.param.rhoHg : 13.546;
+        if (raksa && !(m.param.rhoHg > 0)) return { galat: ['Isi massa jenis air raksa.'] };
+        var r = H.batasSusut({ Gs: m.param.Gs, LL: m.param.LL, cawan: m.tabel.cawan.map(function (c) {
+          return Object.assign({}, c, raksa ? { V: c.V / rho, V0: c.V0 / rho, MHg: c.V, MHg0: c.V0 } : {});
+        }) });
+        r.raksa = raksa; r.rhoHg = rho;
+        return r;
+      },
+      hasil: function (m, r) { return { SL: r.SL, R: r.R }; },
+      tampil: function (m, r, U) {
+        var c = r.cawan, h = '';
+        h += U.ringkasan([U.kartu('Batas susut', f(r.SL, 2) + ' <small>%</small>', 'SL rata-rata ' + c.length + ' cawan'),
+          U.kartu('Rasio susut', f(r.R, 3), 'R = W<sub>o</sub> / (V<sub>0</sub> ρ<sub>w</sub>)')].concat(r.SLGs !== undefined ?
+          [U.kartu('SL dari G<sub>s</sub>', f(r.SLGs, 2) + ' <small>%</small>', 'pembanding, (1/R − 1/G<sub>s</sub>) × 100')] : []));
+        h += '<h3>Tabel hasil</h3>' + U.tabel(['Uraian', 'Simbol', 'Satuan'].concat(c.map(function (x) { return 'Cawan ' + x.nama; })), [
+          kolom(c, 'Berat air', 'W<sub>1</sub> − W<sub>2</sub>', 'gram', function (x) { return x.air; }, 3),
+          kolom(c, 'Berat tanah kering', 'W<sub>o</sub> = W<sub>2</sub> − W<sub>3</sub>', 'gram', function (x) { return x.Wo; }, 3),
+          kolom(c, 'Kadar air awal', 'w', '%', function (x) { return x.w; }, 2),
+          kolom(c, 'Volume tanah basah', 'V', 'cm³', function (x) { return x.V; }, 3),
+          kolom(c, 'Volume tanah kering', 'V<sub>0</sub>', 'cm³', function (x) { return x.V0; }, 3),
+          kolom(c, 'Batas susut', 'SL', '%', function (x) { return x.SL; }, 2),
+          kolom(c, 'Rasio susut', 'R', '–', function (x) { return x.R; }, 3)]);
+        var a = c[0];
+        h += '<h3>Langkah hitungan (cawan ' + a.nama + ')</h3>';
+        if (r.raksa) {
+          h += U.langkah('Volume dari massa air raksa', U.rumus('V = \\dfrac{M_{Hg}}{\\rho_{Hg}} = \\dfrac{' + U.t(a.MHg, 2) + '}{' + U.t(r.rhoHg, 3) + '} = ' + U.t(a.V, 3) + '\\ \\text{cm}^3 \\qquad (1)') +
+            U.rumus('V_0 = \\dfrac{' + U.t(a.MHg0, 2) + '}{' + U.t(r.rhoHg, 3) + '} = ' + U.t(a.V0, 3) + '\\ \\text{cm}^3'));
+        }
+        h += U.langkah('Kadar air awal', U.rumus('w = \\dfrac{W_1 - W_2}{W_2 - W_3}\\times 100\\% = \\dfrac{' + U.t(a.air, 3) + '}{' + U.t(a.Wo, 3) + '}\\times 100\\% = ' + U.t(a.w, 2) + '\\% \\qquad (2)'));
+        h += U.langkah('Batas susut', U.rumus('SL = w - \\dfrac{(V - V_0)\\,\\rho_w}{W_o}\\times 100\\% = ' + U.t(a.w, 2) + ' - \\dfrac{(' + U.t(a.V, 3) + ' - ' + U.t(a.V0, 3) + ')\\times 1}{' + U.t(a.Wo, 3) + '}\\times 100 = ' + U.t(a.SL, 2) + '\\% \\qquad (3)') +
+          '<p class="ket">Kadar air saat volume tanah berhenti berkurang walaupun air terus menguap.</p>');
+        h += U.langkah('Rasio susut', U.rumus('R = \\dfrac{W_o}{V_0\\,\\rho_w} = \\dfrac{' + U.t(a.Wo, 3) + '}{' + U.t(a.V0, 3) + '\\times 1} = ' + U.t(a.R, 3) + ' \\qquad (4)') +
+          (a.SLGs !== undefined ? U.rumus('SL_{G_s} = \\left(\\dfrac{1}{R} - \\dfrac{1}{G_s}\\right)\\times 100 = \\left(\\dfrac{1}{' + U.t(a.R, 3) + '} - \\dfrac{1}{' + U.t(m.param.Gs, 3) + '}\\right)\\times 100 = ' + U.t(a.SLGs, 2) + '\\% \\qquad (5)') +
+            '<p class="ket">Pembanding dengan anggapan tanah masih jenuh saat mencapai batas susut. Selisih besar menandakan ada udara atau kesalahan volume.</p>' : ''));
+        return h;
+      },
+      ekspor: function (m, r) {
+        var c = r.cawan, b = [['Uraian', 'Satuan'].concat(c.map(function (x) { return 'Cawan ' + x.nama; }))];
+        [['W1 cawan + tanah basah', 'gram', 'W1'], ['W2 cawan + tanah kering', 'gram', 'W2'], ['W3 cawan', 'gram', 'W3'], ['Volume tanah basah V', 'cm3', 'V'],
+          ['Volume tanah kering V0', 'cm3', 'V0'], ['Kadar air awal', '%', 'w'], ['Batas susut', '%', 'SL'], ['Rasio susut', '-', 'R']]
+          .forEach(function (x) { b.push([x[0], x[1]].concat(c.map(function (t) { return t[x[2]]; }))); });
+        b.push([], ['Batas susut rata-rata', '%', r.SL], ['Rasio susut rata-rata', '-', r.R]);
+        return b;
+      },
+      sumber: ['Badan Standardisasi Nasional. SNI 3422:2008 <em>Cara uji penentuan batas susut tanah</em>.',
+        'ASTM D4943. <em>Standard test method for shrinkage factors of cohesive soils by the water submersion method</em>. Cara lilin sebagai pengganti air raksa.',
+        'Das, B. M. <em>Principles of geotechnical engineering</em>. Cengage Learning. Batas susut dan rasio susut.']
+    });
+  }
 })();
