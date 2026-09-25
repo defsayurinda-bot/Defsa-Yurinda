@@ -26,9 +26,9 @@ Claude Code bisa dipakai di terminal, di aplikasi desktop, di ekstensi editor ko
 
 | Nama | Letak | Fungsi |
 |---|---|---|
-| **Preferensi** | Pengaturan profil di claude.ai | Aturan umum untuk semua percakapan: bahasa, gaya, cara kerja. Punya saya ada di [preferensi.md](../cara-saya-memakai-claude/preferensi.md). |
+| **Preferensi** | Pengaturan profil di claude.ai | Aturan umum untuk semua percakapan: bahasa, gaya, cara kerja. Punya saya ada di [preferensi.md](../cara-memakai-ai/preferensi.md). |
 | **Project** | Fitur di claude.ai | Kumpulan percakapan yang berbagi dokumen dan instruksi yang sama. Saya pakai untuk urusan yang panjang, misalnya lomba. |
-| **Skill** | Paket instruksi (file `SKILL.md`) | Aturan khusus untuk jenis tugas tertentu. Claude memuatnya saat tugas yang cocok muncul. Punya saya ada di [skill/](../skill/). |
+| **Skill** | Paket instruksi (file `SKILL.md`) | Aturan khusus untuk jenis tugas tertentu. Claude memuatnya saat tugas yang cocok muncul. Punya saya ada di [skill/](../skill/README.md). |
 | **`CLAUDE.md`** | File di dalam repo | Dibaca otomatis oleh Claude Code di setiap sesi yang membuka repo itu. |
 
 Satu hal yang paling penting saya pahami: **Claude tidak ingat percakapan dari sesi lain.** Yang terbawa hanya yang tertulis di preferensi, project, skill, atau `CLAUDE.md`. Jadi keputusan penting harus ditulis, bukan hanya diucapkan di chat.

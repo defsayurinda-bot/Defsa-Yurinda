@@ -18,6 +18,7 @@ Catatan ini merangkum cara situs [defsayurinda-bot.github.io/Defsa-Yurinda](http
 **1. Rumus dipisah dari tampilan.** Setiap kalkulator punya dua file: `*-hitung.js` hanya berisi rumus, `*-tampilan.js` berisi formulir dan langkah hitungan. Dengan begitu rumusnya bisa diuji tanpa membuka browser.
 
 **2. Setiap hitungan diuji dengan dua cara.**
+
 - Hitungan yang sama ditulis ulang di Python secara terpisah, lalu hasilnya dibandingkan dengan JavaScript.
 - Hasil dicocokkan dengan nilai yang sudah dikenal di buku teks, misalnya N<sub>c</sub> = 30,14, N<sub>q</sub> = 18,40, N<sub>γ</sub> = 22,40 untuk φ' = 30°, dan T<sub>v</sub> = 0,848 untuk U = 90%.
 
@@ -44,4 +45,4 @@ Pelajarannya: pengujian yang gagal tidak selalu berarti programnya salah. Yang p
 ## Latihan
 
 1. Buka [kalkulator pondasi dangkal](https://defsayurinda-bot.github.io/Defsa-Yurinda/kalkulator/pondasi-dangkal.html), isi dengan data dari satu contoh soal di buku Mekanika Tanah atau Teknik Pondasi, lalu bandingkan hasilnya dengan jawaban buku. Kalau berbeda, cari penyebabnya: metode faktor yang berbeda, pembulatan, atau salah input?
-2. Buka tab **Actions** di repo ini dan cari satu *run* "Verifikasi hitungan". Apa saja yang dijalankan di dalamnya?
+2. Buka tab **Actions** di repo ini dan cari satu *run* "Verifikasi". Apa saja yang dijalankan di dalamnya?

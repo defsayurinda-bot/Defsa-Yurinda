@@ -51,4 +51,4 @@ Sebelum memasang preferensi dan skill, keluhan saya pada jawaban Claude kurang l
 | Referensi harus bisa ditelusuri | Referensi yang belum pasti ditandai, tidak diisi dengan judul yang hanya terdengar meyakinkan. |
 | Kritik langsung | Kesalahan ditunjuk dengan jelas, tidak tertutup kalimat pujian. |
 
-Preferensi ini saya lengkapi dengan skill yang lebih rinci untuk tugas teknik sipil. Penjelasannya ada di [skill/](../skill/).
+Preferensi ini saya lengkapi dengan skill yang lebih rinci untuk tugas teknik sipil. Penjelasannya ada di [skill/](../skill/README.md).
