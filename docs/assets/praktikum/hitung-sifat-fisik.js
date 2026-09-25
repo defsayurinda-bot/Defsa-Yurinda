@@ -65,7 +65,45 @@
     return { galat: [], peringatan: peringatan, uji: uji, rhoAcuan: rhoAcuan, G: G, rentang: rentang };
   }
 
-  var api = { massaJenisAir: massaJenisAir, kadarAir: kadarAir, beratSpesifik: beratSpesifik };
+  // Hubungan fase (berat–volume) dengan γw = 1 g/cm³. Empat cara masukan:
+  //   'w-gamma'  : Gs, w, γ basah          'w-gammad' : Gs, w, γd
+  //   'e-Sr'     : Gs, e, Sr               'cincin'   : Gs, w, massa tanah basah M dan volume V
+  // γd = γ / (1 + w);  e = Gs γw / γd − 1;  n = e / (1 + e);  Sr = w Gs / e;
+  // γsat = (Gs + e) γw / (1 + e);  γ' = γsat − γw;  udara = n (1 − Sr).
+  function hubunganFase(m) {
+    var galat = [], peringatan = [], Gs = m.Gs, w, gamma, gammaD, e;
+    if (!(Gs > 1)) galat.push('Isi berat spesifik Gs.');
+    if (m.cara === 'e-Sr') {
+      if (!(m.e > 0)) galat.push('Angka pori e harus lebih dari 0.');
+      if (!(m.Sr >= 0 && m.Sr <= 100)) galat.push('Derajat kejenuhan Sr harus 0–100%.');
+      if (galat.length) return { galat: galat };
+      e = m.e; w = m.Sr / 100 * e / Gs; gammaD = Gs / (1 + e); gamma = gammaD * (1 + w);
+    } else {
+      if (!(m.w >= 0)) galat.push('Isi kadar air w.');
+      w = m.w / 100;
+      if (m.cara === 'w-gammad') {
+        if (!(m.gammaD > 0)) galat.push('Isi berat isi kering γd.');
+        gammaD = m.gammaD; gamma = gammaD * (1 + w);
+      } else if (m.cara === 'cincin') {
+        if (!(m.M > 0 && m.V > 0)) galat.push('Isi massa tanah basah dan volume cincin.');
+        gamma = m.M / m.V; gammaD = gamma / (1 + w);
+      } else {
+        if (!(m.gamma > 0)) galat.push('Isi berat isi basah γ.');
+        gamma = m.gamma; gammaD = gamma / (1 + w);
+      }
+      if (galat.length) return { galat: galat };
+      e = Gs / gammaD - 1;
+      if (!(e > 0)) return { galat: ['Angka pori tidak positif (γd ≥ Gs γw). Periksa Gs dan berat isi.'] };
+    }
+    var n = e / (1 + e), Sr = w * Gs / e, gsat = (Gs + e) / (1 + e);
+    if (Sr > 1.0001) peringatan.push('Derajat kejenuhan lebih dari 100%. Kombinasi data tidak mungkin; periksa Gs, w, atau berat isi.');
+    if (e > 3) peringatan.push('Angka pori lebih dari 3, di luar rentang umum tanah mineral.');
+    return { galat: [], peringatan: peringatan, Gs: Gs, w: w * 100, gamma: gamma, gammaD: gammaD, e: e, n: n * 100, Sr: Sr * 100,
+      gammaSat: gsat, gammaApung: gsat - 1, udara: n * (1 - Math.min(Sr, 1)) * 100,
+      volume: { butir: 1 - n, air: n * Math.min(Sr, 1), udara: n * (1 - Math.min(Sr, 1)) } };
+  }
+
+  var api = { massaJenisAir: massaJenisAir, kadarAir: kadarAir, beratSpesifik: beratSpesifik, hubunganFase: hubunganFase };
   if (node) module.exports = api;
   else root.HitungSifatFisik = api;
 })(this);

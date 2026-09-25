@@ -5,6 +5,8 @@ dengan modul JavaScript di docs/assets/praktikum/. Ditambah nilai acuan yang dik
 - massa jenis air Tanaka dkk. (2001): 20 °C = 0,9982067 g/cm³; 25 °C = 0,9970470 g/cm³
 - faktor satu titik batas cair: N = 25 tidak mengubah kadar air
 - klasifikasi bagan plastisitas pada titik-titik uji yang jelas
+- USCS dari bagan alir ASTM D2487, AASHTO dan indeks kelompok (contoh Das)
+- hidrometer: viskositas air terhadap IAPWS, faktor a terhadap tabel ASTM D422
 
 Jalankan dari akar repo:  python3 tests/verifikasi_praktikum.py
 """
@@ -171,6 +173,144 @@ gd = (t["W11"] - t["W10"]) / (1 + w) / Vl
 cocok("γ pasir", gp, r["gammaPasir"])
 cocok("γd lapangan", gd, r["gammaD"])
 cocok("derajat kepadatan", gd / 1.62 * 100, r["D"])
+
+# ---------------------------------------------------------------- klasifikasi USCS (ASTM D2487 / SNI 6371:2015)
+def uscs(d):
+    return js("hitung-klasifikasi.js", "uscs", d)
+
+
+kasus_uscs = [
+    # (masukan, simbol, nama ASTM) — diturunkan dari bagan alir ASTM D2487
+    ({"P4": 95, "P200": 8, "D10": 0.07, "D30": 0.3, "D60": 0.9, "LL": 30, "PL": 20}, "SW-SC", "Well-graded sand with clay"),
+    ({"P4": 100, "P200": 3, "D10": 0.15, "D30": 0.25, "D60": 0.4}, "SP", "Poorly graded sand"),
+    ({"P4": 40, "P200": 2, "D10": 0.5, "D30": 3, "D60": 9}, "GW", "Well-graded gravel with sand"),
+    ({"P4": 90, "P200": 30, "NP": True}, "SM", "Silty sand"),
+    ({"P4": 70, "P200": 20, "LL": 25, "PL": 19}, "SC-SM", "Silty, clayey sand with gravel"),
+    ({"P4": 100, "P200": 85, "LL": 45, "PL": 20}, "CL", "Lean clay with sand"),
+    ({"P4": 90, "P200": 60, "LL": 60, "PL": 40}, "MH", "Sandy elastic silt"),
+    ({"P4": 60, "P200": 55, "LL": 55, "PL": 25}, "CH", "Gravelly fat clay"),
+    ({"P4": 97, "P200": 10, "D10": 0.075, "D30": 0.12, "D60": 0.2, "NP": True}, "SP-SM", "Poorly graded sand with silt"),
+    ({"P4": 30, "P200": 7, "D10": 0.2, "D30": 2.5, "D60": 12, "LL": 24, "PL": 18}, "GW-GC", "Well-graded gravel with silty clay and sand"),
+]
+for d, simbol, nama in kasus_uscs:
+    r = uscs(d)
+    benar(f"USCS {d} → {simbol} (dapat {r.get('simbol')})", r.get("simbol") == simbol)
+    benar(f"USCS nama {simbol}: '{nama}' (dapat '{r.get('nama')}')", r.get("nama") == nama)
+benar("USCS: F < 5% tanpa D10/D30/D60 ditolak", uscs({"P4": 100, "P200": 3})["galat"])
+benar("USCS: F > P4 ditolak", uscs({"P4": 40, "P200": 60, "LL": 30, "PL": 20})["galat"])
+
+
+# ---------------------------------------------------------------- klasifikasi AASHTO M 145
+def gi_acuan(F, LL, IP, kelompok):
+    if kelompok in ("A-1-a", "A-1-b", "A-3", "A-2-4", "A-2-5"):
+        return 0
+    g = 0.01 * (F - 15) * (IP - 10) if kelompok in ("A-2-6", "A-2-7") else (F - 35) * (0.2 + 0.005 * (LL - 40)) + 0.01 * (F - 15) * (IP - 10)
+    return max(0, math.floor(g + 0.5))
+
+
+kasus_aashto = [
+    ({"P200": 95, "LL": 60, "PL": 20}, "A-7-6", 42),        # Das: F = 95, LL = 60, IP = 40 → A-7-6(42)
+    ({"P200": 38, "LL": 35, "PL": 23}, "A-6", 1),           # Das: F = 38, LL = 35, IP = 12 → A-6(1)
+    ({"P200": 30, "P40": 60, "LL": 35, "PL": 20}, "A-2-6", 1),
+    ({"P10": 40, "P40": 20, "P200": 10, "NP": True}, "A-1-a", 0),
+    ({"P10": 100, "P40": 80, "P200": 5, "NP": True}, "A-3", 0),
+    ({"P10": 90, "P40": 45, "P200": 20, "LL": 25, "PL": 21}, "A-1-b", 0),
+    ({"P200": 70, "LL": 70, "PL": 44}, "A-7-5", 21),
+    ({"P200": 40, "LL": 25, "PL": 20}, "A-4", 0),           # GI negatif → 0
+    ({"P200": 60, "LL": 45, "PL": 38}, "A-5", None),
+]
+for d, kelompok, gi in kasus_aashto:
+    r = js("hitung-klasifikasi.js", "aashto", d)
+    benar(f"AASHTO {d} → {kelompok} (dapat {r.get('kelompok')})", r.get("kelompok") == kelompok)
+    IP = 0 if d.get("NP") else round(d["LL"] - d["PL"])
+    acuan = gi_acuan(d["P200"], round(d.get("LL", 0)), IP, kelompok)
+    if gi is not None:
+        benar(f"GI {kelompok} acuan buku {gi} = rumus {acuan}", gi == acuan)
+    benar(f"GI {kelompok}: {acuan} (dapat {r.get('GI')})", r.get("GI") == acuan)
+benar("AASHTO: tanah berbutir tanpa lolos No. 40 ditolak", js("hitung-klasifikasi.js", "aashto", {"P200": 20, "LL": 30, "PL": 20})["galat"])
+
+
+# ---------------------------------------------------------------- hidrometer 152H (ASTM D422)
+def visk(T):  # Pa·s, persamaan tipe Vogel
+    return 2.414e-5 * 10 ** (247.8 / (T + 273.15 - 140))
+
+
+def fungsi(modul, nama, *arg):
+    skrip = "const m=require(process.argv[1]);console.log(JSON.stringify(m[process.argv[2]](...JSON.parse(process.argv[3]))))"
+    return json.loads(subprocess.check_output(["node", "-e", skrip, str(P / modul), nama, json.dumps(arg)], text=True))
+
+
+for T, acuan in ((20, 1.0016e-3), (25, 0.89002e-3)):  # nilai acuan IAPWS 2008
+    cocok(f"viskositas air {T} °C terhadap IAPWS", acuan, fungsi("hitung-hidrometer.js", "viskositasAir", T), tol=1.5e-3)
+for Gs, a in ((2.65, 1.00), (2.70, 0.99), (2.80, 0.97), (2.60, 1.01)):  # ASTM D422 Tabel 1 (dua desimal)
+    benar(f"faktor a Gs {Gs} ≈ {a}", round(fungsi("hitung-hidrometer.js", "faktorA", Gs), 2) == a)
+cocok("L 152H pada R = 0", 16.29, fungsi("hitung-hidrometer.js", "kedalamanL", 0))
+cocok("L 152H pada R = 60 (tabel 6,5 cm)", 6.45, fungsi("hitung-hidrometer.js", "kedalamanL", 60))
+
+W, Gs = 50.0, 2.68
+bac = [(0.5, 36, 27, 1.5), (1, 34, 27, 1.5), (4, 29, 27, 1.5), (30, 21.5, 28, 1.8), (240, 14.5, 28.5, 1.9), (1440, 9.5, 27, 1.5), (2880, 8, 27, 1.5)]
+ayk = [("No. 10", 0.0), ("No. 20", 0.8), ("No. 40", 1.9), ("No. 60", 2.1), ("No. 140", 3.6), ("No. 200", 2.2)]
+mm = {"No. 10": 2.0, "No. 20": 0.85, "No. 40": 0.425, "No. 60": 0.25, "No. 140": 0.106, "No. 200": 0.075}
+r = js("hitung-hidrometer.js", "hitung", {"W": W, "Gs": Gs, "a": None, "F10": 100, "Cm": 0, "Cd": 0, "batasLempung": 0.002,
+                                          "bacaan": [{"no": i + 1, "t": t, "R": R, "T": T, "k": k} for i, (t, R, T, k) in enumerate(bac)],
+                                          "ayakan": [{"nama": n, "tertahan": v} for n, v in ayk]})
+a = 1.65 * Gs / ((Gs - 1) * 2.65)
+titik_h = []
+for (t, R, T, k), b in zip(bac, r["bacaan"]):
+    L = 16.29 - 0.164 * R
+    K = math.sqrt(30 * visk(T) * 10 / (980 * (Gs - rho(T))))
+    D = K * math.sqrt(L / t)
+    Pp = a * (R + k) / W * 100
+    cocok(f"hidrometer t={t}: D", D, b["D"])
+    cocok(f"hidrometer t={t}: P", Pp, b["P"])
+    titik_h.append((D, Pp))
+kum, titik = 0, []
+for n, v in ayk:
+    kum += v
+    titik.append((mm[n], 100 - kum / W * 100))
+titik = sorted(titik + titik_h, key=lambda x: -x[0])
+
+
+def lolos_pada(d):
+    for (d1, p1), (d2, p2) in zip(titik, titik[1:]):
+        if d1 >= d >= d2:
+            return p2 + (math.log10(d) - math.log10(d2)) * (p1 - p2) / (math.log10(d1) - math.log10(d2))
+
+
+cocok("hidrometer: lolos 0,075 mm", lolos_pada(0.075), r["P200"])
+cocok("hidrometer: fraksi lempung < 0,002 mm", lolos_pada(0.002), r["fraksi"]["lempung"])
+cocok("hidrometer: fraksi lanau", lolos_pada(0.075) - lolos_pada(0.002), r["fraksi"]["lanau"])
+r50 = js("hitung-hidrometer.js", "hitung", {"W": W, "Gs": Gs, "F10": 80, "P4": 90, "batasLempung": 0.002,
+                                            "bacaan": [{"no": 1, "t": 2, "R": 30, "T": 25, "k": 0}], "ayakan": []})
+cocok("hidrometer: P′ = P × F10/100", r50["bacaan"][0]["P"] * 0.8, r50["bacaan"][0]["Ptotal"])
+
+# ---------------------------------------------------------------- batas susut (SNI 3422:2008)
+cw = [{"nama": "1", "W1": 48.62, "W2": 40.15, "W3": 21.34, "V": 15.5, "V0": 10.4}, {"nama": "2", "W1": 49.10, "W2": 40.52, "W3": 21.60, "V": 15.6, "V0": 10.5}]
+r = js("hitung-atterberg.js", "batasSusut", {"cawan": cw, "Gs": 2.68})
+SL, Rr, SLg = [], [], []
+for c in cw:
+    Wo = c["W2"] - c["W3"]
+    w = (c["W1"] - c["W2"]) / Wo * 100
+    SL.append(w - (c["V"] - c["V0"]) / Wo * 100)
+    Rr.append(Wo / c["V0"])
+    SLg.append((1 / Rr[-1] - 1 / 2.68) * 100)
+cocok("batas susut rata-rata", sum(SL) / 2, r["SL"])
+cocok("rasio susut rata-rata", sum(Rr) / 2, r["R"])
+cocok("batas susut dari Gs", sum(SLg) / 2, r["SLGs"])
+
+# ---------------------------------------------------------------- hubungan fase
+r = js("hitung-sifat-fisik.js", "hubunganFase", {"cara": "w-gamma", "Gs": 2.68, "w": 24.5, "gamma": 1.86})
+gd = 1.86 / 1.245
+e = 2.68 / gd - 1
+cocok("fase: γd", gd, r["gammaD"])
+cocok("fase: e", e, r["e"])
+cocok("fase: Sr", 0.245 * 2.68 / e * 100, r["Sr"])
+cocok("fase: γsat", (2.68 + e) / (1 + e), r["gammaSat"])
+balik = js("hitung-sifat-fisik.js", "hubunganFase", {"cara": "e-Sr", "Gs": 2.68, "e": r["e"], "Sr": r["Sr"]})
+cocok("fase: e–Sr kembali ke w", 24.5, balik["w"])
+cocok("fase: e–Sr kembali ke γ", 1.86, balik["gamma"])
+cin = js("hitung-sifat-fisik.js", "hubunganFase", {"cara": "cincin", "Gs": 2.68, "w": 24.5, "M": 93.0, "V": 50.0})
+cocok("fase: cincin M/V", 93.0 / 50.0, cin["gamma"])
 
 print("\nSemua cocok." if not gagal else f"\n{gagal} pemeriksaan gagal.")
 sys.exit(1 if gagal else 0)

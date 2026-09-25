@@ -23,6 +23,7 @@
       contoh: { param: {}, tabel: { cawan: [
         { nama: '1', W1: 45.31, W2: 38.62, W3: 12.10 }, { nama: '2', W1: 47.85, W2: 40.71, W3: 13.42 }, { nama: '3', W1: 44.02, W2: 37.60, W3: 11.95 }] } },
       hitung: function (m) { return H.kadarAir({ cawan: m.tabel.cawan }); },
+      hasil: function (m, r) { return { w: r.w }; },
       tampil: function (m, r, U) {
         var c = r.cawan, c1 = c[0];
         return U.ringkasan([U.kartu('Kadar air rata-rata', f(r.w, 2) + ' <small>%</small>', c.length + ' cawan · rentang ' + f(r.rentang, 2) + '%')]) +
@@ -72,6 +73,7 @@
         { nama: '2', W1: 35.102, W2: 60.102, W3: 150.540, W4: 134.955, T: 28 }] } },
       kosong: { param: { Tacuan: '27.5' } },
       hitung: function (m) { return H.beratSpesifik({ uji: m.tabel.uji, Tacuan: +m.param.Tacuan }); },
+      hasil: function (m, r) { return { G: r.G, Tacuan: +m.param.Tacuan }; },
       tampil: function (m, r, U) {
         var u = r.uji, u1 = u[0], Ta = +m.param.Tacuan;
         return U.ringkasan([U.kartu('Berat spesifik rata-rata', f(r.G, 3), 'Gs pada ' + f(Ta, 1) + ' °C · ' + u.length + ' piknometer')]) +
@@ -103,6 +105,90 @@
       },
       sumber: ['Badan Standardisasi Nasional. SNI 1964:2008 <em>Cara uji berat jenis tanah</em>.',
         'Tanaka, M., Girard, G., Davis, R., Peuto, A., &amp; Bignell, N. (2001). Recommended table for the density of water between 0 °C and 40 °C based on recent experimental reports. <em>Metrologia, 38</em>(4), 301–309.',
+        'Hardiyatmo, H. C. <em>Mekanika Tanah I</em>. Gadjah Mada University Press.']
+    });
+  }
+  if (jenis === 'hubungan-fase') {
+    var CARA = [['w-gamma', 'G<sub>s</sub>, w, dan γ basah'], ['w-gammad', 'G<sub>s</sub>, w, dan γ<sub>d</sub>'], ['cincin', 'G<sub>s</sub>, w, massa dan volume cincin'], ['e-Sr', 'G<sub>s</sub>, e, dan S<sub>r</sub>']];
+    var G_KN = 9.81; // g/cm³ → kN/m³
+    var ada = function (daftar) { return function (p) { return daftar.indexOf(p.cara || 'w-gamma') >= 0; }; };
+
+    var diagram = function (r) {
+      var v = r.volume, x0 = 250, lebar = 170, y0 = 24, tinggi = 250, s = '<svg class="grafik" viewBox="0 0 640 300" role="img" aria-label="Diagram fase">';
+      var massa = { udara: 0, air: v.air * 1, butir: v.butir * r.Gs };
+      var y = y0;
+      [['udara', 'Udara', 'var(--permukaan)', 'a'], ['air', 'Air', '#3a7fc1', 'w'], ['butir', 'Butiran', 'var(--pasir)', 's']].forEach(function (z) {
+        var h = tinggi * v[z[0]];
+        if (h > 0.2) {
+          s += '<rect x="' + x0 + '" y="' + y + '" width="' + lebar + '" height="' + h + '" style="fill:' + z[2] + ';' + (z[0] === 'air' ? 'fill-opacity:.35;' : '') + 'stroke:var(--teks);stroke-width:1.4"/>';
+          var tengah = y + h / 2 + 4.5;
+          if (h >= 16) s += '<text x="' + (x0 + lebar / 2) + '" y="' + tengah + '" text-anchor="middle" font-size="13" font-weight="700" style="fill:var(--teks)">' + z[1] + '</text>';
+          s += '<line x1="' + (x0 - 14) + '" x2="' + (x0 - 14) + '" y1="' + (y + 2) + '" y2="' + (y + h - 2) + '" style="stroke:var(--teks-2)"/>';
+          s += '<text x="' + (x0 - 22) + '" y="' + tengah + '" text-anchor="end" font-size="12.5" style="fill:var(--teks)">V<tspan font-size="10" dy="3">' + z[3] + '</tspan><tspan dy="-3"> = ' + f(v[z[0]], 3) + '</tspan></text>';
+          s += '<line x1="' + (x0 + lebar + 14) + '" x2="' + (x0 + lebar + 14) + '" y1="' + (y + 2) + '" y2="' + (y + h - 2) + '" style="stroke:var(--teks-2)"/>';
+          s += '<text x="' + (x0 + lebar + 22) + '" y="' + tengah + '" font-size="12.5" style="fill:var(--teks)">M<tspan font-size="10" dy="3">' + z[3] + '</tspan><tspan dy="-3"> = ' + f(massa[z[0]], 3) + ' g</tspan></text>';
+        }
+        y += h;
+      });
+      s += '<text x="' + (x0 + lebar / 2) + '" y="16" text-anchor="middle" font-size="12" style="fill:var(--teks-2)">untuk V = 1 cm³ · M = ' + f(r.gamma, 3) + ' g</text>';
+      s += '<text x="20" y="' + (y0 + tinggi / 2) + '" font-size="12.5" style="fill:var(--teks-2)">Volume (cm³)</text><text x="620" y="' + (y0 + tinggi / 2) + '" text-anchor="end" font-size="12.5" style="fill:var(--teks-2)">Massa</text>';
+      return s + '</svg>';
+    };
+
+    Praktikum.pasang({
+      id: 'hubungan-fase', judulEkspor: 'Hubungan berat dan volume tanah',
+      parameter: [
+        { id: 'cara', label: 'Data yang diketahui', pilihan: CARA.map(function (c) { return [c[0], c[1].replace(/<[^>]+>/g, '')]; }) },
+        { id: 'Gs', label: 'Berat spesifik, G<sub>s</sub>', dariAlat: { alat: 'berat-spesifik', nama: 'berat spesifik', ambil: function (h) { return h.G; }, d: 3 } },
+        { id: 'w', label: 'Kadar air, w', satuan: '%', tampilJika: ada(['w-gamma', 'w-gammad', 'cincin']),
+          dariAlat: { alat: 'kadar-air', nama: 'kadar air', ambil: function (h) { return h.w; }, d: 2 } },
+        { id: 'gamma', label: 'Berat isi basah, γ', satuan: 'g/cm³', tampilJika: ada(['w-gamma']) },
+        { id: 'gammaD', label: 'Berat isi kering, γ<sub>d</sub>', satuan: 'g/cm³', tampilJika: ada(['w-gammad']),
+          dariAlat: { alat: 'pemadatan', nama: 'pemadatan (γd maks)', ambil: function (h) { return h.gdmaks; }, d: 3 } },
+        { id: 'M', label: 'Massa tanah basah dalam cincin', satuan: 'gram', tampilJika: ada(['cincin']) },
+        { id: 'V', label: 'Volume cincin', satuan: 'cm³', tampilJika: ada(['cincin']), bantuan: 'π d² h / 4 dari ukuran dalam cincin.' },
+        { id: 'e', label: 'Angka pori, e', tampilJika: ada(['e-Sr']) },
+        { id: 'Sr', label: 'Derajat kejenuhan, S<sub>r</sub>', satuan: '%', tampilJika: ada(['e-Sr']) }],
+      tabel: [],
+      contoh: { param: { cara: 'w-gamma', Gs: 2.68, w: 24.5, gamma: 1.86, gammaD: '', M: '', V: '', e: '', Sr: '' }, tabel: {} },
+      kosong: { param: { cara: 'w-gamma', Gs: '', w: '', gamma: '', gammaD: '', M: '', V: '', e: '', Sr: '' } },
+      hitung: function (m) { return H.hubunganFase(m.param); },
+      hasil: function (m, r) { return { e: r.e, n: r.n, Sr: r.Sr, gammaD: r.gammaD, gamma: r.gamma }; },
+      tampil: function (m, r, U) {
+        var p = m.param, h = '';
+        h += U.ringkasan([U.kartu('Angka pori', f(r.e, 3), 'e'), U.kartu('Porositas', f(r.n, 2) + ' <small>%</small>', 'n'),
+          U.kartu('Derajat kejenuhan', f(r.Sr, 2) + ' <small>%</small>', 'S<sub>r</sub>'), U.kartu('Berat isi kering', f(r.gammaD, 3) + ' <small>g/cm³</small>', f(r.gammaD * G_KN, 2) + ' kN/m³')]);
+        h += U.grafik(diagram(r), 'Diagram fase untuk volume total 1 cm³. Massa udara dianggap nol.');
+        h += '<h3>Tabel hasil</h3>' + U.tabel(['Besaran', 'Simbol', 'Satuan', 'Nilai', 'Dalam kN/m³'], [
+          ['Kadar air', 'w', '%', f(r.w, 2), ''], ['Berat isi basah', 'γ', 'g/cm³', f(r.gamma, 3), f(r.gamma * G_KN, 2)],
+          ['Berat isi kering', 'γ<sub>d</sub>', 'g/cm³', f(r.gammaD, 3), f(r.gammaD * G_KN, 2)], ['Berat isi jenuh', 'γ<sub>sat</sub>', 'g/cm³', f(r.gammaSat, 3), f(r.gammaSat * G_KN, 2)],
+          ['Berat isi terendam', 'γ′', 'g/cm³', f(r.gammaApung, 3), f(r.gammaApung * G_KN, 2)], ['Angka pori', 'e', '–', f(r.e, 3), ''],
+          ['Porositas', 'n', '%', f(r.n, 2), ''], ['Derajat kejenuhan', 'S<sub>r</sub>', '%', f(r.Sr, 2), ''], ['Kadar udara', 'A', '%', f(r.udara, 2), '']]);
+        h += '<p class="kecil redup">Konversi ke kN/m³ memakai g = 9,81 m/s² (γ<sub>w</sub> = 9,81 kN/m³).</p>';
+        h += '<h3>Langkah hitungan</h3>';
+        var no = 0;
+        if (p.cara === 'e-Sr') {
+          h += U.langkah('Kadar air dan berat isi', U.rumus('w = \\dfrac{S_r\\,e}{G_s} = \\dfrac{' + U.t(r.Sr / 100, 4) + '\\times' + U.t(r.e, 3) + '}{' + U.t(r.Gs, 3) + '} = ' + U.t(r.w, 2) + '\\% \\qquad (' + (++no) + ')') +
+            U.rumus('\\gamma_d = \\dfrac{G_s\\,\\gamma_w}{1 + e} = \\dfrac{' + U.t(r.Gs, 3) + '}{1 + ' + U.t(r.e, 3) + '} = ' + U.t(r.gammaD, 3) + '\\ \\text{g/cm}^3 \\qquad (' + (++no) + ')') +
+            U.rumus('\\gamma = \\gamma_d\\,(1 + w) = ' + U.t(r.gammaD, 3) + '\\times(1 + ' + U.t(r.w / 100, 4) + ') = ' + U.t(r.gamma, 3) + '\\ \\text{g/cm}^3 \\qquad (' + (++no) + ')'));
+        } else {
+          if (p.cara === 'cincin') h += U.langkah('Berat isi basah', U.rumus('\\gamma = \\dfrac{M}{V} = \\dfrac{' + U.t(p.M, 2) + '}{' + U.t(p.V, 2) + '} = ' + U.t(r.gamma, 3) + '\\ \\text{g/cm}^3 \\qquad (' + (++no) + ')'));
+          h += U.langkah('Berat isi kering', p.cara === 'w-gammad' ? '<p>γ<sub>d</sub> diketahui = ' + f(r.gammaD, 3) + ' g/cm³, sehingga γ = γ<sub>d</sub> (1 + w) = ' + f(r.gamma, 3) + ' g/cm³.</p>' :
+            U.rumus('\\gamma_d = \\dfrac{\\gamma}{1 + w} = \\dfrac{' + U.t(r.gamma, 3) + '}{1 + ' + U.t(r.w / 100, 4) + '} = ' + U.t(r.gammaD, 3) + '\\ \\text{g/cm}^3 \\qquad (' + (++no) + ')'));
+          h += U.langkah('Angka pori dan porositas', U.rumus('e = \\dfrac{G_s\\,\\gamma_w}{\\gamma_d} - 1 = \\dfrac{' + U.t(r.Gs, 3) + '\\times 1}{' + U.t(r.gammaD, 3) + '} - 1 = ' + U.t(r.e, 3) + ' \\qquad (' + (++no) + ')') +
+            U.rumus('n = \\dfrac{e}{1 + e} = \\dfrac{' + U.t(r.e, 3) + '}{1 + ' + U.t(r.e, 3) + '} = ' + U.t(r.n, 2) + '\\% \\qquad (' + (++no) + ')'));
+          h += U.langkah('Derajat kejenuhan', U.rumus('S_r = \\dfrac{w\\,G_s}{e} = \\dfrac{' + U.t(r.w / 100, 4) + '\\times' + U.t(r.Gs, 3) + '}{' + U.t(r.e, 3) + '} = ' + U.t(r.Sr, 2) + '\\% \\qquad (' + (++no) + ')'));
+        }
+        h += U.langkah('Berat isi jenuh dan terendam', U.rumus('\\gamma_{sat} = \\dfrac{(G_s + e)\\,\\gamma_w}{1 + e} = \\dfrac{' + U.t(r.Gs, 3) + ' + ' + U.t(r.e, 3) + '}{1 + ' + U.t(r.e, 3) + '} = ' + U.t(r.gammaSat, 3) + '\\ \\text{g/cm}^3 \\qquad (' + (++no) + ')') +
+          U.rumus('\\gamma\' = \\gamma_{sat} - \\gamma_w = ' + U.t(r.gammaSat, 3) + ' - 1 = ' + U.t(r.gammaApung, 3) + '\\ \\text{g/cm}^3 \\qquad (' + (++no) + ')'));
+        return h;
+      },
+      ekspor: function (m, r) {
+        return [['Besaran', 'Satuan', 'Nilai', 'kN/m3'], ['Gs', '-', r.Gs], ['Kadar air w', '%', r.w], ['Berat isi basah', 'g/cm3', r.gamma, r.gamma * G_KN],
+          ['Berat isi kering', 'g/cm3', r.gammaD, r.gammaD * G_KN], ['Berat isi jenuh', 'g/cm3', r.gammaSat, r.gammaSat * G_KN], ['Berat isi terendam', 'g/cm3', r.gammaApung, r.gammaApung * G_KN],
+          ['Angka pori e', '-', r.e], ['Porositas n', '%', r.n], ['Derajat kejenuhan', '%', r.Sr], ['Kadar udara', '%', r.udara]];
+      },
+      sumber: ['Das, B. M. <em>Principles of geotechnical engineering</em>. Cengage Learning. Hubungan berat–volume.',
         'Hardiyatmo, H. C. <em>Mekanika Tanah I</em>. Gadjah Mada University Press.']
     });
   }
