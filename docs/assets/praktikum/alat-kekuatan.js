@@ -56,7 +56,7 @@
             { titik: B.map(function (b) { return [b.puncak.sigma, b.puncak.tau]; }), garis: false, penanda: true, warna: 'aksen' }],
           tanda: B.map(function (b) { return { x: b.puncak.sigma, y: b.puncak.tau, teks: 'BU ' + b.nama, posisi: 'kanan', titik: false, atas: true }; }) }),
           'Garis keruntuhan dari tegangan geser puncak dengan kuadrat terkecil.');
-        h += '<h3>Tabel hasil tiap benda uji</h3>' + U.tabel(['Uraian', 'Simbol', 'Satuan'].concat(B.map(function (b) { return 'BU ' + U.esc(b.nama); })), [
+        h += '<h3>Tabel hasil tiap benda uji</h3>' + U.tabel(['Uraian', 'Simbol', 'Satuan'].concat(B.map(function (b) { return 'BU ' + b.nama; })), [
           ['Gaya normal', 'P', 'kg'].concat(B.map(function (b) { return f(b.P, 2); })),
           ['Tegangan normal', 'σ', 'kg/cm²'].concat(B.map(function (b) { return f(b.puncak.sigma, 3); })),
           ['Bacaan arloji puncak', '', 'divisi'].concat(B.map(function (b) { return f(b.puncak.bacaan, 1); })),

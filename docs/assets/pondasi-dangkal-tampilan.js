@@ -193,7 +193,7 @@
   }
 
   function mulai() {
-    keadaan = U.bacaHash(function (o) { return typeof o.bentuk === 'string'; }) || salin(CONTOH);
+    keadaan = U.bacaHash(function (o) { return typeof o.bentuk === 'string' && U.tanpaHTML(o); }) || salin(CONTOH);
     isiFormulir();
     ANGKA.forEach(function (k) {
       $(k).addEventListener('input', function () { keadaan[k] = parseFloat($(k).value); perbarui(); });

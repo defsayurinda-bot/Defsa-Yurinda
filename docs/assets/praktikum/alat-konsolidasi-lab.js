@@ -95,7 +95,7 @@
       }
       h += '<h3>Tabel hasil tiap tahap</h3>' + U.tabel([{ teks: 'Tahap' }, { teks: 'p (kg/cm²)', angka: true }, { teks: 'Arloji akhir', angka: true }, 'ΔH (cm)', 'H (cm)', 'e', 'C<sub>c</sub> / C<sub>s</sub>', 'm<sub>v</sub> (cm²/kg)', 't<sub>90</sub> (menit)', 'H<sub>dr</sub> (cm)', 'c<sub>v</sub> (cm²/s)', 'k (cm/s)'],
         T.map(function (t) {
-          return [U.esc(t.nama) + (t.muat ? '' : ' ↑'), f(t.p, 2), f(t.akhir, 1), f(t.dH, 4), f(t.H, 4), f(t.e, 4), t.Cc !== undefined ? f(t.Cc, 3) : t.Cs !== undefined ? f(t.Cs, 3) : '–',
+          return [t.nama + (t.muat ? '' : ' ↑'), f(t.p, 2), f(t.akhir, 1), f(t.dH, 4), f(t.H, 4), f(t.e, 4), t.Cc !== undefined ? f(t.Cc, 3) : t.Cs !== undefined ? f(t.Cs, 3) : '–',
             t.mv !== undefined ? f(t.mv, 4) : '–', t.t90 ? f(t.t90, 2) + (t.caraT90 === 'manual' ? '*' : '') : '–', t.muat ? f(t.Hdr, 4) : '–',
             t.cv ? t.cv.toExponential(3).replace('.', ',') : '–', t.k ? t.k.toExponential(2).replace('.', ',') : '–'];
         }), null, { angkaMulai: 1 });

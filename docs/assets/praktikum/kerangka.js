@@ -34,7 +34,11 @@
 
   function simpan(kunci, nilai) { try { localStorage.setItem(kunci, JSON.stringify(nilai)); } catch (e) { /* tidak tersedia */ } }
   function baca(kunci) { try { return JSON.parse(localStorage.getItem(kunci)); } catch (e) { return null; } }
-  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var esc = U0.esc;
+  // Kebalikan esc, untuk ekspor teks (CSV dan papan klip).
+  function unesc(s) { return String(s).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&'); }
+  // Nilai pilihan dari tautan berbagi harus salah satu pilihan yang sah.
+  function pilihanSah(daftar, v) { return daftar.some(function (o) { return String(o[0]) === String(v); }) ? v : daftar[0][0]; }
 
   // Terima "45,31", "45.31", "1.234,5".
   function angka(s) {
@@ -136,7 +140,7 @@
       var k = tb.kolom.slice();
       if (tb.kolomDari) {
         (keadaan.tabel[tb.kolomDari.tabel] || []).forEach(function (s, i) {
-          k.push({ id: tb.kolomDari.awalan + i, label: tb.kolomDari.label(s.nama || String(i + 1), i), satuan: tb.kolomDari.satuan, opsional: true, dinamis: i });
+          k.push({ id: tb.kolomDari.awalan + i, label: tb.kolomDari.label(esc(s.nama || String(i + 1)), i), satuan: tb.kolomDari.satuan, opsional: true, dinamis: i });
         });
       }
       return k;
@@ -146,15 +150,18 @@
     function teks(v) { return typeof v === 'function' ? v(keadaan.param) : (v || ''); }
 
     // Kumpulkan masukan lengkap untuk fungsi hitung; kolom atau baris setengah terisi dilaporkan.
+    // Nama kolom dan isian teks sudah di-escape di sini, karena hitung dan tampil memasukkannya ke HTML
+    // (pesan galat, judul tabel, judul langkah). Nama baris dan pilihan dibatasi ke daftar yang sah.
     function masukan() {
       var m = { param: {}, tabel: {}, tidakLengkap: [], contoh: !!keadaan.contoh };
       (def.parameter || []).forEach(function (p) {
         var v = keadaan.param[p.id];
-        m.param[p.id] = p.pilihan ? (v === undefined || v === null || v === '' ? p.pilihan[0][0] : v) : angka(v);
+        m.param[p.id] = p.pilihan ? pilihanSah(p.pilihan, v) : angka(v);
       });
       def.tabel.forEach(function (tb) {
         if (tb.jenis === 'baris') {
-          m.tabel[tb.id] = keadaan.tabel[tb.id].map(function (b) { return { nama: b.nama, nilai: angka(b.nilai) }; });
+          m.tabel[tb.id] = keadaan.tabel[tb.id].filter(function (b) { return tb.pilihanBaris.indexOf(b.nama) >= 0; })
+            .map(function (b) { return { nama: b.nama, nilai: angka(b.nilai) }; });
           return;
         }
         m.tabel[tb.id] = [];
@@ -169,8 +176,8 @@
             var o = { no: i + 1 };
             kol.forEach(function (k) {
               if (k.dinamis !== undefined) return;
-              if (k.teks) o[k.id] = String(b[k.id] || '').trim();
-              else if (k.pilihan) o[k.id] = b[k.id] || k.pilihan[0][0];
+              if (k.teks) o[k.id] = esc(String(b[k.id] || '').trim());
+              else if (k.pilihan) o[k.id] = pilihanSah(k.pilihan, b[k.id]);
               else { var v = angka(b[k.id]); o[k.id] = isFinite(v) ? v : null; }
             });
             if (tb.kolomDari) {
@@ -184,8 +191,8 @@
           var wajib = tb.baris.filter(function (b) { return !b.opsional; });
           var terisi = wajib.filter(function (b) { return isFinite(angka(k[b.id])); }).length;
           if (terisi === 0) return;
-          if (terisi < wajib.length) { m.tidakLengkap.push(tb.kolom + ' ' + (k.nama || i + 1)); return; }
-          var o = { nama: k.nama || String(i + 1) };
+          if (terisi < wajib.length) { m.tidakLengkap.push(tb.kolom + ' ' + esc(k.nama || i + 1)); return; }
+          var o = { nama: esc(k.nama || String(i + 1)) };
           tb.baris.forEach(function (b) { var v = angka(k[b.id]); o[b.id] = isFinite(v) ? v : null; });
           m.tabel[tb.id].push(o);
         });
@@ -353,7 +360,7 @@
     }
     function sel(v, pemisah) {
       if (typeof v === 'number') return isFinite(v) ? String(Math.round(v * 1e6) / 1e6).replace('.', ',') : '';
-      v = v == null ? '' : String(v).replace(/<[^>]+>/g, '');
+      v = v == null ? '' : unesc(String(v).replace(/<[^>]+>/g, ''));
       return (v.indexOf(pemisah) >= 0 || v.indexOf('"') >= 0 || v.indexOf('\n') >= 0) ? '"' + v.replace(/"/g, '""') + '"' : v;
     }
     function pesan(t) { document.getElementById('pesan-praktikum').textContent = t; }
@@ -363,7 +370,7 @@
     function blokWord() {
       var blok = [{ jenis: 'subjudul', teks: 'Data pengujian' }];
       var nilaiParam = (def.parameter || []).filter(function (p) { return !p.tampilJika || p.tampilJika(keadaan.param); }).map(function (p) {
-        var v = p.pilihan ? labelPilihan(p.pilihan, keadaan.param[p.id]) : teksAngka(keadaan.param[p.id]);
+        var v = p.pilihan ? labelPilihan(p.pilihan, pilihanSah(p.pilihan, keadaan.param[p.id])) : teksAngka(keadaan.param[p.id]);
         return [p.label, p.satuan || '–', esc(v === '' || v === undefined ? '–' : v)];
       });
       if (nilaiParam.length) blok.push({ jenis: 'tabel', judul: 'Parameter pengujian', kepala: ['Besaran', 'Satuan', 'Nilai'], baris: nilaiParam, kanan: [2] });
@@ -379,7 +386,7 @@
             blok.push({ jenis: 'tabel', judul: tb.judul, kepala: ['No.'].concat(kol.map(function (k) { return k.label + (k.satuan ? ' (' + k.satuan + ')' : ''); })),
               baris: terisi.map(function (b) {
                 return [String(data.indexOf(b) + 1)].concat(kol.map(function (k) {
-                  if (k.pilihan) return esc(labelPilihan(k.pilihan, b[k.id] || k.pilihan[0][0]));
+                  if (k.pilihan) return labelPilihan(k.pilihan, pilihanSah(k.pilihan, b[k.id]));
                   return k.teks ? esc(b[k.id] || '') : teksAngka(b[k.id]);
                 }));
               }), kanan: kol.map(function (k, i) { return kolomAngka(k) ? i + 1 : -1; }) });
