@@ -2,6 +2,8 @@
 
 [![Verifikasi](https://github.com/defsayurinda/defsayurinda.github.io/actions/workflows/verifikasi.yml/badge.svg)](https://github.com/defsayurinda/defsayurinda.github.io/actions/workflows/verifikasi.yml)
 
+**Bahasa Indonesia** · [English](README.en.md)
+
 Kode dan tulisan untuk situs **[defsayurinda.github.io](https://defsayurinda.github.io/)**: kalkulator geoteknik dengan langkah hitungan lengkap, latihan soal, dan catatan belajar memakai Claude Code.
 
 Untuk **memakai** alatnya, buka situsnya. README ini untuk yang ingin melihat atau mengubah isinya.

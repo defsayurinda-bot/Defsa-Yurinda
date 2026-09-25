@@ -32,6 +32,10 @@ SITUS = "https://defsayurinda.github.io/"
 REPO = "https://github.com/defsayurinda/defsayurinda.github.io"
 DASAR_404 = "/"
 
+MENU_EN = [("en/", "Home", ("en/",)), ("en/tentang/", "About", ("en/tentang/",))]
+# Halaman yang punya padanan bahasa Inggris: folder Indonesia → folder Inggris.
+PADANAN = {"": "en/", "tentang/": "en/tentang/"}
+
 MENU = [("alat/", "Alat", ("alat", "kalkulator", "praktikum")),
         ("latihan/", "Latihan", ("latihan",)),
         ("catatan/", "Catatan", ("catatan",)),
@@ -42,7 +46,7 @@ MENU = [("alat/", "Alat", ("alat", "kalkulator", "praktikum")),
 
 def peta_halaman():
     """Kembalikan daftar (berkas sumber, folder keluaran relatif terhadap docs/)."""
-    peta = [(KONTEN / "tentang.md", "tentang/")]
+    peta = [(KONTEN / "tentang.md", "tentang/"), (KONTEN / "en/tentang.md", "en/tentang/")]
     for bagian in ("cara-memakai-ai", "skill"):
         for f in sorted((KONTEN / bagian).glob("*.md")):
             peta.append((f, f"{bagian}/" if f.name == "README.md" else f"{bagian}/{f.stem}/"))
@@ -61,15 +65,34 @@ def relatif(dari_folder, ke):
 
 # ---------------------------------------------------------------- bagian bersama
 
-def menu(awalan, aktif):
+def inggris(folder):
+    return folder is not None and folder.startswith("en/")
+
+
+def menu(awalan, aktif, folder=None):
     tanda = ' aria-current="page"'
-    butir = "".join(f'<li><a href="{awalan}{url}"{tanda if aktif in kunci else ""}>{nama}</a></li>'
-                    for url, nama, kunci in MENU)
-    return (f'<nav class="nav">\n    <div class="wadah">\n      <a class="merek" href="{awalan or "./"}">Defsa<span>.</span></a>\n'
+    if inggris(folder):
+        butir = "".join(f'<li><a href="{awalan}{url}"{tanda if folder in kunci else ""}>{nama}</a></li>' for url, nama, kunci in MENU_EN)
+        asal = next((i for i, e in PADANAN.items() if e == folder), "")
+        butir += f'<li><a href="{awalan}{asal}" lang="id" hreflang="id">Bahasa Indonesia</a></li>'
+        beranda = f"{awalan}en/"
+    else:
+        butir = "".join(f'<li><a href="{awalan}{url}"{tanda if aktif in kunci else ""}>{nama}</a></li>'
+                        for url, nama, kunci in MENU)
+        if folder in PADANAN:
+            butir += f'<li><a href="{awalan}{PADANAN[folder]}" lang="en" hreflang="en">English</a></li>'
+        beranda = awalan or "./"
+    return (f'<nav class="nav">\n    <div class="wadah">\n      <a class="merek" href="{beranda}">Defsa<span>.</span></a>\n'
             f'      <ul>{butir}</ul>\n    </div>\n  </nav>')
 
 
-def footer(awalan, sumber=None):
+def footer(awalan, sumber=None, en=False):
+    if en:
+        tautan_sumber = f' · <a href="{REPO}/blob/main/{sumber}">Source of this page</a>' if sumber else ""
+        return ('<footer>\n    <div class="wadah">'
+                f'<a href="{awalan}en/">Defsa Yurinda</a> · Civil Engineering, Universitas Jambi · '
+                f'<a href="{REPO}">Code and writing on GitHub</a>{tautan_sumber} · '
+                f'Code <a href="{REPO}/blob/main/LICENSE">MIT</a>, writing <a href="{REPO}/blob/main/LICENSE-TULISAN">CC BY 4.0</a></div>\n  </footer>')
     tautan_sumber = f' · <a href="{REPO}/blob/main/{sumber}">Sumber halaman ini</a>' if sumber else ""
     return ('<footer>\n    <div class="wadah">'
             f'<a href="{awalan or "./"}">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · '
@@ -116,10 +139,10 @@ def tulis_ulang_tautan(isi_html, sumber, folder, peta):
     return re.sub(r'href="([^"]+)"', ganti, isi_html)
 
 
-def kepala(judul, ringkasan, awalan, url, tambahan=""):
+def kepala(judul, ringkasan, awalan, url, tambahan="", bahasa="id"):
     j, r = html.escape(judul), html.escape(ringkasan)
     return f"""<!doctype html>
-<html lang="id">
+<html lang="{bahasa}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -130,7 +153,7 @@ def kepala(judul, ringkasan, awalan, url, tambahan=""):
   <meta property="og:description" content="{r}">
   <meta property="og:url" content="{SITUS}{url}">
   <meta property="og:image" content="{SITUS}assets/pratinjau.png">
-  <meta property="og:locale" content="id_ID">
+  <meta property="og:locale" content="{"en_US" if bahasa == "en" else "id_ID"}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#c8421a">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,7 +171,10 @@ def halaman_konten(sumber, folder, peta, sebelum=None, sesudah=None):
     isi = tulis_ulang_tautan(isi, sumber, folder, peta)
     awalan = "../" * kedalaman(folder)
     aktif = bagian_aktif(folder)
-    if aktif == "catatan":
+    en = inggris(folder)
+    if en:
+        atas = ("en/", "Home")
+    elif aktif == "catatan":
         atas = ("catatan/", "Semua catatan")
     elif aktif == "tentang" or folder in ("cara-memakai-ai/", "skill/"):
         atas = ("tentang/", "Tentang") if aktif != "tentang" else ("", "Beranda")
@@ -160,10 +186,10 @@ def halaman_konten(sumber, folder, peta, sebelum=None, sesudah=None):
         kiri = f'<a class="tombol" href="{relatif(folder, sebelum[1])}">← {html.escape(sebelum[0])}</a>' if sebelum else "<span></span>"
         kanan = f'<a class="tombol" href="{relatif(folder, sesudah[1])}">{html.escape(sesudah[0])} →</a>' if sesudah else "<span></span>"
         navigasi = f'\n      <div class="berikut">{kiri}{kanan}</div>'
-    return (kepala(judul, ringkasan, awalan, folder) + "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, aktif) +
+    return (kepala(judul, ringkasan, awalan, folder, bahasa="en" if en else "id") + "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, aktif, folder) +
             "\n  <!-- NAV:SELESAI -->\n\n  <main class=\"wadah\">\n    <article class=\"prosa\">\n      " + remah + "\n" +
             isi + navigasi + "\n    </article>\n  </main>\n\n  <!-- FOOTER:MULAI -->\n  " +
-            footer(awalan, sumber.relative_to(AKAR).as_posix()) + "\n  <!-- FOOTER:SELESAI -->\n</body>\n</html>\n")
+            footer(awalan, sumber.relative_to(AKAR).as_posix(), en) + "\n  <!-- FOOTER:SELESAI -->\n</body>\n</html>\n")
 
 
 def daftar_catatan(peta):
@@ -263,6 +289,14 @@ def kartu_beranda(data):
     return "\n        ".join(kartu)
 
 
+def kartu_beranda_en(data):
+    kartu = []
+    for a in data["alat"]:
+        kartu.append(f'<a class="kartu" href="../{a["halaman"]}" hreflang="id">\n'
+                     f'          <h3>{html.escape(a.get("judul_en", a["judul"]))}</h3>\n          <p class="redup">{a.get("ringkas_en", a["ringkas"])}</p>\n        </a>')
+    return "\n        ".join(kartu)
+
+
 def daftar_halaman_alat(data):
     bagian = []
     for k in data["kategori"]:
@@ -306,6 +340,8 @@ def seragamkan(berkas, teks):
     else:
         folder = rel.rsplit("/", 1)[0] + "/" if "/" in rel else ""
         awalan, aktif = "../" * kedalaman(folder), bagian_aktif(folder)
+        teks = ganti_penanda(teks, "NAV", menu(awalan, aktif, folder))
+        return ganti_penanda(teks, "FOOTER", footer(awalan, en=inggris(folder)), wajib=False)
     teks = ganti_penanda(teks, "NAV", menu(awalan, aktif))
     return ganti_penanda(teks, "FOOTER", footer(awalan), wajib=False)
 
@@ -356,6 +392,7 @@ def bangun():
         keluaran[berkas] = teks
     alat = data_alat()
     keluaran[DOCS / "index.html"] = ganti_penanda(keluaran[DOCS / "index.html"], "ALAT", kartu_beranda(alat))
+    keluaran[DOCS / "en/index.html"] = ganti_penanda(keluaran[DOCS / "en/index.html"], "ALAT-EN", kartu_beranda_en(alat))
     keluaran[DOCS / "alat/index.html"] = ganti_penanda(keluaran[DOCS / "alat/index.html"], "DAFTAR-ALAT", daftar_halaman_alat(alat))
     readme = AKAR / "README.md"
     keluaran[readme] = ganti_penanda(readme.read_text(encoding="utf-8"), "ALAT", tabel_readme(alat), baris_baru=True)
