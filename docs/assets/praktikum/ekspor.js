@@ -148,7 +148,7 @@
     for (var i = 0; i < n; i++) {
       var isiTerpanjang = b.baris.concat(b.kaki ? [b.kaki] : []).reduce(function (a, r) { return Math.max(a, panjang(r[i]).length); }, 0);
       var kataKepala = b.kepala ? panjang(b.kepala[i]).split(/\s+/).reduce(function (a, k) { return Math.max(a, k.length); }, 0) : 0;
-      karakter.push(Math.max(isiTerpanjang, kataKepala));
+      karakter.push(Math.min(30, Math.max(isiTerpanjang, kataKepala))); // teks panjang dibungkus, bukan mengecilkan huruf
     }
     // Ukuran huruf 11 pt; tabel yang terlalu lebar untuk 14 cm diperkecil sampai paling kecil 8 pt.
     function lebarUntuk(sz) { return karakter.map(function (c) { return Math.max(Math.round(560 * sz / 22), Math.round((c * 115 + 240) * sz / 22)); }); }
