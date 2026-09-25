@@ -12,6 +12,7 @@ Repo ini berisi catatan saya selama belajar dan memakai Claude dan Claude Code u
 |---|---|
 | [Kalkulator tiang bor N-SPT](https://defsayurinda-bot.github.io/Defsa-Yurinda/kalkulator/tiang-bor.html) | Daya dukung aksial dengan metode Reese & Wright (1977) dan Meyerhof (1976), lengkap dengan langkah hitungan, profil tanah, dan tautan berbagi |
 | [Kalkulator pondasi dangkal](https://defsayurinda-bot.github.io/Defsa-Yurinda/kalkulator/pondasi-dangkal.html) | Persamaan daya dukung umum dengan faktor bentuk (De Beer), kedalaman (Hansen), N<sub>γ</sub> Vesic, dan koreksi muka air tanah |
+| [Latihan soal](https://defsayurinda-bot.github.io/Defsa-Yurinda/latihan/) | 10 jenis soal pondasi dangkal, konsolidasi, dan tiang bor dengan angka acak, pemeriksaan otomatis, pembahasan, dan skor |
 | [Kalkulator penurunan konsolidasi](https://defsayurinda-bot.github.io/Defsa-Yurinda/kalkulator/konsolidasi.html) | Lempung NC/OC, Δσ metode 2:1, diagram e–log σ', dan kurva penurunan terhadap waktu |
 
 Kode hitungan diuji otomatis setiap kali ada perubahan ([`tests/`](tests/)): dibandingkan dengan perhitungan Python yang ditulis terpisah dan dengan nilai tabel buku teks.

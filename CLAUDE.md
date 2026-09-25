@@ -26,6 +26,7 @@ Repo **publik** milik Defsa Yurinda (mahasiswa Teknik Sipil, Universitas Jambi) 
 - Setiap rumus harus punya sumber yang bisa ditelusuri dan ditulis di halaman. Rumus yang belum bisa diverifikasi tidak dimasukkan. O'Neill & Reese (1999) ditunda karena koefisiennya belum terverifikasi.
 - Fungsi bersama (format angka, KaTeX, tautan berbagi) ada di `docs/assets/umum.js`.
 - Setiap perubahan hitungan wajib lolos semua `tests/verifikasi_*.py`, yang membandingkan JavaScript dengan perhitungan Python terpisah dan, bila ada, dengan nilai tabel buku teks. Kasus uji baru ditambahkan untuk setiap rumus baru.
+- Bank soal (`docs/latihan/`, `docs/assets/latihan-soal.js`): soal dibangkitkan dari templat dengan angka acak berbasis kode soal; kunci jawaban selalu dihitung oleh modul `*-hitung.js`, tidak ditulis tangan. Templat baru wajib ditambahkan ke `tests/verifikasi_latihan.py` beserta hitungan Python-nya.
 - Terzaghi (1943) untuk pondasi dangkal ditunda karena N<sub>γ</sub>-nya berupa tabel yang belum diverifikasi.
 - Tampilan dicek di lebar HP (390 px) dan mode gelap sebelum di-merge. Tidak boleh ada gulir horizontal.
 - Format hitungan mengikuti urutan Defsa: diketahui, ditanya, penyelesaian (rumus, sumber, substitusi), hasil dan penjelasan, catatan. Desimal koma, ribuan titik.
