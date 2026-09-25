@@ -105,12 +105,10 @@ HALAMAN = """<!doctype html>
   <meta property="og:locale" content="id_ID">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#c8421a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="../assets/katex/katex.min.css">
   <link rel="stylesheet" href="../assets/gaya.css">
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.webmanifest">
 </head>
 <body>
   <!-- NAV:MULAI -->
@@ -121,6 +119,8 @@ HALAMAN = """<!doctype html>
       <span class="label-atas">Kalkulator · {kategori}</span>
       <h1>{judul}</h1>
       <p class="lead">{deskripsi}</p>
+      <!-- STATUS:MULAI -->
+      <!-- STATUS:SELESAI -->
     </header>
 
     <section id="hasil" aria-live="polite"></section>
@@ -137,7 +137,7 @@ HALAMAN = """<!doctype html>
   <!-- FOOTER:MULAI -->
   <!-- FOOTER:SELESAI -->
 
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="../assets/katex/katex.min.js" defer></script>
   <script src="../assets/umum.js" defer></script>
   <script src="../assets/{id}-hitung.js" defer></script>
   <script src="../assets/{id}-tampilan.js" defer></script>

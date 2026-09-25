@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cari · Defsa Yurinda</title>
+  <meta name="description" content="Cari alat, alat praktikum, catatan, dan tulisan di situs Defsa Yurinda.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cari · Defsa Yurinda">
+  <meta property="og:description" content="Cari alat, alat praktikum, catatan, dan tulisan di situs Defsa Yurinda.">
+  <meta property="og:url" content="https://defsayurinda.github.io/cari/">
+  <meta property="og:image" content="https://defsayurinda.github.io/assets/pratinjau.png">
+  <meta property="og:locale" content="id_ID">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#c8421a">
+  <link rel="stylesheet" href="../assets/gaya.css">
+  <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.webmanifest">
+</head>
+<body>
+  <!-- NAV:MULAI -->
+  <nav class="nav">
+    <div class="wadah">
+      <a class="merek" href="../">Defsa<span>.</span></a>
+      <ul><li><a href="../alat/">Alat</a></li><li><a href="../latihan/">Latihan</a></li><li><a href="../catatan/">Catatan</a></li><li><a href="../tentang/">Tentang</a></li><li><a href="../cari/" aria-current="page">Cari</a></li></ul>
+    </div>
+  </nav>
+  <!-- NAV:SELESAI -->
+
+  <main class="wadah">
+    <header class="pahlawan" style="padding-bottom:16px">
+      <h1>Cari</h1>
+    </header>
+    <form class="kartu" role="search" onsubmit="return false">
+      <label for="kataCari">Kata yang dicari</label>
+      <input id="kataCari" type="search" autocomplete="off" placeholder="misalnya konsolidasi, CBR, git">
+    </form>
+    <p id="infoCari" class="kecil redup" role="status" aria-live="polite"></p>
+    <ul id="hasilCari" class="daftar-bersih hasil-cari"></ul>
+  </main>
+
+  <!-- FOOTER:MULAI -->
+  <footer>
+    <div class="wadah"><a href="../">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · <a href="https://github.com/defsayurinda/defsayurinda.github.io">Kode dan tulisan di GitHub</a> · Kode <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/LICENSE">MIT</a>, tulisan <a href="https://github.com/defsayurinda/defsayurinda.github.io/blob/main/LICENSE-TULISAN">CC BY 4.0</a></div>
+  </footer>
+  <script src="../assets/daftar-sw.js" defer></script>
+  <!-- FOOTER:SELESAI -->
+  <script src="../assets/cari.js" defer></script>
+</body>
+</html>

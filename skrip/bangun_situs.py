@@ -35,7 +35,8 @@ DASAR_404 = "/"
 MENU = [("alat/", "Alat", ("alat", "kalkulator", "praktikum")),
         ("latihan/", "Latihan", ("latihan",)),
         ("catatan/", "Catatan", ("catatan",)),
-        ("tentang/", "Tentang", ("tentang", "cara-memakai-ai", "skill"))]
+        ("tentang/", "Tentang", ("tentang", "cara-memakai-ai", "skill")),
+        ("cari/", "Cari", ("cari",))]
 
 
 # ---------------------------------------------------------------- peta sumber → halaman
@@ -69,12 +70,16 @@ def menu(awalan, aktif):
             f'      <ul>{butir}</ul>\n    </div>\n  </nav>')
 
 
+def skrip_sw(awalan):
+    return f'\n  <script src="{awalan}assets/daftar-sw.js" defer></script>'
+
+
 def footer(awalan, sumber=None):
     tautan_sumber = f' · <a href="{REPO}/blob/main/{sumber}">Sumber halaman ini</a>' if sumber else ""
     return ('<footer>\n    <div class="wadah">'
             f'<a href="{awalan or "./"}">Defsa Yurinda</a> · Teknik Sipil, Universitas Jambi · '
             f'<a href="{REPO}">Kode dan tulisan di GitHub</a>{tautan_sumber} · '
-            f'Kode <a href="{REPO}/blob/main/LICENSE">MIT</a>, tulisan <a href="{REPO}/blob/main/LICENSE-TULISAN">CC BY 4.0</a></div>\n  </footer>')
+            f'Kode <a href="{REPO}/blob/main/LICENSE">MIT</a>, tulisan <a href="{REPO}/blob/main/LICENSE-TULISAN">CC BY 4.0</a></div>\n  </footer>' + skrip_sw(awalan))
 
 
 def bagian_aktif(folder):
@@ -133,11 +138,9 @@ def kepala(judul, ringkasan, awalan, url, tambahan=""):
   <meta property="og:locale" content="id_ID">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#c8421a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{awalan}assets/gaya.css">
-  <link rel="icon" href="{awalan}assets/ikon.svg" type="image/svg+xml">{tambahan}
+  <link rel="icon" href="{awalan}assets/ikon.svg" type="image/svg+xml">
+  <link rel="manifest" href="{awalan}manifest.webmanifest">{tambahan}
 </head>"""
 
 
@@ -193,31 +196,32 @@ def halaman_daftar_catatan(catatan):
 
 # ---------------------------------------------------------------- praktikum
 
-KATEX = '\n  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">'
+def katex_css(awalan):
+    return f'\n  <link rel="stylesheet" href="{awalan}assets/katex/katex.min.css">'
 
 
 def data_praktikum():
     return json.loads((KONTEN / "praktikum.json").read_text(encoding="utf-8"))
 
 
-def halaman_alat_praktikum(alat, kelompok):
+def halaman_alat_praktikum(alat, kelompok, status=""):
     folder = f"praktikum/{alat['id']}/"
     awalan = "../../"
     skrip = "".join(f'\n  <script src="{awalan}assets/praktikum/{s}" defer></script>'
                     for s in dict.fromkeys(["grafik.js", "ekspor.js", "kerangka.js"] + alat["skrip"]))
-    return (kepala(f"{alat['judul']} · Praktikum", alat["deskripsi"], awalan, folder, KATEX) +
+    return (kepala(f"{alat['judul']} · Praktikum", alat["deskripsi"], awalan, folder, katex_css(awalan)) +
             "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "praktikum") + "\n  <!-- NAV:SELESAI -->\n\n"
             "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
             f"      <p class=\"remah\"><a href=\"{awalan}praktikum/\">← Praktikum Mekanika Tanah</a></p>\n"
             f"      <span class=\"label-atas\">{html.escape(kelompok)} · {html.escape(alat['standar'])}</span>\n"
-            f"      <h1>{html.escape(alat['judul'])}</h1>\n      <p class=\"lead\">{html.escape(alat['deskripsi'])}</p>\n    </header>\n"
+            f"      <h1>{html.escape(alat['judul'])}</h1>\n      <p class=\"lead\">{html.escape(alat['deskripsi'])}</p>\n      {status}\n    </header>\n"
             f"    <div id=\"alat-praktikum\" data-alat=\"{alat['id']}\"></div>\n  </main>\n\n"
             "  <!-- FOOTER:MULAI -->\n  " + footer(awalan) + "\n  <!-- FOOTER:SELESAI -->\n"
-            f'  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>\n'
+            f'  <script src="{awalan}assets/katex/katex.min.js" defer></script>\n'
             f'  <script src="{awalan}assets/umum.js" defer></script>{skrip}\n</body>\n</html>\n')
 
 
-def halaman_induk_praktikum(data):
+def halaman_induk_praktikum(data, status=""):
     folder, awalan = "praktikum/", "../"
     bagian = []
     for k in data["kelompok"]:
@@ -239,7 +243,7 @@ def halaman_induk_praktikum(data):
             "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
             "      <span class=\"label-atas\">Praktikum</span>\n      <h1>Praktikum Mekanika Tanah</h1>\n"
             f"      <p class=\"lead\">Pengolah data praktikum dengan formulir seperti lembar data laboratorium. {status_alat}</p>\n"
-            "    </header>\n    <div class=\"kisi kisi-2 fitur\">\n"
+            f"      {status}\n    </header>\n    <div class=\"kisi kisi-2 fitur\">\n"
             "      <div class=\"kartu\"><h3>Isi seperti form lab</h3><p class=\"redup\">Baris dan simbol mengikuti lembar data. Angka boleh diketik dengan koma, atau blok data di Excel lalu tempel sekaligus.</p></div>\n"
             "      <div class=\"kartu\"><h3>Langkah dan grafik</h3><p class=\"redup\">Setiap hasil disertai rumus bernomor, substitusi angka, dan grafik yang dibutuhkan laporan.</p></div>\n"
             "      <div class=\"kartu\"><h3>Saling terhubung</h3><p class=\"redup\">Hasil satu alat bisa diambil alat lain: G<sub>s</sub> ke pemadatan, hidrometer, dan konsolidasi; saringan, hidrometer, dan Atterberg ke klasifikasi; γ<sub>d maks</sub> ke sand cone dan CBR.</p></div>\n"
@@ -279,6 +283,13 @@ def daftar_halaman_alat(data):
 
 
 STATUS = {"asli": "Sumber asli", "sekunder": "Sumber sekunder", "belum": "Belum terverifikasi"}
+BULAN = "Januari Februari Maret April Mei Juni Juli Agustus September Oktober November Desember".split()
+
+
+def lencana_status(a):
+    t, b, h = (int(x) for x in a["tanggal_cek"].split("-"))
+    return (f'<p class="status-sumber" data-status="{a["status"]}">Status sumber: <strong>{STATUS[a["status"]]}</strong> · '
+            f'dicek {h} {BULAN[b - 1]} {t} · <a href="{REPO}#alat">arti status</a></p>')
 
 
 def tabel_readme(data):
@@ -323,6 +334,93 @@ def sitemap(berkas_html):
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{isi}\n</urlset>\n'
 
 
+# ---------------------------------------------------------------- pencarian
+
+def subjudul(teks):
+    return " ".join(re.sub(r"[*`_]", "", m) for m in re.findall(r"^#{2,3} (.+)$", teks, re.M))
+
+
+def indeks_cari(peta, catatan, alat, praktikum):
+    butir = [{"j": a["judul"], "d": a["deskripsi"], "h": " ".join(dd for _, dd in a["rincian"]), "u": a["halaman"], "k": "Alat"}
+             for a in alat["alat"]]
+    for k in praktikum["kelompok"]:
+        for a in k["alat"]:
+            if a["status"] == "tersedia":
+                butir.append({"j": a["judul"], "d": a["deskripsi"], "h": f'{k["judul"]} {a["standar"]}', "u": f'praktikum/{a["id"]}/', "k": "Praktikum"})
+    for sumber, folder in peta:
+        teks = sumber.read_text(encoding="utf-8")
+        judul, ringkasan = judul_dan_ringkasan(teks)
+        jenis = "Catatan" if folder.startswith("catatan/") else "Tulisan"
+        butir.append({"j": judul, "d": ringkasan, "h": subjudul(teks), "u": folder, "k": jenis})
+    for x in butir:
+        x["h"] = re.sub(r"<[^>]+>", "", x["h"])
+    return json.dumps(butir, ensure_ascii=False, indent=0) + "\n"
+
+
+def halaman_cari():
+    folder, awalan = "cari/", "../"
+    return (kepala("Cari", "Cari alat, alat praktikum, catatan, dan tulisan di situs Defsa Yurinda.", awalan, folder) +
+            "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "cari") + "\n  <!-- NAV:SELESAI -->\n\n"
+            "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
+            "      <h1>Cari</h1>\n    </header>\n"
+            "    <form class=\"kartu\" role=\"search\" onsubmit=\"return false\">\n"
+            "      <label for=\"kataCari\">Kata yang dicari</label>\n"
+            "      <input id=\"kataCari\" type=\"search\" autocomplete=\"off\" placeholder=\"misalnya konsolidasi, CBR, git\">\n"
+            "    </form>\n    <p id=\"infoCari\" class=\"kecil redup\" role=\"status\" aria-live=\"polite\"></p>\n"
+            "    <ul id=\"hasilCari\" class=\"daftar-bersih hasil-cari\"></ul>\n  </main>\n\n"
+            "  <!-- FOOTER:MULAI -->\n  " + footer(awalan) + "\n  <!-- FOOTER:SELESAI -->\n"
+            f'  <script src="{awalan}assets/cari.js" defer></script>\n</body>\n</html>\n')
+
+
+# ---------------------------------------------------------------- mode offline
+
+INTI = ["assets/gaya.css", "assets/umum.js", "assets/daftar-sw.js", "assets/ikon.svg", "manifest.webmanifest",
+        "assets/katex/katex.min.css", "assets/katex/katex.min.js",
+        "assets/font/plus-jakarta-sans-latin-400-normal.woff2", "assets/font/plus-jakarta-sans-latin-600-normal.woff2",
+        "assets/font/plus-jakarta-sans-latin-700-normal.woff2", "assets/font/plus-jakarta-sans-latin-800-normal.woff2"]
+
+
+def versi_rilis():
+    return re.search(r"^version:\s*(\S+)", (AKAR / "CITATION.cff").read_text(encoding="utf-8"), re.M).group(1)
+
+
+def service_worker():
+    inti = ",\n  ".join(json.dumps("/" + x) for x in ["", *INTI])
+    return f"""/* Dibangun oleh skrip/bangun_situs.py; jangan diedit langsung.
+ * Versi cache mengikuti versi di CITATION.cff. Aset inti disimpan saat pemasangan; halaman dan
+ * aset lain disimpan saat pertama dibuka. Halaman: jaringan dulu, cadangan dari cache. Aset: cache dulu.
+ */
+const VERSI = "defsa-{versi_rilis()}";
+const INTI = [
+  {inti}
+];
+
+self.addEventListener("install", (e) => {{
+  e.waitUntil(caches.open(VERSI).then((c) => c.addAll(INTI)).then(() => self.skipWaiting()));
+}});
+
+self.addEventListener("activate", (e) => {{
+  e.waitUntil(caches.keys()
+    .then((kunci) => Promise.all(kunci.filter((k) => k !== VERSI).map((k) => caches.delete(k))))
+    .then(() => self.clients.claim()));
+}});
+
+self.addEventListener("fetch", (e) => {{
+  const req = e.request;
+  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
+  const simpan = (res) => {{
+    if (res.ok) {{ const salinan = res.clone(); caches.open(VERSI).then((c) => c.put(req, salinan)); }}
+    return res;
+  }};
+  if (req.mode === "navigate") {{
+    e.respondWith(fetch(req).then(simpan).catch(() => caches.match(req)));
+    return;
+  }}
+  e.respondWith(caches.match(req).then((r) => r || fetch(req).then(simpan)));
+}});
+"""
+
+
 # ---------------------------------------------------------------- utama
 
 def bangun():
@@ -340,11 +438,13 @@ def bangun():
         keluaran[DOCS / folder / "index.html"] = halaman_konten(sumber, folder, peta, sebelum, sesudah)
     keluaran[DOCS / "catatan/index.html"] = halaman_daftar_catatan(catatan)
     praktikum = data_praktikum()
-    keluaran[DOCS / "praktikum/index.html"] = halaman_induk_praktikum(praktikum)
+    alat = data_alat()
+    status_praktikum = lencana_status(next(a for a in alat["alat"] if a["id"] == "praktikum"))
+    keluaran[DOCS / "praktikum/index.html"] = halaman_induk_praktikum(praktikum, status_praktikum)
     for k in praktikum["kelompok"]:
         for a in k["alat"]:
             if a["status"] == "tersedia":
-                keluaran[DOCS / f"praktikum/{a['id']}/index.html"] = halaman_alat_praktikum(a, k["judul"])
+                keluaran[DOCS / f"praktikum/{a['id']}/index.html"] = halaman_alat_praktikum(a, k["judul"], status_praktikum)
 
     dihasilkan = set(keluaran)
     for berkas in sorted(DOCS.rglob("*.html")):
@@ -354,13 +454,20 @@ def bangun():
         if berkas == DOCS / "index.html":
             teks = sisip_catatan_beranda(teks, catatan)
         keluaran[berkas] = teks
-    alat = data_alat()
+    for a in alat["alat"]:
+        target = DOCS / a["halaman"]
+        target = target / "index.html" if a["halaman"].endswith("/") else target
+        if target in keluaran:
+            keluaran[target] = ganti_penanda(keluaran[target], "STATUS", lencana_status(a), wajib=False)
+    keluaran[DOCS / "cari.json"] = indeks_cari(peta, catatan, alat, praktikum)
+    keluaran[DOCS / "cari/index.html"] = halaman_cari()
     keluaran[DOCS / "index.html"] = ganti_penanda(keluaran[DOCS / "index.html"], "ALAT", kartu_beranda(alat))
     keluaran[DOCS / "alat/index.html"] = ganti_penanda(keluaran[DOCS / "alat/index.html"], "DAFTAR-ALAT", daftar_halaman_alat(alat))
     readme = AKAR / "README.md"
     keluaran[readme] = ganti_penanda(readme.read_text(encoding="utf-8"), "ALAT", tabel_readme(alat), baris_baru=True)
     semua_html = set(k for k in keluaran if k.suffix == ".html") | set(DOCS.rglob("*.html"))
     keluaran[DOCS / "sitemap.xml"] = sitemap(semua_html)
+    keluaran[DOCS / "sw.js"] = service_worker()
     keluaran[DOCS / "robots.txt"] = f"User-agent: *\nAllow: /\nSitemap: {SITUS}sitemap.xml\n"
     return keluaran
 

@@ -1,0 +1,12 @@
+{
+  "name": "Defsa Yurinda · Alat geoteknik",
+  "short_name": "Defsa",
+  "description": "Kalkulator geoteknik, pengolah data praktikum Mekanika Tanah, dan latihan soal dengan langkah hitungan.",
+  "lang": "id",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#c8421a",
+  "icons": [{ "src": "/assets/ikon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
