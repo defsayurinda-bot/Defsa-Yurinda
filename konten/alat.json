@@ -1,0 +1,209 @@
+{
+  "_keterangan": "Registri tunggal alat di situs. skrip/bangun_situs.py membangun kartu beranda, daftar di halaman Alat, dan tabel README dari berkas ini; README profil GitHub membacanya lewat URL raw. Kolom ringkas dan rincian boleh berisi HTML sederhana (sub, em). status: asli (rumus dicocokkan dengan sumber asli dan punya uji contoh soal buku), sekunder (rumus dari sumber yang mengutip sumber asli), belum (sumber belum lengkap atau belum diperiksa). Alat baru dibuat dengan: python3 skrip/buat.py alat <id>.",
+  "kategori": [
+    {
+      "id": "fondasi",
+      "judul": "Fondasi"
+    },
+    {
+      "id": "penurunan",
+      "judul": "Penurunan"
+    },
+    {
+      "id": "praktikum",
+      "judul": "Praktikum Mekanika Tanah"
+    },
+    {
+      "id": "latihan",
+      "judul": "Latihan"
+    }
+  ],
+  "alat": [
+    {
+      "id": "tiang-bor",
+      "judul": "Daya dukung tiang bor dari N-SPT",
+      "judul_pendek": "Kalkulator Tiang Bor N-SPT",
+      "deskripsi": "Hitung daya dukung aksial tiang bor dari data N-SPT dengan metode Reese & Wright (1977), lengkap dengan langkah hitungan dan asumsinya.",
+      "kategori": "fondasi",
+      "lencana": "Fondasi dalam",
+      "halaman": "kalkulator/tiang-bor.html",
+      "ringkas": "Metode Reese &amp; Wright (1977) dengan profil tanah dan langkah hitungan. Meyerhof disembunyikan sementara sampai rumusnya dicek ulang.",
+      "rincian": [
+        [
+          "Metode",
+          "Reese &amp; Wright (1977); Meyerhof (1976) disembunyikan sampai rumusnya dicocokkan dengan PUPR (2019)"
+        ],
+        [
+          "Masukan",
+          "Diameter, panjang, SF, lapisan tanah (jenis, N-SPT, c<sub>u</sub>)"
+        ],
+        [
+          "Keluaran",
+          "Q<sub>p</sub>, Q<sub>s</sub>, Q<sub>u</sub>, Q<sub>a</sub>, profil tanah, asumsi kalkulator"
+        ]
+      ],
+      "skrip": [
+        "docs/assets/tiang-bor-hitung.js",
+        "docs/assets/tiang-bor-tampilan.js"
+      ],
+      "sumber": [
+        "Lastiasih, Y., Irsyam, M., Sidi, I. D., & Toha, F. X. (2013). Media Komunikasi Teknik Sipil, 19(2), 135–140, hlm. 136, pers. (1)–(5).",
+        "Reese, L. C., & Wright, S. J. (1977). Drilled shaft manual. FHWA. Sumber asli, belum dibaca langsung."
+      ],
+      "status": "sekunder",
+      "tanggal_cek": "2026-09-26",
+      "uji": [
+        "tests/verifikasi_tiang_bor.py"
+      ]
+    },
+    {
+      "id": "pondasi-dangkal",
+      "judul": "Kapasitas dukung pondasi dangkal",
+      "judul_pendek": "Kalkulator Pondasi Dangkal",
+      "deskripsi": "Hitung kapasitas dukung pondasi dangkal dengan persamaan daya dukung umum: faktor bentuk, kedalaman, dan koreksi muka air tanah, lengkap dengan langkah hitungan.",
+      "kategori": "fondasi",
+      "lencana": "Fondasi dangkal",
+      "halaman": "kalkulator/pondasi-dangkal.html",
+      "ringkas": "Persamaan daya dukung umum dengan faktor bentuk, kedalaman, dan koreksi muka air tanah.",
+      "rincian": [
+        [
+          "Metode",
+          "Persamaan daya dukung umum: N<sub>γ</sub> Vesic (1973), faktor bentuk De Beer (1970), faktor kedalaman Hansen (1970)"
+        ],
+        [
+          "Masukan",
+          "Bentuk, B, L, D<sub>f</sub>, c', φ', γ, muka air tanah, SF"
+        ],
+        [
+          "Keluaran",
+          "q<sub>u</sub>, q<sub>all</sub> (gross dan net), Q<sub>all</sub>, porsi tiap suku, sketsa"
+        ]
+      ],
+      "skrip": [
+        "docs/assets/pondasi-dangkal-hitung.js",
+        "docs/assets/pondasi-dangkal-tampilan.js"
+      ],
+      "sumber": [
+        "Das, B. M. Principles of foundation engineering. Cengage Learning. Edisi dan halaman belum dicatat.",
+        "Prandtl (1921), Reissner (1924), Vesic (1973), De Beer (1970), Hansen (1970), dikutip dari Das."
+      ],
+      "status": "belum",
+      "tanggal_cek": "2026-09-25",
+      "uji": [
+        "tests/verifikasi_pondasi_dangkal.py"
+      ]
+    },
+    {
+      "id": "konsolidasi",
+      "judul": "Penurunan konsolidasi",
+      "judul_pendek": "Kalkulator Penurunan Konsolidasi",
+      "deskripsi": "Hitung penurunan konsolidasi primer satu dimensi untuk lempung NC dan OC beserta lajunya terhadap waktu, lengkap dengan diagram e–log σ' dan langkah hitungan.",
+      "kategori": "penurunan",
+      "lencana": "Konsolidasi",
+      "halaman": "kalkulator/konsolidasi.html",
+      "ringkas": "Lempung NC dan OC, diagram e–log σ', dan kurva penurunan terhadap waktu.",
+      "rincian": [
+        [
+          "Metode",
+          "Terzaghi 1D; C<sub>c</sub>/C<sub>s</sub> untuk NC dan OC; Δσ metode 2:1"
+        ],
+        [
+          "Masukan",
+          "H, e<sub>0</sub>, C<sub>c</sub>, C<sub>s</sub>, σ'<sub>0</sub>, σ'<sub>c</sub>, beban, c<sub>v</sub>, drainase"
+        ],
+        [
+          "Keluaran",
+          "S<sub>c</sub>, t<sub>50</sub>, t<sub>90</sub>, S(t), diagram e–log σ', kurva penurunan–waktu"
+        ]
+      ],
+      "skrip": [
+        "docs/assets/konsolidasi-hitung.js",
+        "docs/assets/konsolidasi-tampilan.js"
+      ],
+      "sumber": [
+        "Terzaghi, K. (1943). Theoretical soil mechanics. John Wiley & Sons.",
+        "Das, B. M. Principles of geotechnical engineering. Cengage Learning. Edisi dan halaman belum dicatat."
+      ],
+      "status": "belum",
+      "tanggal_cek": "2026-09-25",
+      "uji": [
+        "tests/verifikasi_konsolidasi.py"
+      ]
+    },
+    {
+      "id": "praktikum",
+      "judul": "Praktikum Mekanika Tanah",
+      "judul_pendek": "Praktikum Mekanika Tanah",
+      "deskripsi": "16 alat pengolah data praktikum Mekanika Tanah: formulir seperti lembar data laboratorium, langkah hitungan, grafik, dan ekspor ke Word dan Excel.",
+      "kategori": "praktikum",
+      "lencana": "Praktikum",
+      "halaman": "praktikum/",
+      "ringkas": "Enam belas alat pengolah data praktikum, dari kadar air sampai konsolidasi, sondir, dan SPT. Formulir seperti lembar data lab, grafik, hasil antaralat yang saling terhubung, dan ekspor ke Word dan Excel.",
+      "judul_rincian": "16 alat: sifat fisik, konsistensi, gradasi, klasifikasi, kepadatan, kekuatan, konsolidasi, sondir, dan SPT",
+      "lencana_rincian": "Pengolah data praktikum",
+      "rincian": [
+        [
+          "Masukan",
+          "Formulir seperti lembar data laboratorium; angka boleh memakai koma"
+        ],
+        [
+          "Keluaran",
+          "Tabel hasil, langkah hitungan bernomor, grafik (kurva aliran, bagan plastisitas, gradasi gabungan, Proctor, CBR, Mohr–Coulomb, tegangan–regangan, e–log p, √t, sondir, log bor)"
+        ],
+        [
+          "Ekspor",
+          "Word (.docx) sesuai format laporan, grafik PNG, salin ke Excel, CSV, tautan berbagi, cetak dengan kop identitas contoh"
+        ]
+      ],
+      "sub_daftar": "konten/praktikum.json",
+      "skrip": [
+        "docs/assets/praktikum/kerangka.js",
+        "docs/assets/praktikum/ekspor.js",
+        "docs/assets/praktikum/grafik.js"
+      ],
+      "sumber": [
+        "SNI dan ASTM per alat, tercantum di bagian Acuan tiap halaman alat praktikum."
+      ],
+      "status": "belum",
+      "tanggal_cek": "2026-09-25",
+      "uji": [
+        "tests/verifikasi_praktikum.py",
+        "tests/verifikasi_keamanan.py"
+      ]
+    },
+    {
+      "id": "latihan",
+      "judul": "Bank soal geoteknik",
+      "judul_pendek": "Latihan Soal Geoteknik",
+      "deskripsi": "Latihan soal geoteknik dengan angka acak dan pembahasan langkah demi langkah: pondasi dangkal, konsolidasi, dan tiang bor.",
+      "kategori": "latihan",
+      "lencana": "Latihan",
+      "halaman": "latihan/",
+      "ringkas": "Sembilan jenis soal dengan angka acak, dicek otomatis, lengkap dengan pembahasan.",
+      "judul_rincian": "Latihan soal geoteknik",
+      "lencana_rincian": "Bank soal",
+      "rincian": [
+        [
+          "Topik",
+          "Pondasi dangkal, konsolidasi, tiang bor (9 jenis soal)"
+        ],
+        [
+          "Cara kerja",
+          "Angka acak, jawaban dicek otomatis (toleransi 2%), pembahasan langkah demi langkah, skor"
+        ]
+      ],
+      "skrip": [
+        "docs/assets/latihan-soal.js",
+        "docs/assets/latihan-tampilan.js"
+      ],
+      "sumber": [
+        "Kunci dihitung modul kalkulator; sumber mengikuti kalkulator masing-masing."
+      ],
+      "status": "belum",
+      "tanggal_cek": "2026-09-26",
+      "uji": [
+        "tests/verifikasi_latihan.py"
+      ]
+    }
+  ]
+}

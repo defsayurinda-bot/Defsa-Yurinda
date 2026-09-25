@@ -4,6 +4,8 @@ Yang dilakukan:
 1. Setiap berkas Markdown di konten/ diubah menjadi halaman HTML di docs/ dengan
    templat yang sama (menu, gaya, footer, tag pratinjau).
 2. Daftar catatan dibuat otomatis (docs/catatan/) dan disisipkan ke beranda.
+   Kartu alat di beranda, daftar di halaman Alat, dan tabel alat di README.md dibangun
+   dari registri konten/alat.json (penanda ALAT dan DAFTAR-ALAT).
 3. Menu dan footer di semua halaman docs/ (termasuk yang ditulis tangan) ditulis ulang
    di antara penanda <!-- NAV:MULAI --> … <!-- NAV:SELESAI --> dan <!-- FOOTER:MULAI --> …
    <!-- FOOTER:SELESAI -->, supaya selalu seragam.
@@ -247,14 +249,53 @@ def halaman_induk_praktikum(data):
             "  <!-- FOOTER:MULAI -->\n  " + footer(awalan) + "\n  <!-- FOOTER:SELESAI -->\n</body>\n</html>\n")
 
 
+# ---------------------------------------------------------------- registri alat
+
+def data_alat():
+    return json.loads((KONTEN / "alat.json").read_text(encoding="utf-8"))
+
+
+def kartu_beranda(data):
+    kartu = []
+    for a in data["alat"]:
+        kartu.append(f'<a class="kartu" href="{a["halaman"]}">\n          <span class="lencana">{html.escape(a["lencana"])}</span>\n'
+                     f'          <h3>{html.escape(a["judul"])}</h3>\n          <p class="redup">{a["ringkas"]}</p>\n        </a>')
+    return "\n        ".join(kartu)
+
+
+def daftar_halaman_alat(data):
+    bagian = []
+    for k in data["kategori"]:
+        kartu = []
+        for a in (x for x in data["alat"] if x["kategori"] == k["id"]):
+            rincian = "".join(f"\n            <dt>{html.escape(dt)}</dt><dd>{dd}</dd>" for dt, dd in a["rincian"])
+            kartu.append(f'        <a class="kartu" href="../{a["halaman"]}">\n'
+                         f'          <span class="lencana">{html.escape(a.get("lencana_rincian", a["lencana"]))}</span>\n'
+                         f'          <h3>{html.escape(a.get("judul_rincian", a["judul"]))}</h3>\n'
+                         f'          <dl class="rincian">{rincian}\n          </dl>\n        </a>')
+        if kartu:
+            bagian.append(f'<section>\n      <h2>{html.escape(k["judul"])}</h2>\n      <div class="kisi">\n' + "\n".join(kartu) + "\n      </div>\n    </section>")
+    return "\n\n    ".join(bagian)
+
+
+STATUS = {"asli": "Sumber asli", "sekunder": "Sumber sekunder", "belum": "Belum terverifikasi"}
+
+
+def tabel_readme(data):
+    baris = [f'| [{a["judul_pendek"]}]({SITUS}{a["halaman"]}) | {a["deskripsi"]} | {STATUS[a["status"]]} |' for a in data["alat"]]
+    return "| Alat | Isi | Status sumber |\n|---|---|---|\n" + "\n".join(baris)
+
+
 # ---------------------------------------------------------------- penanda di halaman tulisan tangan
 
-def ganti_penanda(teks, nama, isi, wajib=True):
+def ganti_penanda(teks, nama, isi, wajib=True, baris_baru=False):
     pola = re.compile(rf"(<!-- {nama}:MULAI -->)(.*?)(<!-- {nama}:SELESAI -->)", re.S)
     if not pola.search(teks):
         if wajib:
             raise SystemExit(f"Penanda {nama} tidak ditemukan")
         return teks
+    if baris_baru:  # Markdown: tabel harus mulai di awal baris
+        return pola.sub(lambda m: f"{m.group(1)}\n{isi}\n{m.group(3)}", teks)
     return pola.sub(lambda m: f"{m.group(1)}\n  {isi}\n  {m.group(3)}", teks)
 
 
@@ -313,7 +354,12 @@ def bangun():
         if berkas == DOCS / "index.html":
             teks = sisip_catatan_beranda(teks, catatan)
         keluaran[berkas] = teks
-    semua_html = set(keluaran) | set(DOCS.rglob("*.html"))
+    alat = data_alat()
+    keluaran[DOCS / "index.html"] = ganti_penanda(keluaran[DOCS / "index.html"], "ALAT", kartu_beranda(alat))
+    keluaran[DOCS / "alat/index.html"] = ganti_penanda(keluaran[DOCS / "alat/index.html"], "DAFTAR-ALAT", daftar_halaman_alat(alat))
+    readme = AKAR / "README.md"
+    keluaran[readme] = ganti_penanda(readme.read_text(encoding="utf-8"), "ALAT", tabel_readme(alat), baris_baru=True)
+    semua_html = set(k for k in keluaran if k.suffix == ".html") | set(DOCS.rglob("*.html"))
     keluaran[DOCS / "sitemap.xml"] = sitemap(semua_html)
     keluaran[DOCS / "robots.txt"] = f"User-agent: *\nAllow: /\nSitemap: {SITUS}sitemap.xml\n"
     return keluaran
