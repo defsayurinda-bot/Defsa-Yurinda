@@ -205,7 +205,7 @@
       id: 'rw-ujung', topik: 'tiang-bor', judul: 'Tahanan ujung tiang bor (Reese & Wright)',
       buat: function (rng, F) {
         var d = acak(rng, 0.4, 1.0, 0.1), L = acak(rng, 8, 20, 1), N = acak(rng, 15, 60, 1);
-        var m = { d: d, L: L, SF: 2.5, gammaBeton: 24, pakaiBerat: false, perpindahan: 'kecil',
+        var m = { d: d, L: L, SF: 2.5, gammaBeton: 24, pakaiBerat: false,
           lapisan: [{ atas: 0, bawah: L + 6, jenis: 'pasir', N: N, cu: null }] };
         var r = TB.hitung(m).reeseWright;
         return {
@@ -214,8 +214,9 @@
           jawaban: r.Qp, satuan: 'kN', desimal: 1, data: m,
           langkah: function (F) {
             return [
-              { judul: 'Tahanan ujung satuan', tex: ['q_p = 7N = 7\\times' + F.t(N, 0) + ' = ' + F.t(7 * N, 0) + '\\ \\text{t/m}^2' + (r.ujung.dibatasi ? ' > 400 \\Rightarrow 400\\ \\text{t/m}^2' : ' \\le 400\\ \\text{t/m}^2'),
-                'q_p = ' + F.t(r.ujung.qpT, 0) + '\\times 9{,}80665 = ' + F.t(r.qp, 2) + '\\ \\text{kPa}'] },
+              { judul: 'Tahanan ujung satuan', teks: 'Reese &amp; Wright (1977) menurut Lastiasih dkk. (2013, hlm. 136): persamaan (3) untuk N ≤ 60, persamaan (2) untuk N &gt; 60.',
+                tex: [(r.ujung.dibatasi ? 'q_p = \\dfrac{40}{0{,}3048^2}' : 'q_p = \\dfrac{2}{3}\\times\\dfrac{' + F.t(N, 0) + '}{0{,}3048^2}') + ' = ' + F.t(r.ujung.qpT, 2) + '\\ \\text{t/m}^2',
+                'q_p = ' + F.t(r.ujung.qpT, 2) + '\\times 9{,}80665 = ' + F.t(r.qp, 2) + '\\ \\text{kPa}'] },
               { judul: 'Tahanan ujung', tex: ['A_p = \\tfrac{\\pi}{4}d^2 = ' + F.t(Math.PI * d * d / 4, 4) + '\\ \\text{m}^2\\qquad Q_p = q_p A_p = ' + F.t(r.Qp, 2) + '\\ \\text{kN}'] }
             ];
           }

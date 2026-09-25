@@ -82,7 +82,9 @@ def kunci_python(tid, d):
         return d["q"] * d["B2"] * d["L2"] / ((d["B2"] + d["z"]) * (d["L2"] + d["z"]))
     if tid == "rw-ujung":
         N = d["lapisan"][0]["N"]
-        return min(7 * N, 400) * T * math.pi * d["d"] ** 2 / 4
+        # Lastiasih dkk. (2013), Media Komunikasi Teknik Sipil 19(2), hlm. 136, pers. (2)-(3)
+        qp = 40 / 0.3048**2 if N > 60 else 2 / 3 * N / 0.3048**2
+        return qp * T * math.pi * d["d"] ** 2 / 4
     if tid == "meyerhof-selimut":
         N = d["lapisan"][0]["N"]
         return 100 * N / (100 if d["perpindahan"] == "kecil" else 50) * math.pi * d["d"] * d["L"]
