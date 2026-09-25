@@ -1,5 +1,7 @@
 # Defsa Yurinda
 
+[![Verifikasi hitungan](https://github.com/defsayurinda-bot/Defsa-Yurinda/actions/workflows/verifikasi.yml/badge.svg)](https://github.com/defsayurinda-bot/Defsa-Yurinda/actions/workflows/verifikasi.yml)
+
 Mahasiswa Teknik Sipil, Universitas Jambi. Minat utama: geoteknik.
 
 Repo ini berisi catatan saya selama belajar dan memakai Claude dan Claude Code untuk kuliah: bagaimana saya mengatur Claude, perintah yang saya pakai, aturan yang saya pegang supaya hasilnya bisa dipertanggungjawabkan, dan skill yang saya susun sendiri.
@@ -48,6 +50,7 @@ Kode hitungan diuji otomatis setiap kali ada perubahan ([`tests/`](tests/)): dib
 |---|---|
 | 01 | [Mengenal Claude dan Claude Code](catatan/01-mengenal-claude-dan-claude-code.md) |
 | 02 | [Git dan Pull Request pertama](catatan/02-git-dan-pull-request-pertama.md) |
+| 03 | [Membangun situs dan kalkulator bersama Claude Code](catatan/03-membangun-situs-dan-kalkulator.md) |
 
 Catatan baru ditambahkan seiring saya belajar.
 
