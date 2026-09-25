@@ -62,7 +62,12 @@ Pengolah data praktikum di `docs/praktikum/`, disusun mengikuti form laboratoriu
 4. `tests/verifikasi_praktikum.py`: tambah hitungan Python terpisah dan nilai acuan bila ada.
 5. Periksa tampilan di 1280 px dan 390 px, terang dan gelap, dan pastikan tidak ada rumus KaTeX yang gagal (elemen `.katex-error`; hindari karakter seperti `·` di dalam `\text{}`).
 
-Alat yang masih `menyusul` (CBR, geser langsung, UCS, konsolidasi laboratorium, sondir, SPT) dicatat di Issue repo pribadi Defsa.
+Alat yang masih `menyusul` (sondir, SPT) dicatat di Issue repo pribadi Defsa.
+
+Catatan metode yang sudah diputuskan:
+- CBR memakai tegangan standar ASTM D1883 (6,9 dan 10,3 MPa, piston 1935 mm²) karena SNI 1744:2012 mengacu AASHTO T 193 dan ASTM D1883; keduanya bisa diubah di formulir.
+- Konsolidasi: c<sub>v</sub> memakai H<sub>dr</sub> = setengah tebal rata-rata (drainase dua arah), bukan tebal penuh seperti Excel lab. Metode Taylor otomatis diuji terhadap kurva Terzaghi eksak (selisih t<sub>90</sub> sekitar 1%).
+- UCS: regangan = ΔL / L0 dengan ΔL dari selisih bacaan arloji, bukan bacaan dikali tinggi.
 
 ## Alur kerja
 

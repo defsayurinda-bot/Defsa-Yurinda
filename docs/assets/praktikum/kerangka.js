@@ -393,7 +393,12 @@
       });
       blok.push({ jenis: 'subjudul', teks: 'Hasil pengolahan' });
       var judulTerakhir = '';
+      var anak = [];
       Array.prototype.forEach.call(document.getElementById('hasil-praktikum').children, function (el) {
+        if (el.classList.contains('kisi-grafik')) Array.prototype.forEach.call(el.children, function (x) { anak.push(x); });
+        else anak.push(el);
+      });
+      anak.forEach(function (el) {
         if (el.tagName === 'H3') { judulTerakhir = el.textContent; return; }
         if (el.classList.contains('ringkasan')) {
           blok.push({ jenis: 'tabel', judul: 'Ringkasan hasil', kepala: ['Besaran', 'Nilai', 'Keterangan'], kanan: [1],
@@ -406,7 +411,8 @@
           if (svg) blok.push({ jenis: 'gambar', svg: svg, judul: cap ? cap.textContent.split('. ')[0].replace(/\.$/, '') : '' });
         } else if (el.classList.contains('tabel-gulir')) {
           var t = el.querySelector('table'), th = t.querySelectorAll('thead th');
-          blok.push({ jenis: 'tabel', judul: judulTerakhir || 'Hasil',
+          var judulBersih = (judulTerakhir || 'Hasil').replace(/^Tabel\s+/i, '');
+          blok.push({ jenis: 'tabel', judul: judulBersih.charAt(0).toUpperCase() + judulBersih.slice(1),
             kanan: Array.prototype.map.call(th, function (x, i) { return x.classList.contains('angka') ? i : -1; }),
             kepala: Array.prototype.map.call(th, function (x) { return x.innerHTML; }),
             baris: Array.prototype.map.call(t.querySelectorAll('tbody tr'), function (tr) { return Array.prototype.map.call(tr.children, function (td) { return td.innerHTML; }); }),
