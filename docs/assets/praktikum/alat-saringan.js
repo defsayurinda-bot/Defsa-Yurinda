@@ -11,7 +11,7 @@
     var dmaks = Math.max(10, Math.pow(10, Math.ceil(Math.log10(r.titik[0].mm)))), dmin = 0.01;
     var tanda = [];
     [['D₁₀', r.D10, 10], ['D₃₀', r.D30, 30], ['D₆₀', r.D60, 60]].forEach(function (d) {
-      if (d[1]) tanda.push({ x: d[1], y: d[2], teks: d[0] + ' = ' + formatMm(d[1]) + ' mm', posisi: 'kanan' });
+      if (d[1]) tanda.push({ x: d[1], y: d[2], teks: d[0] + ' = ' + formatMm(d[1]) + ' mm', posisi: d[1] < Math.sqrt(dmin * dmaks) ? 'kiri' : 'kanan' });
     });
     return Grafik.plot({ id: 'gradasi', judul: 'Kurva gradasi', x: { min: dmin, max: dmaks, log: true, balik: true, label: 'Ukuran butir (mm, skala log)' },
       y: { min: 0, max: 100, label: 'Persen lolos (%)', tick: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] },
@@ -38,6 +38,11 @@
     hitung: function (m) {
       return H.hitung({ beratTotal: m.param.beratTotal, pan: m.param.pan,
         ayakan: m.tabel.ayakan.map(function (b) { return { nama: b.nama, tertahan: b.nilai }; }) });
+    },
+    // Untuk klasifikasi dan hidrometer: persen lolos saringan kunci dan besaran gradasi.
+    hasil: function (m, r) {
+      return { P4: H.lolosPada(r.titik, 4.75), P10: H.lolosPada(r.titik, 2), P40: H.lolosPada(r.titik, 0.425), P200: H.lolosPada(r.titik, 0.075),
+        D10: r.D10, D30: r.D30, D60: r.D60, Cu: r.Cu, Cc: r.Cc };
     },
     tampil: function (m, r, U) {
       var h = '', kartu = [];
