@@ -68,14 +68,16 @@
         (ket ? '<div class="redup kecil">' + ket + '</div>' : '') + '</div>';
     },
     ringkasan: function (kartu) { return '<div class="ringkasan">' + kartu.join('') + '</div>'; },
-    // Kolom ke-0..2 teks (uraian, simbol, satuan), sisanya angka. o.angkaMulai mengubah batas itu.
+    // Kolom ke-0..2 teks (uraian, simbol, satuan), sisanya angka. o.angkaMulai mengubah batas itu;
+    // o.kanan: [indeks kolom] menentukan sendiri kolom yang rata kanan.
     tabel: function (kepala, baris, kaki, o) {
       o = o || {};
       var mulai = o.angkaMulai === undefined ? 3 : o.angkaMulai;
-      return '<div class="tabel-gulir"><table><thead><tr>' + kepala.map(function (k, i) { return '<th' + (i >= mulai || k.angka ? ' class="angka"' : '') + '>' + (k.teks || k) + '</th>'; }).join('') +
+      function kanan(i) { return o.kanan ? o.kanan.indexOf(i) >= 0 : i >= mulai; }
+      return '<div class="tabel-gulir"><table><thead><tr>' + kepala.map(function (k, i) { return '<th' + (kanan(i) || (!o.kanan && k.angka) ? ' class="angka"' : '') + '>' + (k.teks || k) + '</th>'; }).join('') +
         '</tr></thead><tbody>' + baris.map(function (b) {
-          return '<tr>' + b.map(function (c, i) { return '<td' + (i >= mulai ? ' class="angka"' : '') + '>' + (c === null || c === undefined ? '–' : c) + '</td>'; }).join('') + '</tr>';
-        }).join('') + '</tbody>' + (kaki ? '<tfoot><tr>' + kaki.map(function (c, i) { return '<td' + (i >= mulai ? ' class="angka"' : '') + '>' + c + '</td>'; }).join('') + '</tr></tfoot>' : '') +
+          return '<tr>' + b.map(function (c, i) { return '<td' + (kanan(i) ? ' class="angka"' : '') + '>' + (c === null || c === undefined ? '–' : c) + '</td>'; }).join('') + '</tr>';
+        }).join('') + '</tbody>' + (kaki ? '<tfoot><tr>' + kaki.map(function (c, i) { return '<td' + (kanan(i) ? ' class="angka"' : '') + '>' + c + '</td>'; }).join('') + '</tr></tfoot>' : '') +
         '</table></div>';
     },
     langkah: function (judul, isi) { return '<div class="langkah"><h4>' + judul + '</h4>' + isi + '</div>'; },
