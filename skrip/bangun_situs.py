@@ -232,7 +232,7 @@ def halaman_induk_praktikum(data):
     semua = sum(len(k["alat"]) for k in data["kelompok"])
     status_alat = (f"Semua {semua} alat sudah tersedia, dari sifat fisik sampai uji lapangan." if tersedia == semua
                    else f"{tersedia} dari {semua} alat sudah tersedia; alat lain menyusul.")
-    return (kepala("Praktikum Mekanika Tanah", "Alat pengolah data praktikum Mekanika Tanah: formulir seperti lembar data laboratorium, langkah hitungan, grafik, dan ekspor ke Excel.", awalan, folder) +
+    return (kepala("Praktikum Mekanika Tanah", f"{semua} alat pengolah data praktikum Mekanika Tanah: formulir seperti lembar data laboratorium, langkah hitungan, grafik, dan ekspor ke Word dan Excel.", awalan, folder) +
             "\n<body>\n  <!-- NAV:MULAI -->\n  " + menu(awalan, "praktikum") + "\n  <!-- NAV:SELESAI -->\n\n"
             "  <main class=\"wadah\">\n    <header class=\"pahlawan\" style=\"padding-bottom:16px\">\n"
             "      <span class=\"label-atas\">Praktikum</span>\n      <h1>Praktikum Mekanika Tanah</h1>\n"
