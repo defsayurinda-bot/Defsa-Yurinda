@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konsep B · Lembar gambar kerja</title>
+  <style>
+    @font-face { font-family: "IBM Plex Sans Condensed"; src: url(../font/ibm-plex-sans-condensed-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "IBM Plex Sans Condensed"; src: url(../font/ibm-plex-sans-condensed-latin-600-normal.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+    @font-face { font-family: "IBM Plex Sans Condensed"; src: url(../font/ibm-plex-sans-condensed-latin-700-normal.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+    @font-face { font-family: "IBM Plex Mono"; src: url(../font/ibm-plex-mono-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "IBM Plex Mono"; src: url(../font/ibm-plex-mono-latin-500-normal.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+
+    /* Token warna konsep B */
+    :root {
+      --kertas: #F4F7FA;      /* Kertas kalkir */
+      --tinta: #102A43;       /* Tinta gambar */
+      --kisi: #DCE5EE;        /* Garis kisi */
+      --tautan: #1B5A9E;      /* Biru garis ukur: tautan */
+      --revisi: #B3261E;      /* Merah revisi: penanda */
+      --abu: #4A5D70;         /* Teks kedua */
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      /* Cetak biru */
+      :root { --kertas: #0C2136; --tinta: #E6EEF5; --kisi: #16324F; --tautan: #8CC2FF; --revisi: #F2C94C; --abu: #9FB3C8; }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; color: var(--tinta); font: 400 1.0625rem/1.55 "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+      background-color: var(--kertas);
+      background-image: linear-gradient(var(--kisi) 1px, transparent 1px), linear-gradient(90deg, var(--kisi) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    a { color: var(--tautan); text-underline-offset: 3px; }
+    a:focus-visible { outline: 2px solid var(--revisi); outline-offset: 3px; }
+    .angka, code, .kop { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+    /* Bingkai lembar: garis tebal luar, garis tipis dalam */
+    .lembar { max-width: 1080px; margin: 16px auto; background: var(--kertas); border: 2px solid var(--tinta); outline: 1px solid var(--tinta); outline-offset: 5px; }
+    .isi { padding: 20px; }
+    nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--tinta); padding: 10px 20px; }
+    nav .nama { font-weight: 700; color: var(--tinta); text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; flex-wrap: wrap; }
+    nav ul a { color: var(--tinta); }
+
+    h1, h2, h3 { font-weight: 700; line-height: 1.15; }
+    h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: 8px 0 12px; }
+    h2 { font-size: 1.4rem; margin: 0 0 12px; display: flex; gap: 10px; align-items: baseline; }
+    h2 .no { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: .95rem; color: var(--revisi); }
+    .pembuka p { max-width: 62ch; }
+    .tombol { display: inline-block; padding: 8px 16px; border: 1px solid var(--tinta); color: var(--tinta); text-decoration: none; font-weight: 600; margin: 0 6px 8px 0; background: var(--kertas); }
+    .tombol.utama { background: var(--tinta); color: var(--kertas); }
+    .tombol[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+    section { margin-top: 28px; }
+
+    /* Daftar gambar: tabel seperti daftar isi gambar kerja */
+    table { width: 100%; border-collapse: collapse; background: var(--kertas); }
+    th, td { border: 1px solid var(--tinta); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { font-weight: 600; }
+    td.no { font-family: "IBM Plex Mono", monospace; width: 64px; }
+    td p { margin: 2px 0 0; color: var(--abu); font-size: .95rem; }
+    @media (max-width: 600px) {
+      .daftar thead { display: none; }
+      .daftar tr { display: grid; grid-template-columns: 56px 1fr; border: 1px solid var(--tinta); border-top: none; }
+      .daftar tr:first-child { border-top: 1px solid var(--tinta); }
+      .daftar td { border: none; }
+      .daftar td.jenis { grid-column: 2; padding-top: 0; color: var(--abu); }
+    }
+
+    /* Kop etiket di kanan bawah, seperti title block */
+    .bawah { display: grid; grid-template-columns: 1fr; border-top: 2px solid var(--tinta); }
+    .kop { border-collapse: collapse; font-size: .85rem; }
+    .kop td { padding: 6px 10px; }
+    .kop td.label { color: var(--abu); width: 32%; }
+    .catatan-lembar { padding: 12px 20px; font-size: .95rem; color: var(--abu); }
+    @media (min-width: 760px) { .bawah { grid-template-columns: 1fr 380px; } .kop { border-left: 2px solid var(--tinta); } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    @media print { body { background: none; } }
+  </style>
+</head>
+<body>
+  <div class="lembar">
+    <nav aria-label="Menu utama">
+      <a class="nama" href="#">Defsa Yurinda</a>
+      <ul><li><a href="#">Alat</a></li><li><a href="#">Latihan</a></li><li><a href="#">Catatan</a></li><li><a href="#">Tentang</a></li></ul>
+    </nav>
+    <div class="isi">
+      <header class="pembuka">
+        <h1>Defsa Yurinda</h1>
+        <p>Mahasiswa Teknik Sipil Universitas Jambi, minat utama geoteknik. Di sini ada kalkulator dengan langkah hitungan, pengolah data praktikum Mekanika Tanah, latihan soal, dan catatan belajar.</p>
+        <a class="tombol utama" href="#">Tentang saya</a>
+        <a class="tombol" href="#" aria-disabled="true">CV (menyusul)</a>
+        <a class="tombol" href="#">GitHub</a>
+      </header>
+
+      <section>
+        <h2><span class="no">01</span>Daftar alat</h2>
+        <table class="daftar">
+          <thead><tr><th>No.</th><th>Alat</th><th>Bidang</th></tr></thead>
+          <tbody>
+            <tr><td class="no">A-01</td><td><a href="#">Daya dukung tiang bor dari N-SPT</a><p>Reese &amp; Wright (1977), profil tanah, langkah hitungan.</p></td><td class="jenis">Fondasi dalam</td></tr>
+            <tr><td class="no">A-02</td><td><a href="#">Kapasitas dukung pondasi dangkal</a><p>Faktor bentuk, kedalaman, koreksi muka air tanah.</p></td><td class="jenis">Fondasi dangkal</td></tr>
+            <tr><td class="no">A-03</td><td><a href="#">Penurunan konsolidasi</a><p>NC dan OC, diagram e–log σ', penurunan terhadap waktu.</p></td><td class="jenis">Konsolidasi</td></tr>
+            <tr><td class="no">A-04</td><td><a href="#">Praktikum Mekanika Tanah</a><p>16 alat pengolah data, ekspor ke Word dan Excel.</p></td><td class="jenis">Praktikum</td></tr>
+            <tr><td class="no">A-05</td><td><a href="#">Bank soal geoteknik</a><p>9 jenis soal dengan angka acak dan pembahasan.</p></td><td class="jenis">Latihan</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2><span class="no">02</span>Catatan terbaru</h2>
+        <table>
+          <tbody>
+            <tr><td class="no">03</td><td><a href="#">Membangun situs dan kalkulator bersama Claude Code</a></td></tr>
+            <tr><td class="no">02</td><td><a href="#">Git dan Pull Request pertama</a></td></tr>
+            <tr><td class="no">01</td><td><a href="#">Mengenal Claude dan Claude Code</a></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <div class="bawah">
+      <p class="catatan-lembar">Setiap alat menampilkan rumus, sumber, dan substitusi angkanya, jadi hasilnya bisa dicocokkan dengan hitungan tangan.</p>
+      <table class="kop">
+        <tbody>
+          <tr><td class="label">Pemilik</td><td>Defsa Yurinda</td></tr>
+          <tr><td class="label">Instansi</td><td>Teknik Sipil, Universitas Jambi</td></tr>
+          <tr><td class="label">Isi</td><td>5 alat · 3 catatan</td></tr>
+          <tr><td class="label">Pembaruan</td><td>26-09-2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

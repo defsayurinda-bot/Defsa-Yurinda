@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konsep A · Pita dan stabilo</title>
+  <style>
+    @font-face { font-family: "Archivo Black"; src: url(../font/archivo-black-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Source Sans 3"; src: url(../font/source-sans-3-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Source Sans 3"; src: url(../font/source-sans-3-latin-600-normal.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+    @font-face { font-family: "Source Sans 3"; src: url(../font/source-sans-3-latin-700-normal.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+
+    /* Token warna konsep A */
+    :root {
+      --kertas: #FFFFFF;      /* Kertas slide */
+      --tinta: #1A1A1A;       /* Tinta */
+      --pita: #F05A28;        /* Pita oranye: hanya hiasan, bukan teks */
+      --tautan: #B23C0C;      /* Oranye bakar: tautan dan tombol */
+      --stabilo: #FFFF00;     /* Stabilo kuning di balik judul */
+      --abu: #595959;         /* Teks kedua */
+      --garis: #D9D9D9;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --kertas: #161616; --tinta: #F2F2F2; --tautan: #FF8B5E; --abu: #B3B3B3; --garis: #3A3A3A; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--kertas); color: var(--tinta); font: 400 1.0625rem/1.6 "Source Sans 3", system-ui, sans-serif; }
+    a { color: var(--tautan); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--tautan); outline-offset: 3px; }
+    .wadah { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+    /* Pita atas seperti template presentasi */
+    .pita-atas { height: 10px; background: var(--pita); }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--garis); flex-wrap: wrap; gap: 8px; }
+    nav .nama { font-family: "Archivo Black", sans-serif; font-size: 1.05rem; color: var(--tinta); text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; flex-wrap: wrap; }
+    nav ul a { color: var(--tinta); text-decoration: none; font-weight: 600; }
+    nav ul a:hover { text-decoration: underline; }
+
+    h1, h2, h3 { font-family: "Archivo Black", "Arial Black", sans-serif; font-weight: 400; line-height: 1.15; letter-spacing: -0.01em; }
+    .stabilo { background: linear-gradient(transparent 12%, var(--stabilo) 12%, var(--stabilo) 88%, transparent 88%); color: #1A1A1A; padding: 0 .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+    .pembuka { display: grid; grid-template-columns: 1fr; gap: 28px; padding: 48px 0 40px; }
+    .pembuka h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); margin: 0 0 16px; }
+    .pembuka p { max-width: 60ch; margin: 0 0 20px; font-size: 1.15rem; }
+    .tombol { display: inline-block; padding: 10px 18px; border: 2px solid var(--tinta); color: var(--tinta); font-weight: 700; text-decoration: none; margin: 0 8px 8px 0; }
+    .tombol.utama { background: var(--tinta); color: var(--kertas); }
+    .tombol[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+
+    section { padding: 28px 0; }
+    .judul-bagian { display: flex; align-items: stretch; gap: 14px; margin: 0 0 20px; }
+    .judul-bagian::before { content: ""; width: 12px; background: var(--pita); flex: none; }
+    .judul-bagian h2 { margin: 0; font-size: clamp(1.4rem, 4vw, 1.9rem); }
+
+    .daftar-alat { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--tinta); }
+    .daftar-alat li { border-bottom: 1px solid var(--garis); }
+    .daftar-alat a { display: grid; grid-template-columns: 1fr; gap: 4px; padding: 16px 0; color: var(--tinta); text-decoration: none; }
+    .daftar-alat a:hover h3 { text-decoration: underline; text-decoration-color: var(--pita); text-decoration-thickness: 3px; }
+    .daftar-alat h3 { font-size: 1.15rem; margin: 0; }
+    .daftar-alat .jenis { font-weight: 700; color: var(--tautan); font-size: .95rem; }
+    .daftar-alat p { margin: 0; color: var(--abu); }
+    @media (min-width: 760px) {
+      .pembuka { grid-template-columns: 1.4fr 1fr; align-items: end; }
+      .daftar-alat a { grid-template-columns: 180px 1fr; column-gap: 24px; }
+      .daftar-alat .jenis { grid-row: span 2; padding-top: 3px; }
+    }
+    .catatan-list { margin: 0; padding-left: 1.2em; }
+    .catatan-list li { margin: 6px 0; }
+    .ringkas-profil { border-left: 4px solid var(--garis); padding: 4px 0 4px 16px; color: var(--abu); }
+    footer { border-top: 10px solid var(--pita); margin-top: 32px; padding: 20px 0 40px; color: var(--abu); font-size: .95rem; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+    @media print { .pita-atas, nav { display: none; } footer { border-top: 1px solid #000; } }
+  </style>
+</head>
+<body>
+  <div class="pita-atas" aria-hidden="true"></div>
+  <div class="wadah">
+    <nav aria-label="Menu utama">
+      <a class="nama" href="#">Defsa Yurinda</a>
+      <ul><li><a href="#">Alat</a></li><li><a href="#">Latihan</a></li><li><a href="#">Catatan</a></li><li><a href="#">Tentang</a></li></ul>
+    </nav>
+
+    <header class="pembuka">
+      <div>
+        <h1><span class="stabilo">Defsa Yurinda</span></h1>
+        <p>Mahasiswa Teknik Sipil Universitas Jambi, minat utama geoteknik. Di sini ada kalkulator dengan langkah hitungan, pengolah data praktikum Mekanika Tanah, latihan soal, dan catatan belajar.</p>
+        <a class="tombol utama" href="#">Tentang saya</a>
+        <a class="tombol" href="#" aria-disabled="true">CV (menyusul)</a>
+        <a class="tombol" href="#">GitHub</a>
+      </div>
+      <p class="ringkas-profil">Setiap alat menampilkan rumus, sumber, dan substitusi angkanya, jadi hasilnya bisa dicocokkan dengan hitungan tangan.</p>
+    </header>
+
+    <section>
+      <div class="judul-bagian"><h2><span class="stabilo">Alat</span></h2></div>
+      <ul class="daftar-alat">
+        <li><a href="#"><span class="jenis">Fondasi dalam</span><h3>Daya dukung tiang bor dari N-SPT</h3><p>Metode Reese &amp; Wright (1977) dengan profil tanah dan langkah hitungan.</p></a></li>
+        <li><a href="#"><span class="jenis">Fondasi dangkal</span><h3>Kapasitas dukung pondasi dangkal</h3><p>Persamaan daya dukung umum dengan faktor bentuk, kedalaman, dan koreksi muka air tanah.</p></a></li>
+        <li><a href="#"><span class="jenis">Konsolidasi</span><h3>Penurunan konsolidasi</h3><p>Lempung NC dan OC, diagram e–log σ', dan kurva penurunan terhadap waktu.</p></a></li>
+        <li><a href="#"><span class="jenis">Praktikum</span><h3>Praktikum Mekanika Tanah</h3><p>Enam belas alat pengolah data, dari kadar air sampai sondir dan SPT, dengan ekspor ke Word dan Excel.</p></a></li>
+        <li><a href="#"><span class="jenis">Latihan</span><h3>Bank soal geoteknik</h3><p>Sembilan jenis soal dengan angka acak, dicek otomatis, lengkap dengan pembahasan.</p></a></li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="judul-bagian"><h2><span class="stabilo">Catatan terbaru</span></h2></div>
+      <ol class="catatan-list" reversed>
+        <li><a href="#">Membangun situs dan kalkulator bersama Claude Code</a></li>
+        <li><a href="#">Git dan Pull Request pertama</a></li>
+        <li><a href="#">Mengenal Claude dan Claude Code</a></li>
+      </ol>
+    </section>
+
+    <footer>Defsa Yurinda · Teknik Sipil, Universitas Jambi · Kode dan tulisan di GitHub</footer>
+  </div>
+</body>
+</html>
