@@ -144,20 +144,23 @@
     }
     // Lebar kolom menurut isi terpanjang (angka tidak boleh terpotong), dipersempit bila melebihi lebar teks.
     function panjang(html) { var d = document.createElement('div'); d.innerHTML = String(html == null ? '' : html); return d.textContent.trim(); }
-    var lebar = [];
+    var karakter = [];
     for (var i = 0; i < n; i++) {
       var isiTerpanjang = b.baris.concat(b.kaki ? [b.kaki] : []).reduce(function (a, r) { return Math.max(a, panjang(r[i]).length); }, 0);
       var kataKepala = b.kepala ? panjang(b.kepala[i]).split(/\s+/).reduce(function (a, k) { return Math.max(a, k.length); }, 0) : 0;
-      lebar.push(Math.max(560, Math.max(isiTerpanjang, kataKepala) * 115 + 240));
+      karakter.push(Math.max(isiTerpanjang, kataKepala));
     }
-    var total = lebar.reduce(function (a, v) { return a + v; }, 0);
-    if (total > LEBAR_TEKS) lebar = lebar.map(function (v) { return Math.floor(v * LEBAR_TEKS / total); });
-    total = lebar.reduce(function (a, v) { return a + v; }, 0);
+    // Ukuran huruf 11 pt; tabel yang terlalu lebar untuk 14 cm diperkecil sampai paling kecil 8 pt.
+    function lebarUntuk(sz) { return karakter.map(function (c) { return Math.max(Math.round(560 * sz / 22), Math.round((c * 115 + 240) * sz / 22)); }); }
+    var sz = 22, lebar = lebarUntuk(sz), jumlah = function (l) { return l.reduce(function (a, v) { return a + v; }, 0); };
+    while (jumlah(lebar) > LEBAR_TEKS && sz > 16) { sz--; lebar = lebarUntuk(sz); }
+    var total = jumlah(lebar);
+    if (total > LEBAR_TEKS) { lebar = lebar.map(function (v) { return Math.floor(v * LEBAR_TEKS / total); }); total = jumlah(lebar); }
     function sel(isi, i, o) {
       var jc = o.kepala ? 'center' : (kanan.indexOf(i) >= 0 ? 'right' : 'left');
       var batas = o.kepala ? '<w:tcBorders><w:bottom ' + GARIS + '/></w:tcBorders>' : o.kaki ? '<w:tcBorders><w:top ' + GARIS + '/></w:tcBorders>' : '';
       return '<w:tc><w:tcPr><w:tcW w:w="' + lebar[i] + '" w:type="dxa"/>' + batas + '<w:vAlign w:val="center"/></w:tcPr>' +
-        paragraf(runs(isi, { b: o.kepala || o.kaki }), { jc: jc }) + '</w:tc>';
+        paragraf(runs(isi, { b: o.kepala || o.kaki, sz: sz === 22 ? 0 : sz }), { jc: jc }) + '</w:tc>';
     }
     return '<w:tbl><w:tblPr><w:tblW w:w="' + total + '" w:type="dxa"/><w:jc w:val="center"/>' +
       '<w:tblBorders><w:top ' + GARIS + '/><w:left w:val="nil"/><w:bottom ' + GARIS + '/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders>' +
