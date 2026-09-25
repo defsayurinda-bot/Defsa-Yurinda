@@ -312,5 +312,123 @@ cocok("fase: e–Sr kembali ke γ", 1.86, balik["gamma"])
 cin = js("hitung-sifat-fisik.js", "hubunganFase", {"cara": "cincin", "Gs": 2.68, "w": 24.5, "M": 93.0, "V": 50.0})
 cocok("fase: cincin M/V", 93.0 / 50.0, cin["gamma"])
 
+# ---------------------------------------------------------------- CBR (SNI 1744:2012, ASTM D1883)
+cocok("beban standar 2,54 mm: 6,9 MPa × 1935 mm² ≈ 3000 lbf", 3000 * 4.4482216 / 1000, 6.9 * 1935 / 1000, tol=1e-3)
+cocok("beban standar 5,08 mm: 10,3 MPa × 1935 mm² ≈ 4500 lbf", 4500 * 4.4482216 / 1000, 10.3 * 1935 / 1000, tol=5e-3)
+pen = [0, 0.32, 0.64, 1.27, 1.91, 2.54, 3.81, 5.08, 7.62, 10.16, 12.7, 15.24]
+beban = {"Atas": [0, 0.18, 0.36, 0.66, 0.90, 1.10, 1.42, 1.60, 1.98, 2.22, 2.40, 2.55], "Bawah": [0, 0.05, 0.14, 0.40, 0.68, 0.92, 1.30, 1.44, 1.74, 1.98, 2.15, 2.28]}
+r = js("hitung-cbr.js", "hitung", {"A": 1935, "std1": 6.9, "std2": 10.3, "koreksi": "otomatis", "kondisi": [], "swell": [],
+                                   "atas": [{"no": i + 1, "penetrasi": x, "beban": y} for i, (x, y) in enumerate(zip(pen, beban["Atas"]))],
+                                   "bawah": [{"no": i + 1, "penetrasi": x, "beban": y} for i, (x, y) in enumerate(zip(pen, beban["Bawah"]))]})
+
+
+def interp(xs, ys, x):
+    for (x1, y1), (x2, y2) in zip(zip(xs, ys), zip(xs[1:], ys[1:])):
+        if x1 <= x <= x2:
+            return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
+
+
+for s in r["set"]:
+    ys = beban[s["nama"]]
+    lereng = [(ys[i + 1] - ys[i]) / (pen[i + 1] - pen[i]) for i in range(len(pen) - 1) if pen[i] < 5.08]
+    i = max(range(len(lereng)), key=lambda k: (lereng[k], -k))
+    x0 = max(0.0, pen[i] - ys[i] / lereng[i]) if i > 0 else 0.0
+    cocok(f"CBR {s['nama']}: titik nol", x0, s["koreksi"]["x0"])
+    cocok(f"CBR {s['nama']}: CBR 2,54", interp(pen, ys, 2.54 + x0) * 1000 / 1935 / 6.9 * 100, s["CBR1"])
+    cocok(f"CBR {s['nama']}: CBR 5,08", interp(pen, ys, 5.08 + x0) * 1000 / 1935 / 10.3 * 100, s["CBR2"])
+benar("CBR: permukaan atas tidak dikoreksi (awal kurva cembung)", r["set"][0]["koreksi"]["x0"] == 0)
+benar("CBR: permukaan bawah dikoreksi (awal kurva cekung)", r["set"][1]["koreksi"]["x0"] > 0.3)
+sw = js("hitung-cbr.js", "hitung", {"A": 1935, "std1": 6.9, "std2": 10.3, "koreksi": "tidak", "H0": 116.4, "satuanArloji": 0.0254,
+                                    "atas": [{"no": 1, "penetrasi": 2.54, "beban": 1}, {"no": 2, "penetrasi": 5.08, "beban": 1.5}],
+                                    "swell": [{"no": 1, "bacaan": 0}, {"no": 2, "bacaan": 104}], "kondisi": [{"Wt": 9850, "Wm": 5480, "V": 2124, "W1": 58.4, "W2": 50.9, "W3": 12.3}], "gdmaks": 1.75})
+cocok("CBR: pengembangan", 104 * 0.0254 / 116.4 * 100, sw["pengembangan"])
+gd = (9850 - 5480) / 2124 / (1 + 7.5 / 38.6)
+cocok("CBR: γd benda uji", gd, sw["kondisi"][0]["gammaD"])
+cocok("CBR: derajat kepadatan", gd / 1.75 * 100, sw["D"])
+
+# ---------------------------------------------------------------- geser langsung (SNI 3420:2016)
+for D_, d_ in ((6.31, 0.5), (6.0, 1.2)):
+    r_ = D_ / 2
+    lensa = 2 * r_ ** 2 * math.acos(d_ / (2 * r_)) - d_ / 2 * math.sqrt(4 * r_ ** 2 - d_ ** 2)  # irisan dua lingkaran
+    cocok(f"luas terkoreksi bulat D={D_}, δ={d_}", lensa, fungsi("hitung-kekuatan.js", "luasTerkoreksi", "bulat", D_, d_))
+cocok("luas terkoreksi persegi", 6 * (6 - 0.4), fungsi("hitung-kekuatan.js", "luasTerkoreksi", "persegi", 6, 0.4))
+DIAL = [[5, 8.5, 11, 12.8, 14, 14.8, 15.3, 15.6, 15.5, 15.3], [6.5, 11.5, 15.2, 18, 19.8, 21, 21.8, 22.3, 22.5, 22.4], [8, 14, 19, 22.8, 25.4, 27.2, 28.3, 29, 29.4, 29.3]]
+Pn = [8, 16, 24]
+r = js("hitung-kekuatan.js", "geserLangsung", {"bentuk": "bulat", "ukuran": 6.31, "kalibrasi": 0.54, "koreksiLuas": "tidak",
+                                                "benda": [{"nama": str(i + 1), "P": P_} for i, P_ in enumerate(Pn)],
+                                                "bacaan": [{"no": k + 1, "geser": 0.25 * (k + 1), "nilai": [d[k] for d in DIAL]} for k in range(10)]})
+A0 = math.pi * 6.31 ** 2 / 4
+sig = [P_ / A0 for P_ in Pn]
+tau = [max(d) * 0.54 / A0 for d in DIAL]
+ms, mt = sum(sig) / 3, sum(tau) / 3
+b_ = sum((x - ms) * (y - mt) for x, y in zip(sig, tau)) / sum((x - ms) ** 2 for x in sig)
+cocok("geser langsung: c", mt - b_ * ms, r["c"])
+cocok("geser langsung: φ", math.degrees(math.atan(b_)), r["phi"])
+
+# ---------------------------------------------------------------- kuat tekan bebas (SNI 3638:2012, ASTM D2166)
+UCS = [(0, 0), (25, 6), (50, 11), (75, 15.5), (100, 19), (150, 24), (200, 27.5), (250, 29.5), (300, 30.8), (350, 31.5), (400, 31.8), (450, 31.6), (500, 31.0), (600, 29.8)]
+r = js("hitung-kekuatan.js", "tekanBebas", {"diameter": 3.8, "tinggi": 7.6, "satuanRegangan": 0.01, "satuanBeban": "kN", "kalibrasi": 0.0045, "quRemas": 42,
+                                            "bacaan": [{"no": i + 1, "regangan": a_, "beban": b2} for i, (a_, b2) in enumerate(UCS)]})
+A0 = math.pi * 3.8 ** 2 / 4
+sg = []
+for a_, b2 in UCS:
+    e_ = a_ * 0.01 / 10 / 7.6
+    sg.append((e_ * 100, b2 * 0.0045 / (A0 / (1 - e_)) * 10000))
+qu = max(s_ for e_, s_ in sg)
+cocok("UCS: qu puncak (kPa)", qu, r["quKPa"])
+cocok("UCS: cu", qu / 2, r["cuKPa"])
+cocok("UCS: sensitivitas", qu / 42, r["St"])
+for (e1, s1), (e2, s2) in zip(sg, sg[1:]):
+    if s1 <= qu / 2 <= s2:
+        cocok("UCS: E50", (qu / 2) / ((e1 + (qu / 2 - s1) * (e2 - e1) / (s2 - s1)) / 100), r["E50"])
+        break
+naik = js("hitung-kekuatan.js", "tekanBebas", {"diameter": 3.8, "tinggi": 7.6, "satuanRegangan": 0.01, "satuanBeban": "kg", "kalibrasi": 0.3,
+                                               "bacaan": [{"no": i + 1, "regangan": 100 * i, "beban": 10 * math.sqrt(i)} for i in range(14)]})
+benar("UCS: tanpa puncak sampai 15% → qu pada regangan 15%", naik["caraQu"] == "regangan 15%" and abs(naik["epsQu"] - 15) < 1e-9)
+benar("UCS: konsistensi 119,5 kPa = kaku", r["konsistensi"] == "Kaku")
+
+# ---------------------------------------------------------------- konsolidasi laboratorium (SNI 2812:2011)
+def U_terzaghi(Tv):
+    if Tv <= 0:
+        return 0.0
+    return 1 - sum(2 / M ** 2 * math.exp(-M * M * Tv) for M in (math.pi * (2 * m + 1) / 2 for m in range(200)))
+
+
+cv_, Hdr_ = 2e-3, 1.0  # cm²/s, cm
+t_uji = [0.05 * 1.25 ** k for k in range(40)]
+tay = fungsi("hitung-konsolidasi-lab.js", "taylor", [{"t": t_, "s": 1.5 * U_terzaghi(cv_ * t_ * 60 / Hdr_ ** 2)} for t_ in t_uji])
+cocok("Taylor: t90 dari kurva Terzaghi eksak", 0.848 * Hdr_ ** 2 / cv_ / 60, tay["t90"], tol=0.03)
+cocok("Taylor: s100 dari kurva Terzaghi eksak", 1.5, tay["s100"], tol=0.03)
+
+KOL = [[100, 102, 103.5, 105, 107, 109.5, 112, 114, 114, 114, 114.5, 114.5, 114.5, 114.5, 114.5],
+       [114.5, 116.5, 118, 119, 121, 124, 127, 129, 129.5, 130, 130, 130, 130, 130, 130],
+       [130, 134, 136, 138.5, 142, 147, 153.5, 158.5, 160.5, 160.5, 160.5, 161, 161, 161, 161],
+       [161, 169.5, 174, 179.5, 187, 198, 212, 225, 231, 232.5, 232.5, 233, 233, 233.5, 233.5],
+       [233.5, 243.5, 249, 255.5, 264.5, 277.5, 294, 310.5, 318.5, 320.5, 320.5, 321, 321, 321.5, 322]]
+TW = [0, 0.1, 0.25, 0.5, 1, 2, 4, 8, 15, 30, 60, 120, 240, 480, 1440]
+pk = [0.25, 0.5, 1, 2, 4, 1, 0.25]
+akhir = [None, None, None, None, None, 301, 275]
+r = js("hitung-konsolidasi-lab.js", "hitung", {"Gs": 2.68, "H0": 2, "diameter": 6.35, "Ws": 88, "Ww": 118.5, "satuan": 0.01, "arloji0": 100, "arah": "naik",
+                                               "drainase": "dua", "caraCc": "terakhir", "LL": 48,
+                                               "tahap": [{"nama": str(i + 1), "p": p_, "akhir": akhir[i], "t90": None} for i, p_ in enumerate(pk)],
+                                               "bacaan": [{"t": t_, "nilai": [KOL[i][j] if i < 5 else None for i in range(7)]} for j, t_ in enumerate(TW)]})
+A = math.pi * 6.35 ** 2 / 4
+Hs = 88 / (2.68 * A)
+e0 = 2 / Hs - 1
+dakhir = [k[-1] for k in KOL] + [301, 275]
+e = [(2 - (d_ - 100) * 0.01 / 10) / Hs - 1 for d_ in dakhir]
+cocok("konsolidasi: e0", e0, r["awal"]["e0"])
+for i in range(7):
+    cocok(f"konsolidasi: e tahap {i + 1}", e[i], r["tahap"][i]["e"])
+cocok("konsolidasi: Cc dua tahap tertinggi", (e[3] - e[4]) / (math.log10(4) - math.log10(2)), r["Cc"])
+cocok("konsolidasi: Cs", (e[6] - e[4]) / (math.log10(4) - math.log10(0.25)), r["Cs"])
+cocok("konsolidasi: mv tahap 4", (e[2] - e[3]) / ((1 + e[2]) * (2 - 1)), r["tahap"][3]["mv"])
+H3, H4 = 2 - (dakhir[2] - 100) * 0.001, 2 - (dakhir[3] - 100) * 0.001
+t4 = r["tahap"][3]
+cocok("konsolidasi: Hdr tahap 4 (dua arah)", (H3 + H4) / 4, t4["Hdr"])
+cocok("konsolidasi: cv tahap 4 dari t90", 0.848 * t4["Hdr"] ** 2 / (t4["t90"] * 60), t4["cv"])
+benar("konsolidasi: cv contoh mendekati nilai pembangkit 1,6e-3 cm²/s (±15%)", abs(t4["cv"] - 1.6e-3) / 1.6e-3 < 0.15)
+cocok("konsolidasi: korelasi Cc Terzaghi & Peck", 0.009 * 38, r["CcKorelasi"])
+
 print("\nSemua cocok." if not gagal else f"\n{gagal} pemeriksaan gagal.")
 sys.exit(1 if gagal else 0)

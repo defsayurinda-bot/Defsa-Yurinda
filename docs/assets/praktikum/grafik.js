@@ -6,11 +6,11 @@
  * Grafik.plot({
  *   judul, lebar, tinggi,
  *   x: { min, max, log, balik, label, tick: [angka…] (opsional), format: fn },
- *   y: { min, max, label, tick, format },
+ *   y: { min, max, label, tick, format, balik },   balik: nilai besar di bawah (mis. bacaan arloji pemampatan)
  *   seri: [{ titik: [[x, y], …], garis: true, penanda: true, warna: 'aksen'|'teks'|'biru'|'hijau', putus: true, label, tebal }],
  *   area: [{ titik: [[x, y], …], warna }],           poligon terisi tipis
- *   tanda: [{ x, y, teks, posisi: 'kanan'|'kiri'|'atas' }],
- *   vertikal: [{ x, teks }], horizontal: [{ y, teks }]
+ *   tanda: [{ x, y, teks, posisi: 'kanan'|'kiri'|'atas', atas, bawah, titik: false }],
+ *   vertikal: [{ x, teks }], horizontal: [{ y, teks, rata: 'kanan' }]
  * }) → string SVG
  */
 (function (root) {
@@ -56,7 +56,7 @@
     var fx = o.x.log
       ? function (v) { var t = (Math.log10(v) - Math.log10(o.x.min)) / (Math.log10(o.x.max) - Math.log10(o.x.min)); return kiri + (o.x.balik ? 1 - t : t) * lw; }
       : function (v) { var t = (v - o.x.min) / (o.x.max - o.x.min); return kiri + (o.x.balik ? 1 - t : t) * lw; };
-    var fy = function (v) { return atas + (1 - (v - o.y.min) / (o.y.max - o.y.min)) * lh; };
+    var fy = function (v) { var r = (v - o.y.min) / (o.y.max - o.y.min); return atas + (o.y.balik ? r : 1 - r) * lh; };
     var s = '<svg class="grafik" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + (o.judul || 'Grafik') + '">';
     s += '<defs><clipPath id="klip-' + (o.id || 'g') + '"><rect x="' + kiri + '" y="' + atas + '" width="' + lw + '" height="' + lh + '"/></clipPath></defs>';
 
@@ -108,14 +108,18 @@
     s += '</g>';
     (o.vertikal || []).concat(o.horizontal || []).forEach(function (g) {
       if (!g.teks) return;
-      if (g.x !== undefined) s += '<text x="' + (fx(g.x) + 4) + '" y="' + (atas + 14) + '" font-size="12" style="fill:var(--teks-2)">' + g.teks + '</text>';
+      // Label garis tegak di dekat tepi kanan ditulis di sisi kiri garis supaya tidak keluar bingkai.
+      if (g.x !== undefined) s += fx(g.x) > kiri + lw - 70
+        ? '<text x="' + (fx(g.x) - 4) + '" y="' + (atas + 14) + '" text-anchor="end" font-size="12" style="fill:var(--teks-2)">' + g.teks + '</text>'
+        : '<text x="' + (fx(g.x) + 4) + '" y="' + (atas + 14) + '" font-size="12" style="fill:var(--teks-2)">' + g.teks + '</text>';
+      else if (g.rata === 'kanan') s += '<text x="' + (kiri + lw - 6) + '" y="' + (fy(g.y) - 5) + '" text-anchor="end" font-size="12" style="fill:var(--teks-2)">' + g.teks + '</text>';
       else s += '<text x="' + (kiri + 6) + '" y="' + (fy(g.y) - 5) + '" font-size="12" style="fill:var(--teks-2)">' + g.teks + '</text>';
     });
     (o.tanda || []).forEach(function (t) {
       var x = fx(t.x), y = fy(t.y);
       if (t.titik !== false) s += '<circle cx="' + x + '" cy="' + y + '" r="5.5" style="fill:var(--aksen);stroke:var(--permukaan);stroke-width:2"/>';
       var kiriTeks = t.posisi === 'kiri' || t.rata === 'kiri';
-      s += '<text x="' + (x + (kiriTeks ? -9 : 9)) + '" y="' + (y + (t.posisi === 'atas' || t.atas ? -10 : 4)) + '" text-anchor="' + (kiriTeks ? 'end' : 'start') +
+      s += '<text x="' + (x + (kiriTeks ? -9 : 9)) + '" y="' + (y + (t.posisi === 'atas' || t.atas ? -10 : t.bawah ? 20 : 4)) + '" text-anchor="' + (kiriTeks ? 'end' : 'start') +
         '" font-size="12.5" font-weight="700" style="fill:var(--teks);paint-order:stroke;stroke:var(--permukaan);stroke-width:4px">' + t.teks + '</text>';
     });
     // legenda
