@@ -1,4 +1,10 @@
 {
+  "env": {
+    "GIT_AUTHOR_NAME": "Defsa Yurinda",
+    "GIT_AUTHOR_EMAIL": "310235006+defsayurinda-bot@users.noreply.github.com",
+    "GIT_COMMITTER_NAME": "Defsa Yurinda",
+    "GIT_COMMITTER_EMAIL": "310235006+defsayurinda-bot@users.noreply.github.com"
+  },
   "hooks": {
     "SessionStart": [
       {
