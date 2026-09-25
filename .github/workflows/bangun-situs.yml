@@ -1,0 +1,42 @@
+name: Bangun situs
+
+# Membangun ulang docs/ setiap kali konten/ berubah di main, lalu meng-commit hasilnya.
+# Dengan ini catatan atau registri alat bisa diubah lewat editor web GitHub tanpa menjalankan Python.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "konten/**"
+      - "skrip/bangun_situs.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bangun-situs
+  cancel-in-progress: false
+
+jobs:
+  bangun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Bangun ulang docs/ dan README.md
+        run: |
+          pip install -r skrip/kebutuhan.txt
+          python3 skrip/bangun_situs.py
+      - name: Commit bila ada perubahan
+        run: |
+          if [ -z "$(git status --porcelain docs README.md)" ]; then
+            echo "Situs sudah sesuai dengan konten/."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs README.md
+          git commit -m "Bangun ulang situs dari konten/"
+          git push
