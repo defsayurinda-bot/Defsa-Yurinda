@@ -69,10 +69,12 @@ a { color: var(--aksen); text-underline-offset: 3px; }
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--garis);
 }
-.nav .wadah { display: flex; align-items: center; gap: 20px; height: 60px; }
+.nav .wadah { display: flex; align-items: center; gap: 4px 20px; min-height: 60px; flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
 .nav .merek { font-weight: 800; color: var(--teks); text-decoration: none; letter-spacing: -.01em; }
 .nav .merek span { color: var(--aksen); }
 .nav ul { display: flex; gap: 18px; list-style: none; margin: 0 0 0 auto; padding: 0; font-size: 15px; }
+@media (max-width: 440px) { .nav ul { gap: 12px; font-size: 14px; } }
+.nav ul { flex-wrap: wrap; row-gap: 4px; }
 .nav ul a { color: var(--teks-2); text-decoration: none; }
 .nav ul a:hover, .nav ul a[aria-current="page"] { color: var(--teks); }
 

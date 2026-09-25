@@ -1,5 +1,7 @@
 # Defsa Yurinda · Situs dan alat geoteknik
 
+**Bahasa Indonesia** · [English](README.en.md)
+
 Kalkulator geoteknik, pengolah data praktikum Mekanika Tanah, dan latihan soal yang menampilkan langkah hitungan dan sumber rumusnya, terbit di **[defsayurinda.github.io](https://defsayurinda.github.io/)**.
 
 [![Verifikasi](https://github.com/defsayurinda/defsayurinda.github.io/actions/workflows/verifikasi.yml/badge.svg)](https://github.com/defsayurinda/defsayurinda.github.io/actions/workflows/verifikasi.yml)
