@@ -130,6 +130,7 @@ input, select {
   border: 1px solid var(--garis); border-radius: 8px; padding: 8px 10px;
   font-variant-numeric: tabular-nums;
 }
+input:disabled, select:disabled { opacity: .45; cursor: not-allowed; }
 input:focus, select:focus { outline: 2px solid var(--aksen); outline-offset: 1px; border-color: transparent; }
 input[type="checkbox"] { width: auto; }
 .isian-kisi { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Penurunan Konsolidasi · Defsa Yurinda</title>
+  <meta name="description" content="Hitung penurunan konsolidasi primer satu dimensi untuk lempung NC dan OC beserta lajunya terhadap waktu, lengkap dengan diagram e–log σ' dan langkah hitungan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="../assets/gaya.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23c8421a'/><path d='M6 9 Q14 10 17 16 T26 24' stroke='white' stroke-width='3' fill='none'/></svg>">
+</head>
+<body>
+  <nav class="nav">
+    <div class="wadah">
+      <a class="merek" href="../">Defsa<span>.</span></a>
+      <ul>
+        <li><a href="../#alat">Alat</a></li>
+        <li><a href="../#catatan">Catatan</a></li>
+        <li><a href="https://github.com/defsayurinda-bot/Defsa-Yurinda">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="wadah">
+    <header class="pahlawan" style="padding-bottom:16px">
+      <span class="label-atas">Kalkulator · Penurunan</span>
+      <h1>Penurunan konsolidasi primer</h1>
+      <p class="lead">Besar penurunan lapisan lempung NC atau OC dan lajunya terhadap waktu menurut teori konsolidasi satu dimensi Terzaghi.</p>
+    </header>
+
+    <div class="tata-kalk">
+      <section>
+        <form id="formulir" class="kartu" autocomplete="off" onsubmit="return false">
+          <h3 style="margin-top:0">Lapisan lempung</h3>
+          <div class="isian-kisi">
+            <div><label for="H">Tebal lapisan, H (m)</label><input id="H" type="number" step="0.5" min="0.1" inputmode="decimal"></div>
+            <div><label for="e0">Angka pori awal, e<sub>0</sub></label><input id="e0" type="number" step="0.01" min="0.1" inputmode="decimal"></div>
+            <div><label for="Cc">Indeks kompresi, C<sub>c</sub></label><input id="Cc" type="number" step="0.01" min="0" inputmode="decimal"></div>
+            <div><label for="Cs">Indeks pengembangan, C<sub>s</sub></label><input id="Cs" type="number" step="0.01" min="0" inputmode="decimal"></div>
+            <div><label for="s0">σ'<sub>0</sub> di tengah lapisan (kPa)</label><input id="s0" type="number" step="1" min="1" inputmode="decimal"></div>
+            <div><label for="sc">Prakonsolidasi, σ'<sub>c</sub> (kPa)</label><input id="sc" type="number" step="1" min="1" inputmode="decimal"></div>
+          </div>
+          <p class="kecil redup" style="margin-top:10px">Untuk lempung terkonsolidasi normal (NC), isi σ'<sub>c</sub> sama dengan σ'<sub>0</sub>. Metode 2:1 menghitung Δσ' dari beban pondasi; drainase dua arah berarti ada lapisan lolos air di atas dan di bawah lempung.</p>
+
+          <h3>Tambahan tegangan di tengah lapisan</h3>
+          <div class="isian-kisi">
+            <div>
+              <label for="modeDelta">Sumber Δσ'</label>
+              <select id="modeDelta">
+                <option value="2:1">Metode 2:1</option>
+                <option value="manual">Isi langsung</option>
+              </select>
+            </div>
+            <div data-mode="manual"><label for="delta">Δσ' (kPa)</label><input id="delta" type="number" step="1" min="0" inputmode="decimal"></div>
+            <div data-mode="2:1">
+              <label for="bentuk2">Bentuk pondasi</label>
+              <select id="bentuk2"><option value="persegi">Persegi</option><option value="lajur">Lajur</option></select>
+            </div>
+            <div data-mode="2:1"><label for="q">Tekanan pondasi, q (kPa)</label><input id="q" type="number" step="5" min="0" inputmode="decimal"></div>
+            <div data-mode="2:1"><label for="B2">Lebar, B (m)</label><input id="B2" type="number" step="0.1" min="0.1" inputmode="decimal"></div>
+            <div data-mode="2:1"><label for="L2">Panjang, L (m)</label><input id="L2" type="number" step="0.1" min="0.1" inputmode="decimal"></div>
+            <div data-mode="2:1"><label for="z">Kedalaman z dari dasar pondasi ke tengah lapisan (m)</label><input id="z" type="number" step="0.5" min="0" inputmode="decimal"></div>
+          </div>
+
+          <h3>Laju konsolidasi</h3>
+          <div class="isian-kisi">
+            <div><label for="cv">c<sub>v</sub> (m²/tahun)</label><input id="cv" type="number" step="0.1" min="0" inputmode="decimal"></div>
+            <div>
+              <label for="drainase">Drainase</label>
+              <select id="drainase"><option value="dua">Dua arah</option><option value="satu">Satu arah</option></select>
+            </div>
+            <div><label for="t">Waktu yang ditinjau, t (tahun)</label><input id="t" type="number" step="0.5" min="0" inputmode="decimal"></div>
+          </div>
+          <div class="baris-tombol tidak-cetak">
+            <button type="button" class="tombol kecil" id="muatContoh">Muat data contoh</button>
+            <button type="button" class="tombol kecil" id="bagikan">Salin tautan hasil</button>
+            <button type="button" class="tombol kecil" onclick="window.print()">Cetak / simpan PDF</button>
+          </div>
+          <p id="pesanBagikan" class="kecil redup" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <aside class="kartu" style="position:sticky; top:76px">
+        <h3 style="margin-top:0">Diagram e–log σ'</h3>
+        <div id="diagramE"></div>
+        <p class="kecil redup" style="margin:8px 0 0">Jalur dari σ'<sub>0</sub> ke σ'<sub>0</sub> + Δσ'. Kemiringan C<sub>s</sub> di bawah σ'<sub>c</sub>, C<sub>c</sub> di atasnya.</p>
+      </aside>
+    </div>
+
+    <section id="hasil" aria-live="polite"></section>
+
+    <section>
+      <h2>Sumber rumus</h2>
+      <ul class="daftar-bersih">
+        <li>Terzaghi, K. (1943). <em>Theoretical soil mechanics</em>. John Wiley &amp; Sons. Teori konsolidasi satu dimensi dan penyelesaian deret untuk derajat konsolidasi rata-rata.</li>
+        <li>Das, B. M. <em>Principles of geotechnical engineering</em>. Cengage Learning. Rumus penurunan konsolidasi NC dan OC dengan C<sub>c</sub> dan C<sub>s</sub>, hubungan T<sub>v</sub>–U, dan metode 2:1 untuk tambahan tegangan.</li>
+      </ul>
+      <p class="kecil redup">Hubungan U–T<sub>v</sub> dihitung dari deret eksak dan dicocokkan dengan nilai buku teks (U = 50% → T<sub>v</sub> = 0,197; 60% → 0,286; 90% → 0,848). Seluruh hitungan diuji terhadap perhitungan Python terpisah (<a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/tree/main/tests"><code>tests/</code></a>).</p>
+      <div class="catatan"><strong>Alat bantu belajar.</strong> Metode 2:1 hanya pendekatan; untuk tegangan di bawah titik tertentu gunakan solusi Boussinesq. Penurunan sekunder (rangkak) tidak dihitung.</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wadah">Dibuat oleh <a href="../">Defsa Yurinda</a>, Teknik Sipil Universitas Jambi · Isi dilisensikan <a href="https://github.com/defsayurinda-bot/Defsa-Yurinda/blob/main/LICENSE">CC BY 4.0</a></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script src="../assets/umum.js" defer></script>
+  <script src="../assets/konsolidasi-hitung.js" defer></script>
+  <script src="../assets/konsolidasi-tampilan.js" defer></script>
+</body>
+</html>

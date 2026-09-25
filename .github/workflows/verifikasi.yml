@@ -16,5 +16,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Bandingkan hitungan JavaScript dengan Python
-        run: python3 tests/verifikasi_tiang_bor.py
+      - name: Bandingkan hitungan JavaScript dengan Python dan nilai tabel
+        run: |
+          for f in tests/verifikasi_*.py; do
+            echo "== $f"
+            python3 "$f"
+          done
