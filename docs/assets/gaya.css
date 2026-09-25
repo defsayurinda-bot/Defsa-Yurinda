@@ -1,3 +1,9 @@
+/* Huruf disimpan lokal (SIL OFL, dari Fontsource), tanpa CDN. */
+@font-face { font-family: "Plus Jakarta Sans"; src: url(font/plus-jakarta-sans-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url(font/plus-jakarta-sans-latin-600-normal.woff2) format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url(font/plus-jakarta-sans-latin-700-normal.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url(font/plus-jakarta-sans-latin-800-normal.woff2) format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
+
 :root {
   --latar: #faf8f5;
   --permukaan: #ffffff;
@@ -275,3 +281,11 @@ footer { border-top: 1px solid var(--garis); margin-top: 64px; padding: 28px 0 4
 .kisi-grafik { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
 .kisi-grafik .grafik-bingkai { margin: 0; }
 .kisi-grafik.kisi-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+
+/* Pencarian */
+.hasil-cari li { padding: 12px 0; border-bottom: 1px solid var(--garis, #ddd); }
+.hasil-cari p { margin: 4px 0 0; }
+#kataCari { width: 100%; }
+.status-sumber { font-size: .95rem; margin: 10px 0 0; }
+.status-sumber[data-status="belum"] strong { color: var(--aksen); }
+.lapor { margin-top: 40px; }
