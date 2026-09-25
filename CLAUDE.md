@@ -9,7 +9,7 @@ Panduan untuk Claude saat bekerja di repo ini. Rencana kerja per tahap, keputusa
 3. **Kerjakan hanya tahap yang diminta.** Jangan menambah fitur, halaman, alat, atau refactor di luar daftar tugas tahap itu. Fitur baru baru dikerjakan setelah semua temuan Fatal beres (diperbaiki sesuai sumber, atau bagian yang terdampak disembunyikan).
 4. **Sumber.** Jangan menulis rumus, koefisien, nilai tabel, nomor standar, atau pustaka tanpa sumber yang memenuhi Aturan Sumber di rencana. Kalau sumber yang memenuhi tidak ada di sesi, berhenti dan minta Defsa mengirim halamannya. Jangan mencari pengganti dari situs yang dilarang.
 5. **Berhenti dan tanya Defsa** sebelum: force push; menghapus berkas atau branch; mengganti nama repo atau berkas secara massal; mengubah pengaturan repo atau akun; memilih di antara dua cara yang sama-sama valid dan memengaruhi arsitektur; mengerjakan apa pun di luar tahap; atau setelah dua kali gagal memperbaiki galat yang sama.
-6. **Privasi.** Jangan memuat NIM, nomor HP, alamat, email pribadi, data atau nama asli proyek, nama dosen, draf skripsi, atau detail lomba ke repo publik. Repo privat `Defsa` tidak disentuh kecuali disebut di tugas.
+6. **Privasi.** Jangan memuat NIM, nomor HP, alamat, email pribadi, data atau nama asli proyek, nama dosen, draf skripsi, atau detail lomba ke repo publik. Repo privat `catatan-pribadi` tidak disentuh kecuali disebut di tugas.
 7. **Satu branch per tahap** dengan nama jelas, misalnya `tahap-2/hitungan`. Pakai subagent hanya untuk penelusuran besar yang benar-benar terpisah.
 8. **Bukti.** Setiap klaim "selesai" dibuktikan dengan keluaran perintah (uji, `python3 skrip/bangun_situs.py --periksa`) dan, untuk tampilan, tangkapan layar.
 
@@ -72,7 +72,7 @@ Pengolah data praktikum di `docs/praktikum/` (16 alat), disusun mengikuti form l
 - `ekspor.js`: grafik ke PNG dan laporan ke Word `.docx` tanpa pustaka. Setelah mengubahnya, buka berkas hasilnya untuk memastikan masih terbaca.
 - `grafik.js`: grafik SVG (sumbu linier/log, sumbu terbalik).
 - Peringatan kuning adalah pemeriksaan kewajaran, bukan ketentuan standar.
-- Rumus yang sengaja berbeda dari form atau Excel lab harus mengikuti standar dan perbedaannya dijelaskan di halaman alat (temuan B7). Temuan audit form lab dicatat di Issue #16 repo privat Defsa.
+- Rumus yang sengaja berbeda dari form atau Excel lab harus mengikuti standar dan perbedaannya dijelaskan di halaman alat (temuan B7). Temuan audit form lab dicatat di Issue #16 repo privat `catatan-pribadi`.
 - Alat yang ditambahkan lewat PR #7–#9 memakai sebagian sumber yang melanggar Aturan Sumber; diperiksa ulang di Tahap 2 butir 7.
 
 Menambah alat praktikum: berkas `hitung-<nama>.js`, definisi `alat-<nama>.js` (`Praktikum.pasang({...})`), entri di `konten/praktikum.json`, uji di `tests/verifikasi_praktikum.py`, lalu `python3 skrip/bangun_situs.py`. Alat baru hanya dikerjakan sesuai Aturan wajib 3.
