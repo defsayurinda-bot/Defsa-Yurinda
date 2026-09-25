@@ -1,7 +1,13 @@
 """Verifikasi kalkulator tiang bor.
 
 Hitungan ditulis ulang di Python secara terpisah dari kode JavaScript,
-lalu hasil keduanya dibandingkan untuk beberapa kasus.
+lalu hasil keduanya dibandingkan untuk beberapa kasus. Meyerhof ikut dibandingkan
+walaupun disembunyikan dari halaman (temuan B1–B3), supaya kodenya tidak rusak diam-diam.
+
+Uji sifat Reese & Wright: memecah satu lapisan menjadi dua baris yang sama tidak
+mengubah hasil, dan ujung tiang tepat di batas lapisan tetap memberi Qp > 0.
+
+Belum ada contoh soal buku (temuan B5): menunggu halaman sumber dari Defsa.
 
 Jalankan dari akar repo:  python3 tests/verifikasi_tiang_bor.py
 """
@@ -69,7 +75,7 @@ def hitung_js(m):
         "const t=require(process.argv[1]);"
         "const r=t.hitung(JSON.parse(process.argv[2]));"
         "if(r.galat.length){console.log(JSON.stringify({galat:r.galat}));process.exit(0)}"
-        "const k=x=>({Qp:x.Qp,Qs:x.Qs,Qu:x.Qu,Qa:x.Qa,Nrata:x.Nrata});"
+        "const k=x=>x&&({Qp:x.Qp,Qs:x.Qs,Qu:x.Qu,Qa:x.Qa,Nrata:x.Nrata});"
         "console.log(JSON.stringify({rw:k(r.reeseWright),my:k(r.meyerhof)}));"
     )
     keluaran = subprocess.check_output(
@@ -118,11 +124,41 @@ def main():
                     print(f"GAGAL  {nama:24s} {metode}.{kunci}: python={nilai:.4f} js={js[metode][kunci]:.4f}")
         print(f"{nama:24s}  RW Qu={py['rw']['Qu']:9.2f} kN   Meyerhof Qu={py['my']['Qu']:9.2f} kN")
 
-    # Kasus salah harus ditolak
-    salah = dict(CONTOH, L=18)  # data tanah tidak sampai 4d di bawah ujung
+    # Kasus salah harus ditolak: data tanah berhenti tepat di ujung tiang.
+    salah = dict(CONTOH, L=20)
     if not hitung_js(salah).get("galat"):
         print("GAGAL  masukan salah tidak ditolak")
         gagal += 1
+
+    # Data sampai di bawah ujung tetapi kurang dari 4d: Reese & Wright tetap dihitung, Meyerhof tidak.
+    pendek = dict(CONTOH, L=18)
+    js = hitung_js(pendek)
+    if js.get("galat") or js["my"] is not None or not js["rw"]["Qu"] > 0:
+        print("GAGAL  data pendek: Reese & Wright harus dihitung dan Meyerhof kosong")
+        gagal += 1
+
+    # Uji sifat 1: memecah lapisan menjadi dua baris yang sama tidak mengubah hasil Reese & Wright.
+    utuh = {"d": 0.6, "L": 12, "SF": 2.5, "gammaBeton": 24, "pakaiBerat": True,
+            "lapisan": [ly(0, 4, "lempung", 6, 40), ly(4, 20, "pasir", 30)]}
+    pecah = dict(utuh, lapisan=[ly(0, 4, "lempung", 6, 40), ly(4, 9, "pasir", 30), ly(9, 20, "pasir", 30)])
+    a, b = hitung_js(utuh)["rw"], hitung_js(pecah)["rw"]
+    for kunci in ("Qp", "Qs", "Qu"):
+        if abs(a[kunci] - b[kunci]) > 1e-6 * max(1.0, abs(a[kunci])):
+            print(f"GAGAL  sifat pecah lapisan: {kunci} {a[kunci]:.4f} vs {b[kunci]:.4f}")
+            gagal += 1
+
+    # Uji sifat 2: ujung tepat di batas lapisan memakai lapisan di bawahnya dan Qp > 0.
+    batas = {"d": 0.6, "L": 10, "SF": 2.5, "gammaBeton": 24, "pakaiBerat": False,
+             "lapisan": [ly(0, 10, "pasir", 15), ly(10, 20, "pasir", 45)]}
+    rw = hitung_js(batas)["rw"]
+    harapan = min(7 * 45, 400) * T * math.pi * 0.6**2 / 4
+    if not rw["Qp"] > 0 or abs(rw["Qp"] - harapan) > 1e-6 * harapan:
+        print(f"GAGAL  sifat ujung di batas lapisan: Qp = {rw['Qp']:.4f}, harapan {harapan:.4f}")
+        gagal += 1
+
+    # Kerangka B5: contoh soal buku utuh (judul, edisi, halaman) ditambahkan setelah Defsa mengirim halamannya.
+
+    print("DILEWATI  contoh soal buku: belum ada halaman sumber dari Defsa (temuan B5).")
 
     print("\nSemua cocok." if not gagal else f"\n{gagal} pemeriksaan gagal.")
     sys.exit(1 if gagal else 0)

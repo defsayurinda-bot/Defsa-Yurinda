@@ -101,6 +101,10 @@ def main():
         gagal += 1
         print("GAGAL  σ'c < σ'0 tidak ditolak")
 
+    # Kerangka B5: contoh soal buku utuh (judul, edisi, halaman) ditambahkan setelah Defsa mengirim halamannya.
+
+    print("DILEWATI  contoh soal buku: belum ada halaman sumber dari Defsa (temuan B5).")
+
     print("\nSemua cocok." if not gagal else f"\n{gagal} pemeriksaan gagal.")
     sys.exit(1 if gagal else 0)
 
