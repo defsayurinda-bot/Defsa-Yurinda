@@ -63,10 +63,13 @@
     // kisi dan label sumbu
     var tx = o.x.tick || (o.x.log ? tickLog(o.x.min, o.x.max) : tickLinier(o.x.min, o.x.max, 6).nilai);
     var dx = o.x.log ? null : tickLinier(o.x.min, o.x.max, 6).desimal;
+    // Sumbu log yang lebar (lebih dari 3 dekade): label hanya di 1, 10, 100…, garis kisi tetap di 1-2-5.
+    var dekade = o.x.log ? Math.log10(o.x.max / o.x.min) : 0;
     tx.forEach(function (v) {
-      var x = fx(v);
+      var x = fx(v), mantisa = v / Math.pow(10, Math.floor(Math.log10(v) + 1e-9));
+      var berlabel = o.x.tick || !o.x.log || dekade * 3 <= lw / 45 || Math.abs(mantisa - 1) < 1e-6;
       s += '<line x1="' + x + '" x2="' + x + '" y1="' + atas + '" y2="' + (atas + lh) + '" style="stroke:var(--garis)"/>';
-      s += '<text x="' + x + '" y="' + (atas + lh + 18) + '" text-anchor="middle" font-size="12" style="fill:var(--teks-2)">' +
+      if (berlabel) s += '<text x="' + x + '" y="' + (atas + lh + 18) + '" text-anchor="middle" font-size="12" style="fill:var(--teks-2)">' +
         (o.x.format ? o.x.format(v) : o.x.log ? formatLog(v) : angka(v, dx)) + '</text>';
     });
     var ty = o.y.tick || tickLinier(o.y.min, o.y.max, 6).nilai, dy = tickLinier(o.y.min, o.y.max, 6).desimal;

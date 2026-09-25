@@ -254,3 +254,19 @@ footer { border-top: 1px solid var(--garis); margin-top: 64px; padding: 28px 0 4
   .tabel-isian td:first-child { min-width: 140px; }
   .tabel-isian input { min-width: 78px; }
 }
+
+/* Praktikum: tabel daftar, hasil antaralat, langkah bernomor */
+.tabel-daftar td:first-child, .tabel-daftar th:first-child { min-width: 0 !important; width: 1%; text-align: center; color: var(--teks-2); font-size: 13px; }
+.tabel-daftar th { font-size: 13px; line-height: 1.35; vertical-align: bottom; }
+.tabel-daftar input { min-width: 78px; }
+.tabel-daftar input.teks { min-width: 180px; text-align: left; }
+.tabel-daftar select { min-width: 130px; padding: 6px 8px; }
+.impor { border: 1px dashed var(--garis); border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; }
+.tautan-kecil { display: inline-block; margin-top: 5px; padding: 0; border: 0; background: none; color: var(--aksen); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; text-decoration: underline; text-underline-offset: 3px; }
+.langkah-daftar { padding-left: 1.3em; }
+.langkah-daftar li { margin: .35em 0; line-height: 1.6; }
+@media (max-width: 560px) {
+  #alat-praktikum .ringkasan { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  #alat-praktikum .ringkasan .kartu { padding: 13px; }
+  #alat-praktikum .nilai-besar { font-size: 25px; }
+}

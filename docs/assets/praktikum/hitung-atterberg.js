@@ -87,7 +87,40 @@
     return hasil;
   }
 
-  var api = { hitung: hitung, garisA: garisA, garisU: garisU, simbolHalus: simbolHalus };
+  // Batas susut (SNI 3422:2008): SL = w − (V − V0) ρw / Wo × 100; rasio susut R = Wo / (V0 ρw).
+  // V = volume tanah basah (isi cawan susut), V0 = volume tanah kering, Wo = massa tanah kering.
+  // Bila Gs diketahui, pembanding SL = (1/R − 1/Gs) × 100 (anggapan tanah jenuh saat susut berhenti).
+  function batasSusut(m) {
+    var galat = [], peringatan = [], rhoW = m.rhoW > 0 ? m.rhoW : 1;
+    var cawan = m.cawan.map(function (c) {
+      var k = D.kadarAir(c.W1, c.W2, c.W3), Wo = k.kering;
+      if (!(c.W2 > c.W3)) galat.push('Cawan ' + c.nama + ': W2 harus lebih besar dari W3.');
+      if (!(c.W1 > c.W2)) galat.push('Cawan ' + c.nama + ': W1 harus lebih besar dari W2.');
+      if (!(c.V > 0 && c.V0 > 0)) galat.push('Cawan ' + c.nama + ': volume tanah basah dan kering harus lebih dari 0.');
+      else if (!(c.V0 <= c.V)) galat.push('Cawan ' + c.nama + ': volume tanah kering tidak boleh lebih besar dari volume tanah basah.');
+      var SL = k.w - (c.V - c.V0) * rhoW / Wo * 100, R = Wo / (c.V0 * rhoW);
+      var o = Object.assign({}, c, k, { Wo: Wo, SL: SL, R: R, susutVolume: (c.V - c.V0) / c.V0 * 100 });
+      if (m.Gs > 1) o.SLGs = (1 / R - 1 / m.Gs) * 100;
+      return o;
+    });
+    if (!cawan.length) galat.push('Isi data minimal satu cawan susut.');
+    if (galat.length) return { galat: galat };
+    var hasil = { galat: [], peringatan: peringatan, cawan: cawan, rhoW: rhoW,
+      SL: D.rata(cawan.map(function (c) { return c.SL; })), R: D.rata(cawan.map(function (c) { return c.R; })) };
+    if (m.Gs > 1) hasil.SLGs = D.rata(cawan.map(function (c) { return c.SLGs; }));
+    cawan.forEach(function (c) {
+      if (c.SL < 0) peringatan.push('Cawan ' + c.nama + ' memberi batas susut negatif. Periksa volume tanah basah dan kering.');
+      if (c.w < c.SL) peringatan.push('Cawan ' + c.nama + ': kadar air awal lebih kecil dari batas susut. Contoh seharusnya dibuat mendekati batas cair.');
+    });
+    if (cawan.length > 1) {
+      var sl = cawan.map(function (c) { return c.SL; });
+      if (Math.max.apply(null, sl) - Math.min.apply(null, sl) > 2) peringatan.push('Selisih batas susut antarcawan lebih dari 2%. Periksa pengukuran volume.');
+    }
+    if (m.LL > 0 && hasil.SL >= m.LL) peringatan.push('Batas susut tidak lebih kecil dari batas cair. Periksa data.');
+    return hasil;
+  }
+
+  var api = { hitung: hitung, garisA: garisA, garisU: garisU, simbolHalus: simbolHalus, batasSusut: batasSusut };
   if (node) module.exports = api;
   else root.HitungAtterberg = api;
 })(this);

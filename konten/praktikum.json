@@ -4,60 +4,190 @@
     {
       "judul": "Sifat fisik",
       "alat": [
-        {"id": "kadar-air", "judul": "Kadar air", "standar": "SNI 1965:2008", "status": "tersedia",
-         "deskripsi": "Kadar air tiap cawan dan rata-ratanya dari penimbangan basah dan kering.",
-         "skrip": ["hitung-dasar.js", "hitung-sifat-fisik.js", "alat-sifat-fisik.js"]},
-        {"id": "berat-spesifik", "judul": "Berat spesifik (piknometer)", "standar": "SNI 1964:2008", "status": "tersedia",
-         "deskripsi": "Gs tiap piknometer dengan koreksi suhu massa jenis air, dan rata-ratanya.",
-         "skrip": ["hitung-dasar.js", "hitung-sifat-fisik.js", "alat-sifat-fisik.js"]}
+        {
+          "id": "kadar-air",
+          "judul": "Kadar air",
+          "standar": "SNI 1965:2008",
+          "status": "tersedia",
+          "deskripsi": "Kadar air tiap cawan dan rata-ratanya dari penimbangan basah dan kering.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-sifat-fisik.js",
+            "alat-sifat-fisik.js"
+          ]
+        },
+        {
+          "id": "berat-spesifik",
+          "judul": "Berat spesifik (piknometer)",
+          "standar": "SNI 1964:2008",
+          "status": "tersedia",
+          "deskripsi": "Gs tiap piknometer dengan koreksi suhu massa jenis air, dan rata-ratanya.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-sifat-fisik.js",
+            "alat-sifat-fisik.js"
+          ]
+        },
+        {
+          "id": "hubungan-fase",
+          "judul": "Hubungan berat–volume",
+          "standar": "Diagram fase",
+          "status": "tersedia",
+          "deskripsi": "Angka pori, porositas, derajat kejenuhan, dan berat isi (basah, kering, jenuh, terendam) dengan diagram fase.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-sifat-fisik.js",
+            "alat-sifat-fisik.js"
+          ]
+        }
       ]
     },
     {
       "judul": "Konsistensi dan gradasi",
       "alat": [
-        {"id": "atterberg", "judul": "Batas Atterberg", "standar": "SNI 1967:2008 · SNI 1966:2008", "status": "tersedia",
-         "deskripsi": "Batas cair (kurva aliran atau satu titik), batas plastis, indeks plastisitas, dan posisi di bagan plastisitas.",
-         "skrip": ["hitung-dasar.js", "hitung-atterberg.js", "alat-atterberg.js"]},
-        {"id": "saringan", "judul": "Analisa saringan", "standar": "SNI 3423:2008", "status": "tersedia",
-         "deskripsi": "Persen lolos tiap saringan, kurva gradasi, D10/D30/D60, Cu, Cc, dan fraksi kerikil/pasir/halus.",
-         "skrip": ["hitung-saringan.js", "alat-saringan.js"]},
-        {"id": "hidrometer", "judul": "Analisa hidrometer", "standar": "SNI 3423:2008", "status": "menyusul",
-         "deskripsi": "Diameter butir halus dengan hukum Stokes dan persen lolos gabungan dengan saringan."},
-        {"id": "klasifikasi", "judul": "Klasifikasi tanah", "standar": "SNI 6371:2015 · AASHTO M 145", "status": "menyusul",
-         "deskripsi": "Simbol dan nama kelompok USCS serta kelompok dan indeks kelompok AASHTO dari data gradasi dan Atterberg."}
+        {
+          "id": "atterberg",
+          "judul": "Batas Atterberg",
+          "standar": "SNI 1967:2008 · SNI 1966:2008",
+          "status": "tersedia",
+          "deskripsi": "Batas cair (kurva aliran atau satu titik), batas plastis, indeks plastisitas, dan posisi di bagan plastisitas.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-atterberg.js",
+            "alat-atterberg.js"
+          ]
+        },
+        {
+          "id": "batas-susut",
+          "judul": "Batas susut",
+          "standar": "SNI 3422:2008",
+          "status": "tersedia",
+          "deskripsi": "Batas susut dan rasio susut dari volume tanah basah dan kering, dengan volume langsung atau air raksa.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-atterberg.js",
+            "alat-atterberg.js"
+          ]
+        },
+        {
+          "id": "saringan",
+          "judul": "Analisa saringan",
+          "standar": "SNI 3423:2008",
+          "status": "tersedia",
+          "deskripsi": "Persen lolos tiap saringan, kurva gradasi, D10/D30/D60, Cu, Cc, dan fraksi kerikil/pasir/halus.",
+          "skrip": [
+            "hitung-saringan.js",
+            "alat-saringan.js"
+          ]
+        },
+        {
+          "id": "hidrometer",
+          "judul": "Analisa hidrometer",
+          "standar": "SNI 3423:2008",
+          "status": "tersedia",
+          "deskripsi": "Hidrometer 152H dengan hukum Stokes, persen lolos, dan kurva gradasi gabungan saringan–hidrometer beserta fraksi lanau dan lempung.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-sifat-fisik.js",
+            "hitung-saringan.js",
+            "hitung-hidrometer.js",
+            "alat-hidrometer.js"
+          ]
+        },
+        {
+          "id": "klasifikasi",
+          "judul": "Klasifikasi tanah",
+          "standar": "SNI 6371:2015 · AASHTO M 145",
+          "status": "tersedia",
+          "deskripsi": "Simbol dan nama kelompok USCS serta kelompok dan indeks kelompok AASHTO. Data bisa diambil langsung dari alat saringan, hidrometer, dan Atterberg.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-atterberg.js",
+            "hitung-klasifikasi.js",
+            "alat-klasifikasi.js"
+          ]
+        }
       ]
     },
     {
       "judul": "Kepadatan",
       "alat": [
-        {"id": "pemadatan", "judul": "Pemadatan (Proctor)", "standar": "SNI 1742:2008 · SNI 1743:2008", "status": "tersedia",
-         "deskripsi": "Kurva pemadatan orde 2 atau 3, kadar air optimum, kepadatan kering maksimum, dan garis ZAV.",
-         "skrip": ["hitung-dasar.js", "hitung-kepadatan.js", "alat-kepadatan.js"]},
-        {"id": "sand-cone", "judul": "Kerucut pasir (sand cone)", "standar": "SNI 2828:2011", "status": "tersedia",
-         "deskripsi": "Kalibrasi pasir, volume lubang, berat isi kering lapangan, dan derajat kepadatan.",
-         "skrip": ["hitung-dasar.js", "hitung-kepadatan.js", "alat-kepadatan.js"]},
-        {"id": "cbr", "judul": "CBR laboratorium", "standar": "SNI 1744:2012", "status": "menyusul",
-         "deskripsi": "Kurva beban–penetrasi, koreksi titik awal, nilai CBR 2,54 mm dan 5,08 mm, dan pengembangan."}
+        {
+          "id": "pemadatan",
+          "judul": "Pemadatan (Proctor)",
+          "standar": "SNI 1742:2008 · SNI 1743:2008",
+          "status": "tersedia",
+          "deskripsi": "Kurva pemadatan orde 2 atau 3, kadar air optimum, kepadatan kering maksimum, dan garis ZAV.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-kepadatan.js",
+            "alat-kepadatan.js"
+          ]
+        },
+        {
+          "id": "sand-cone",
+          "judul": "Kerucut pasir (sand cone)",
+          "standar": "SNI 2828:2011",
+          "status": "tersedia",
+          "deskripsi": "Kalibrasi pasir, volume lubang, berat isi kering lapangan, dan derajat kepadatan.",
+          "skrip": [
+            "hitung-dasar.js",
+            "hitung-kepadatan.js",
+            "alat-kepadatan.js"
+          ]
+        },
+        {
+          "id": "cbr",
+          "judul": "CBR laboratorium",
+          "standar": "SNI 1744:2012",
+          "status": "menyusul",
+          "deskripsi": "Kurva beban–penetrasi, koreksi titik awal, nilai CBR 2,54 mm dan 5,08 mm, dan pengembangan."
+        }
       ]
     },
     {
       "judul": "Kekuatan dan konsolidasi",
       "alat": [
-        {"id": "geser-langsung", "judul": "Kuat geser langsung", "standar": "SNI 3420:2016", "status": "menyusul",
-         "deskripsi": "Tegangan geser puncak tiap benda uji, garis keruntuhan Mohr–Coulomb, c dan φ."},
-        {"id": "tekan-bebas", "judul": "Kuat tekan bebas (UCS)", "standar": "SNI 3638:2012", "status": "menyusul",
-         "deskripsi": "Kurva tegangan–regangan dengan koreksi luas, qu, dan cu = qu/2."},
-        {"id": "konsolidasi-lab", "judul": "Konsolidasi laboratorium", "standar": "SNI 2812:2011", "status": "menyusul",
-         "deskripsi": "Kurva e–log p, Cc, Cs, tegangan prakonsolidasi, dan cv dari metode akar waktu."}
+        {
+          "id": "geser-langsung",
+          "judul": "Kuat geser langsung",
+          "standar": "SNI 3420:2016",
+          "status": "menyusul",
+          "deskripsi": "Tegangan geser puncak tiap benda uji, garis keruntuhan Mohr–Coulomb, c dan φ."
+        },
+        {
+          "id": "tekan-bebas",
+          "judul": "Kuat tekan bebas (UCS)",
+          "standar": "SNI 3638:2012",
+          "status": "menyusul",
+          "deskripsi": "Kurva tegangan–regangan dengan koreksi luas, qu, dan cu = qu/2."
+        },
+        {
+          "id": "konsolidasi-lab",
+          "judul": "Konsolidasi laboratorium",
+          "standar": "SNI 2812:2011",
+          "status": "menyusul",
+          "deskripsi": "Kurva e–log p, Cc, Cs, tegangan prakonsolidasi, dan cv dari metode akar waktu."
+        }
       ]
     },
     {
       "judul": "Uji lapangan",
       "alat": [
-        {"id": "sondir", "judul": "Sondir", "standar": "SNI 2827:2008", "status": "menyusul",
-         "deskripsi": "Perlawanan konus, hambatan lekat, jumlah hambatan lekat, dan grafik terhadap kedalaman."},
-        {"id": "spt", "judul": "Standard Penetration Test", "standar": "SNI 4153:2008", "status": "menyusul",
-         "deskripsi": "Nilai N dari tiga interval pukulan dan grafik N terhadap kedalaman."}
+        {
+          "id": "sondir",
+          "judul": "Sondir",
+          "standar": "SNI 2827:2008",
+          "status": "menyusul",
+          "deskripsi": "Perlawanan konus, hambatan lekat, jumlah hambatan lekat, dan grafik terhadap kedalaman."
+        },
+        {
+          "id": "spt",
+          "judul": "Standard Penetration Test",
+          "standar": "SNI 4153:2008",
+          "status": "menyusul",
+          "deskripsi": "Nilai N dari tiga interval pukulan dan grafik N terhadap kedalaman."
+        }
       ]
     }
   ]
