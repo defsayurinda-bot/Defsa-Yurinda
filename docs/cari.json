@@ -1,0 +1,219 @@
+[
+{
+"j": "Daya dukung tiang bor dari N-SPT",
+"d": "Hitung daya dukung aksial tiang bor dari data N-SPT dengan metode Reese & Wright (1977), lengkap dengan langkah hitungan dan asumsinya.",
+"h": "Reese &amp; Wright (1977); Meyerhof (1976) disembunyikan sampai rumusnya dicocokkan dengan PUPR (2019) Diameter, panjang, SF, lapisan tanah (jenis, N-SPT, cu) Qp, Qs, Qu, Qa, profil tanah, asumsi kalkulator",
+"u": "kalkulator/tiang-bor.html",
+"k": "Alat"
+},
+{
+"j": "Kapasitas dukung pondasi dangkal",
+"d": "Hitung kapasitas dukung pondasi dangkal dengan persamaan daya dukung umum: faktor bentuk, kedalaman, dan koreksi muka air tanah, lengkap dengan langkah hitungan.",
+"h": "Persamaan daya dukung umum: Nγ Vesic (1973), faktor bentuk De Beer (1970), faktor kedalaman Hansen (1970) Bentuk, B, L, Df, c', φ', γ, muka air tanah, SF qu, qall (gross dan net), Qall, porsi tiap suku, sketsa",
+"u": "kalkulator/pondasi-dangkal.html",
+"k": "Alat"
+},
+{
+"j": "Penurunan konsolidasi",
+"d": "Hitung penurunan konsolidasi primer satu dimensi untuk lempung NC dan OC beserta lajunya terhadap waktu, lengkap dengan diagram e–log σ' dan langkah hitungan.",
+"h": "Terzaghi 1D; Cc/Cs untuk NC dan OC; Δσ metode 2:1 H, e0, Cc, Cs, σ'0, σ'c, beban, cv, drainase Sc, t50, t90, S(t), diagram e–log σ', kurva penurunan–waktu",
+"u": "kalkulator/konsolidasi.html",
+"k": "Alat"
+},
+{
+"j": "Praktikum Mekanika Tanah",
+"d": "16 alat pengolah data praktikum Mekanika Tanah: formulir seperti lembar data laboratorium, langkah hitungan, grafik, dan ekspor ke Word dan Excel.",
+"h": "Formulir seperti lembar data laboratorium; angka boleh memakai koma Tabel hasil, langkah hitungan bernomor, grafik (kurva aliran, bagan plastisitas, gradasi gabungan, Proctor, CBR, Mohr–Coulomb, tegangan–regangan, e–log p, √t, sondir, log bor) Word (.docx) sesuai format laporan, grafik PNG, salin ke Excel, CSV, tautan berbagi, cetak dengan kop identitas contoh",
+"u": "praktikum/",
+"k": "Alat"
+},
+{
+"j": "Bank soal geoteknik",
+"d": "Latihan soal geoteknik dengan angka acak dan pembahasan langkah demi langkah: pondasi dangkal, konsolidasi, dan tiang bor.",
+"h": "Pondasi dangkal, konsolidasi, tiang bor (9 jenis soal) Angka acak, jawaban dicek otomatis (toleransi 2%), pembahasan langkah demi langkah, skor",
+"u": "latihan/",
+"k": "Alat"
+},
+{
+"j": "Kadar air",
+"d": "Kadar air tiap cawan dan rata-ratanya dari penimbangan basah dan kering.",
+"h": "Sifat fisik SNI 1965:2008",
+"u": "praktikum/kadar-air/",
+"k": "Praktikum"
+},
+{
+"j": "Berat spesifik (piknometer)",
+"d": "Gs tiap piknometer dengan koreksi suhu massa jenis air, dan rata-ratanya.",
+"h": "Sifat fisik SNI 1964:2008",
+"u": "praktikum/berat-spesifik/",
+"k": "Praktikum"
+},
+{
+"j": "Hubungan berat–volume",
+"d": "Angka pori, porositas, derajat kejenuhan, dan berat isi (basah, kering, jenuh, terendam) dengan diagram fase.",
+"h": "Sifat fisik Diagram fase",
+"u": "praktikum/hubungan-fase/",
+"k": "Praktikum"
+},
+{
+"j": "Batas Atterberg",
+"d": "Batas cair (kurva aliran atau satu titik), batas plastis, indeks plastisitas, dan posisi di bagan plastisitas.",
+"h": "Konsistensi dan gradasi SNI 1967:2008 · SNI 1966:2008",
+"u": "praktikum/atterberg/",
+"k": "Praktikum"
+},
+{
+"j": "Batas susut",
+"d": "Batas susut dan rasio susut dari volume tanah basah dan kering, dengan volume langsung atau air raksa.",
+"h": "Konsistensi dan gradasi SNI 3422:2008",
+"u": "praktikum/batas-susut/",
+"k": "Praktikum"
+},
+{
+"j": "Analisa saringan",
+"d": "Persen lolos tiap saringan, kurva gradasi, D10/D30/D60, Cu, Cc, dan fraksi kerikil/pasir/halus.",
+"h": "Konsistensi dan gradasi SNI 3423:2008",
+"u": "praktikum/saringan/",
+"k": "Praktikum"
+},
+{
+"j": "Analisa hidrometer",
+"d": "Hidrometer 152H dengan hukum Stokes, persen lolos, dan kurva gradasi gabungan saringan–hidrometer beserta fraksi lanau dan lempung.",
+"h": "Konsistensi dan gradasi SNI 3423:2008",
+"u": "praktikum/hidrometer/",
+"k": "Praktikum"
+},
+{
+"j": "Klasifikasi tanah",
+"d": "Simbol dan nama kelompok USCS serta kelompok dan indeks kelompok AASHTO. Data bisa diambil langsung dari alat saringan, hidrometer, dan Atterberg.",
+"h": "Konsistensi dan gradasi SNI 6371:2015 · AASHTO M 145",
+"u": "praktikum/klasifikasi/",
+"k": "Praktikum"
+},
+{
+"j": "Pemadatan (Proctor)",
+"d": "Kurva pemadatan orde 2 atau 3, kadar air optimum, kepadatan kering maksimum, dan garis ZAV.",
+"h": "Kepadatan SNI 1742:2008 · SNI 1743:2008",
+"u": "praktikum/pemadatan/",
+"k": "Praktikum"
+},
+{
+"j": "Kerucut pasir (sand cone)",
+"d": "Kalibrasi pasir, volume lubang, berat isi kering lapangan, dan derajat kepadatan.",
+"h": "Kepadatan SNI 2828:2011",
+"u": "praktikum/sand-cone/",
+"k": "Praktikum"
+},
+{
+"j": "CBR laboratorium",
+"d": "Kurva beban–penetrasi dua permukaan, koreksi titik nol, CBR 2,54 mm dan 5,08 mm, pengembangan, dan berat isi.",
+"h": "Kepadatan SNI 1744:2012",
+"u": "praktikum/cbr/",
+"k": "Praktikum"
+},
+{
+"j": "Kuat geser langsung",
+"d": "Tegangan geser tiap benda uji, koreksi luas opsional, garis keruntuhan Mohr–Coulomb, c dan φ.",
+"h": "Kekuatan dan konsolidasi SNI 3420:2016",
+"u": "praktikum/geser-langsung/",
+"k": "Praktikum"
+},
+{
+"j": "Kuat tekan bebas (UCS)",
+"d": "Kurva tegangan–regangan dengan koreksi luas, qu (puncak atau pada regangan 15%), cu, E50, dan sensitivitas.",
+"h": "Kekuatan dan konsolidasi SNI 3638:2012",
+"u": "praktikum/tekan-bebas/",
+"k": "Praktikum"
+},
+{
+"j": "Konsolidasi laboratorium",
+"d": "Kurva e–log p, Cc, Cs, mv, dan cv dengan metode akar waktu Taylor otomatis tiap tahap beban.",
+"h": "Kekuatan dan konsolidasi SNI 2812:2011",
+"u": "praktikum/konsolidasi-lab/",
+"k": "Praktikum"
+},
+{
+"j": "Sondir",
+"d": "PK, JP, hambatan lekat, JHL, hambatan setempat, rasio gesekan, dan grafik terhadap kedalaman seperti form lab.",
+"h": "Uji lapangan SNI 2827:2008",
+"u": "praktikum/sondir/",
+"k": "Praktikum"
+},
+{
+"j": "SPT dan log bor",
+"d": "Nilai N dan N60, kepadatan atau konsistensi menurut N, dan log bor berpola lapisan dengan grafik N terhadap kedalaman.",
+"h": "Uji lapangan SNI 4153:2008",
+"u": "praktikum/spt/",
+"k": "Praktikum"
+},
+{
+"j": "Tentang saya",
+"d": "Topik yang saya ajukan: perbandingan daya dukung aksial fondasi tiang bor (bore pile) yang dihitung dari data N-SPT dengan hasil uji pembebanan statik.",
+"h": "Minat Pengalaman Tugas akhir (sedang berjalan) Perangkat lunak Peran AI dalam kuliah saya Kontak",
+"u": "tentang/",
+"k": "Tulisan"
+},
+{
+"j": "Cara saya memakai AI",
+"d": "Saya memakai Claude untuk kuliah teknik sipil dengan aturan yang saya tulis sendiri. Tiga halaman di bawah menjelaskan aturan itu, contoh perintahnya, dan batas yang saya pegang.",
+"h": "",
+"u": "cara-memakai-ai/",
+"k": "Tulisan"
+},
+{
+"j": "Batasan dan etika",
+"d": "AI mempercepat pekerjaan, tapi nama yang tertulis di laporan tetap nama saya. Aturan di bawah saya pakai supaya semua yang saya kumpulkan bisa saya pertanggungjawabkan.",
+"h": "1. Tidak ada yang dikarang 2. Sumber setiap angka jelas 3. Referensi dicek satu per satu 4. Hitungan diverifikasi dengan cara kedua 5. Keputusan dan pemahaman tetap di saya 6. Data proyek dan data pribadi dijaga 7. Aturan kampus diikuti",
+"u": "cara-memakai-ai/batasan-dan-etika/",
+"k": "Tulisan"
+},
+{
+"j": "Contoh prompt",
+"d": "Perintah yang saya pakai untuk tugas kuliah teknik sipil. Bagian dalam kurung siku diganti dengan data sendiri.",
+"h": "Pola umum Belajar Menghitung Menulis Referensi Diskusi skripsi Claude Code",
+"u": "cara-memakai-ai/contoh-prompt/",
+"k": "Tulisan"
+},
+{
+"j": "Preferensi Claude saya",
+"d": "Preferensi adalah aturan yang saya pasang di pengaturan profil claude.ai. Aturan ini berlaku di semua percakapan, jadi saya tidak perlu mengulanginya setiap kali.",
+"h": "Kenapa saya membuatnya Isi preferensi Pendekatan Kalau permintaan tidak bisa dikerjakan Konteks tentang saya Pekerjaan yang paling sering saya minta Komunikasi Tujuan beberapa aturan",
+"u": "cara-memakai-ai/preferensi/",
+"k": "Tulisan"
+},
+{
+"j": "Skill Claude",
+"d": "Skill adalah paket instruksi untuk Claude, berupa folder berisi file SKILL.md. Bagian atas file memuat nama dan deskripsi singkat. Claude membaca deskripsi itu, lalu memuat isi…",
+"h": "Apa itu skill Skill yang saya pakai Cara saya menyusun skill",
+"u": "skill/",
+"k": "Tulisan"
+},
+{
+"j": "Skill: Asisten Teknik Sipil",
+"d": "Skill utama saya untuk semua tugas teknik sipil. Halaman ini meringkas isinya. Data pribadi dan data proyek yang ada di versi asli tidak ditampilkan.",
+"h": "Urutan prioritas Tujuh aturan inti Peran dan perintah singkat Format jawaban hitungan Verifikasi sebelum hasil ditampilkan Jebakan yang pernah terjadi Isi lain dalam skill",
+"u": "skill/asisten-teknik-sipil/",
+"k": "Tulisan"
+},
+{
+"j": "01 — Mengenal Claude dan Claude Code",
+"d": "Claude adalah asisten AI buatan Anthropic. Saya memakainya lewat claude.ai, di browser atau aplikasi ponsel. Di sana Claude bisa diajak diskusi, membaca file yang dilampirkan…",
+"h": "Claude Claude Code Empat hal yang mengatur perilaku Claude Contoh Latihan",
+"u": "catatan/01-mengenal-claude-dan-claude-code/",
+"k": "Catatan"
+},
+{
+"j": "02 — Git dan Pull Request pertama",
+"d": "Buat PR tanpa Claude, langsung dari web GitHub:",
+"h": "Istilah dasar Alurnya Yang terjadi di sesi pertama Yang saya pelajari Latihan",
+"u": "catatan/02-git-dan-pull-request-pertama/",
+"k": "Catatan"
+},
+{
+"j": "03 — Membangun situs dan kalkulator bersama Claude Code",
+"d": "Catatan ini merangkum cara situs defsayurinda.github.io dibuat: tiga kalkulator geoteknik dan satu bank soal, dikerjakan Claude Code dalam empat tahap, masing-masing lewat Pull…",
+"h": "Konsep Cara kerja yang dipakai Contoh: kesalahan yang tertangkap pengujian Pembagian kerja Latihan",
+"u": "catatan/03-membangun-situs-dan-kalkulator/",
+"k": "Catatan"
+}
+]
